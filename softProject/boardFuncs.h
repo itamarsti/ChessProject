@@ -8,9 +8,12 @@
 #ifndef BOARDFUNCS_H_
 #define BOARDFUNCS_H_
 
+#include "SPArrayList.h"
 
 typedef struct boardGame{
 	char boardArr[8][8];
+	SPArrayList* history;
+	int hisCounter;
 	int gameMode;
 	int diffLevel;
 	int userCol;

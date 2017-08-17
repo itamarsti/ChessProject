@@ -8,9 +8,13 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "commandsFuncs.h"
+#include "SPArrayList.h"
+
 
 typedef struct boardGame{
 	char boardArr[8][8];
+	SPArrayList* history;
+	int hisCounter;
 	int gameMode;
 	int diffLevel;
 	int userCol;
@@ -34,6 +38,7 @@ typedef struct boardGame{
 #define WhiteQueen 'q'
 #define BlackKing 'K'
 #define WhiteKing 'k'
+#define HISTORY 12
 
 boardGame* createBoard(){
 	boardGame* board = (boardGame*)malloc(sizeof(boardGame));
@@ -43,10 +48,8 @@ boardGame* createBoard(){
 			board->boardArr[i][j]=UNDERSCORE;
 		}
 	}
-	board->gameMode = 1;
-	board->diffLevel = 2;
-	board->userCol = 1;				//1 - white; 0 - black;
-	board->curPlayer = 1;			//1 = white player, 0 = black player
+	board->history = (SPArrayList*)spArrayListCreate(HISTORY);
+	assert(board->history!=NULL);
 	return board;
 }
 
@@ -65,8 +68,10 @@ void initBoard(boardGame* board){
 	board->boardArr[0][2] = BlackBishop; board->boardArr[0][5] = BlackBishop;
 	board->boardArr[7][3] = WhiteQueen; board->boardArr[7][4] = WhiteKing;
 	board->boardArr[0][3] = BlackQueen; board->boardArr[0][4] = BlackKing;
-
-
+	board->gameMode = 1;
+	board->diffLevel = 2;
+	board->userCol = 1;				//1 - white; 0 - black;
+	board->curPlayer = 1;			//1 = white player, 0 = black player
 }
 
 void printBoard(boardGame* board){
@@ -91,9 +96,9 @@ void printBoard(boardGame* board){
 void destroyBoard(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	assert(board->userCol!=NULL);
+	assert(board->history!=NULL);
+	spArrayListDestroy(board->history);
 	free(board->boardArr);
-	free(board->userCol);
 	free(board);
 }
 
@@ -105,6 +110,7 @@ void setDifficult(boardGame* board, int num){
 
 void boardPrintSet(boardGame*board){
 	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
 	printf("SETTINGS:/n");
 	if(board->gameMode==1){
 		printf("GAME MODE: %d",board->gameMode);
@@ -112,7 +118,33 @@ void boardPrintSet(boardGame*board){
 	else{
 		printf("GAME MODE: %d",board->gameMode);
 		printf("DIFFICULTY_LVL: %d",board->diffLevel);
-		printf("USER_CLR: %s",board->userCol);
+		if(board->userCol==0){
+			printf("USER_CLR: BLACK");
+		}
+		else if (board->userCol==1){
+			printf("USER_CLR: WHITE");
+		}
 		return;
 	}
+}
+
+boardGame* copyBoard(boardGame*board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	boardGame* copy = createBoard();
+	assert(copy!=NULL);
+	assert(copy->boardArr!=NULL);
+	for(int i=0;i<ROW;i++){
+		for(int j=0;j<COL;j++){
+			copy->boardArr[i][j]=board->boardArr[i][j];
+		}
+	}
+	copy->history = board->history;
+	copy->curPlayer=board->curPlayer;
+	copy->diffLevel=board->diffLevel;
+	copy->gameMode=board->gameMode;
+	copy->userCol = board->userCol;
+	copy->hisCounter = board->hisCounter;
+	return copy;
 }

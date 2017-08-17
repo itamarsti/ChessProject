@@ -23,12 +23,12 @@ typedef enum {
 	LOAD_FILE,
 	DEFAULT,
 	PRINT_SETTINGS,
-	QUIT,
-	INVALID_LINE
-} CHESS_COMMAND;
+	QUIT1,
+	INVALID_LINE1
+} SETTING_COMMAND;
 
 typedef struct t_command {
-	CHESS_COMMAND cmd;
+	SETTING_COMMAND cmd;
 	bool validArg; //is set to true if the line contains a valid argument
 } ChessCommand;
 

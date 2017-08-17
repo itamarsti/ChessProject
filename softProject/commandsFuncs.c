@@ -35,7 +35,7 @@ ChessCommand commandParser(const char* str){
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	if(token==NULL){
-		command.cmd = INVALID_LINE;
+		command.cmd = INVALID_LINE1;
 		command.validArg = false;}
 	else if(strcmp(token, "start")==0){
 		command.cmd = START;}
@@ -64,14 +64,14 @@ ChessCommand commandParser(const char* str){
 	else if(strcmp(token, "print_setting")==0){
 		command.cmd = PRINT_SETTINGS;}
 	else if(strcmp(token, "quit")==0){
-		command.cmd = QUIT;}
+		command.cmd = QUIT1;}
 	else{
-		command.cmd = INVALID_LINE;
+		command.cmd = INVALID_LINE1;
 		command.validArg = false;}
 	return command;
 }
 
-int diffLevelToInt(CHESS_COMMAND cmd){
+int diffLevelToInt(SETTING_COMMAND cmd){
 	if(cmd==DIFFICULTY_1) return 1;
 	else if(cmd==DIFFICULTY_2) return 2;
 	else if(cmd==DIFFICULTY_3) return 3;
