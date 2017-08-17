@@ -37,7 +37,7 @@ typedef struct boardGame{
 #define WhiteQueen 'q'
 #define BlackKing 'K'
 #define WhiteKing 'k'
-#define HISTORY 12
+#define HISTORY 24
 
 boardGame* createBoard(){
 	boardGame* board = (boardGame*)malloc(sizeof(boardGame));

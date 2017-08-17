@@ -22,4 +22,5 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 void moveObj(boardGame* board, int xPos, int yPos, int xDest, int yDest);
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj);
 void switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2);
+void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest);
 #endif /* MOVEOPS_H_ */

@@ -16,13 +16,60 @@
 void undo(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
 	if(board->gameMode==2){
 		printf("Undo command not available in 2 players mode\n");
 		return;
 	}
-	if(board->history->actualSize==0){
+	if(spArrayListIsEmpty(board->history)){
 		printf("Empty history, move cannot be undone\n");
 		return;
 	}
+	exUndo(board);
+	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
+		spArrayListRemoveAt(board->history,i);
+	}
+	board->history->actualSize-=4;
 
+	return;
+}
+
+void exUndo(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	int index = board->history->actualSize-1;
+	char objDest = (char)board->history->elements[index];
+	int posDest = board->history->elements[index-1];
+	char objSource = (char)board->history->elements[index-2];
+	int posDSource = board->history->elements[index-3];
+	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
+	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
+	changePlayer(board);
+	return;
+
+}
+
+int NumToRow(int num){
+	int row = num/8;
+	return row;
+}
+
+int NumToCol(int num){
+	int col = num%8;
+	return col;
+}
+
+int RowColToNum(int row, int col){
+	int num = 8*row + col;
+	return num;
+}
+
+
+void changePlayer(boardGame* board){
+	assert(board!=NULL);
+	if(board->curPlayer==0) board->curPlayer=1;
+	else if (board->curPlayer==1) board->curPlayer=0;
 }

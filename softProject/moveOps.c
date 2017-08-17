@@ -13,7 +13,8 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <ctype.h>
-
+#include "spArrayList.h"
+#include "gameCommands.h"
 
 #define MAX(x,y) (((x)>(y))?(x):(y))
 #define MIN(x,y) (((x)>(y))?(y):(x))
@@ -297,8 +298,29 @@ void moveObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest)
 	else if (obj=='N' || obj =='n') moveKnight(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='K' || obj =='k') moveKing(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='Q' || obj =='q') moveQueen(board,rowPos,colPos,rowDest,colDest);
+	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
+	changePlayer(board);
 
 }
 
 
+void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	if(spArrayListIsFull(board->history)){
+		for(int i=0;i<4;i++){
+			spArrayListRemoveFirst(board->history);
+		}
+	}
+	int index = board->history->actualSize-1;
+	board->history->elements[index] = RowColToNum(rowPos,colPos);
+	board->history->elements[index+1] = (int) board->boardArr[rowPos][colPos];
+	board->history->elements[index+2] =RowColToNum(rowDest,colDest);
+	board->history->elements[index+3] = (int) board->boardArr[rowDest][colDest];
+	board->history->actualSize+=4;
+	return;
+
+}
 

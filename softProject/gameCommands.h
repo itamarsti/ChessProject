@@ -9,6 +9,8 @@
 #define GAMECOMMANDS_H_
 
 #include <stdbool.h>
+#include "boardFuncs.h"
+
 
 typedef enum {
 	MOVE,
@@ -19,6 +21,13 @@ typedef enum {
 	QUIT,
 	INVALID_LINE
 } GAME_COMMAND;
+
+void undo(boardGame* board);
+void exUndo(boardGame* board);
+void changePlayer(boardGame* board);
+int NumToRow(int num);
+int NumToCol(int num);
+int RowColToNum(int row, int col);
 
 
 #endif /* GAMECOMMANDS_H_ */
