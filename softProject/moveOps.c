@@ -6,7 +6,6 @@
  */
 
 #include "moveOps.h"
-
 #include "boardFuncs.h"
 #include <stdlib.h>
 #include <stdio.h>
