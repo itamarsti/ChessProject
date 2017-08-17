@@ -1,9 +1,11 @@
 /*
- * boardOps.c
+ * moveOps.c
  *
- *  Created on: 12 баев„ 2017
+ *  Created on: 17 баев„ 2017
  *      Author: Itamar
  */
+
+#include "moveOps.h"
 
 #include "boardFuncs.h"
 #include <stdlib.h>
@@ -11,7 +13,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "boardOps.h"
 #include <ctype.h>
 
 
@@ -299,4 +300,6 @@ void moveObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest)
 	else if (obj=='Q' || obj =='q') moveQueen(board,rowPos,colPos,rowDest,colDest);
 
 }
+
+
 

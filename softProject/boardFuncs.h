@@ -13,7 +13,6 @@
 typedef struct boardGame{
 	char boardArr[8][8];
 	SPArrayList* history;
-	int hisCounter;
 	int gameMode;
 	int diffLevel;
 	int userCol;

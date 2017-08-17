@@ -9,7 +9,7 @@
 #include <SDL2/SDL_video.h>
 #include "boardFuncs.h"
 #include "commandsFuncs.h"
-#include "boardOps.h"
+#include "moveOps.h"
 
 int main(int argc, char* argv[]) {
 	boardGame* mainBoard = createBoard();

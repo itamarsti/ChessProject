@@ -20,4 +20,9 @@ void undo(boardGame* board){
 		printf("Undo command not available in 2 players mode\n");
 		return;
 	}
+	if(board->history->actualSize==0){
+		printf("Empty history, move cannot be undone\n");
+		return;
+	}
+
 }

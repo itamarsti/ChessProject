@@ -14,7 +14,6 @@
 typedef struct boardGame{
 	char boardArr[8][8];
 	SPArrayList* history;
-	int hisCounter;
 	int gameMode;
 	int diffLevel;
 	int userCol;
@@ -145,6 +144,5 @@ boardGame* copyBoard(boardGame*board){
 	copy->diffLevel=board->diffLevel;
 	copy->gameMode=board->gameMode;
 	copy->userCol = board->userCol;
-	copy->hisCounter = board->hisCounter;
 	return copy;
 }
