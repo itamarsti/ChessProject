@@ -47,6 +47,14 @@ void exUndo(boardGame* board){
 	int posDSource = board->history->elements[index-3];
 	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
 	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
+	if(board->curPlayer==0){
+		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+		BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+	}
+	else if(board->curPlayer==1){
+		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+		WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+	}
 	changePlayer(board);
 	return;
 

@@ -10,7 +10,8 @@
 
 #include <stdbool.h>
 #include "boardFuncs.h"
-
+#define BLACK "black"
+#define WHITE "white"
 
 typedef enum {
 	MOVE,
