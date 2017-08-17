@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 #include "boardFuncs.h"
-#include "commandsFuncs.h"
+#include "settingCommands.h"
 #include "moveOps.h"
 
 int main(int argc, char* argv[]) {

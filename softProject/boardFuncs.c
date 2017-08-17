@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "commandsFuncs.h"
+#include "settingCommands.h"
 #include "SPArrayList.h"
 
 

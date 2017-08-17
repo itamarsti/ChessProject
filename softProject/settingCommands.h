@@ -1,12 +1,14 @@
 /*
- * commandsFuncs.h
+ * settingCommands.h
  *
- *  Created on: 11 баев„ 2017
+ *  Created on: 17 баев„ 2017
  *      Author: Itamar
  */
 
-#ifndef COMMANDSFUNCS_H_
-#define COMMANDSFUNCS_H_
+#ifndef SETTINGCOMMANDS_H_
+#define SETTINGCOMMANDS_H_
+
+
 
 #include <stdbool.h>
 typedef enum {
@@ -37,4 +39,4 @@ char* commandsAcc();
 
 ChessCommand commandParser(const char* str);
 
-#endif /* COMMANDSFUNCS_H_ */
+#endif /* SETTINGCOMMANDS_H_ */

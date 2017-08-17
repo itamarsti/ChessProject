@@ -1,16 +1,17 @@
 /*
- * commandsFuncs.c
+ * settingCommands.c
  *
- *  Created on: 11 баев„ 2017
+ *  Created on: 17 баев„ 2017
  *      Author: Itamar
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
-#include "commandsFuncs.h"
+#include "settingCommands.h"
 #define BUFFER 1024
 
 
@@ -79,3 +80,4 @@ int diffLevelToInt(SETTING_COMMAND cmd){
 	else if(cmd==DIFFICULTY_5) return 5;
 	else return -1;
 }
+
