@@ -30,15 +30,15 @@ typedef enum {
 	INVALID_LINE1
 } SETTING_COMMAND;
 
-typedef struct t_command {
+typedef struct s_command {
 	SETTING_COMMAND cmd;
 	bool validArg; //is set to true if the line contains a valid argument
 	char* path;
 } ChessCommand;
 
 
-char* commandsAcc();
-ChessCommand commandParser(const char* str);
+char* settingAcc();
+ChessCommand* settingParser(const char* str);
 bool spParserIsInt(const char* str);
 SETTING_COMMAND diffiDecider(char* str);
 SETTING_COMMAND gameModeDecider(char* str);

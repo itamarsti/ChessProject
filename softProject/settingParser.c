@@ -18,7 +18,7 @@
 
 
 
-char* commandsAcc(){
+char* settingAcc(){
     setvbuf (stdout, NULL, _IONBF, 0);
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	fflush(stdout);
@@ -35,7 +35,7 @@ char* commandsAcc(){
 	}
 
 
-ChessCommand* cmdParser(const char* str){
+ChessCommand* settingParser(const char* str){
 	ChessCommand* command = (ChessCommand*)malloc(sizeof(ChessCommand));
 	assert(command!=NULL);
 	assert(str!=NULL);

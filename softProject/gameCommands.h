@@ -17,10 +17,11 @@ typedef enum {
 	MOVE,
 	GET_MOVES,
 	SAVE,
+	INVALID_SAVE,
 	UNDO,
 	RESET,
-	QUIT,
-	INVALID_LINE
+	QUIT2,
+	INVALID_LINE2
 } GAME_COMMAND;
 
 void undo(boardGame* board);

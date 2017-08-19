@@ -1,2 +1,3 @@
 1. backspace/whitespace Policy
 2. are the commands suppose to be in small letters/capital letters
+3. ask about whitespaces in file name
