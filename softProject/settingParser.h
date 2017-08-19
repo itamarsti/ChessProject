@@ -1,12 +1,13 @@
 /*
- * settingCommands.h
+ * settingParser.h
  *
- *  Created on: 17 баев„ 2017
+ *  Created on: 19 баев„ 2017
  *      Author: Itamar
  */
 
-#ifndef SETTINGCOMMANDS_H_
-#define SETTINGCOMMANDS_H_
+#ifndef SETTINGPARSER_H_
+#define SETTINGPARSER_H_
+
 
 #include <stdbool.h>
 typedef enum {
@@ -42,5 +43,6 @@ bool spParserIsInt(const char* str);
 SETTING_COMMAND diffiDecider(char* str);
 SETTING_COMMAND gameModeDecider(char* str);
 SETTING_COMMAND gameColorDecider(char* str);
-bool isFileExist(char*path);
-#endif /* SETTINGCOMMANDS_H_ */
+bool isFileExist(const char*path);
+
+#endif /* SETTINGPARSER_H_ */

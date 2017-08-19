@@ -1,9 +1,10 @@
 /*
- * settingCommands.c
+ * settingParser.c
  *
- *  Created on: 17 баев„ 2017
+ *  Created on: 19 баев„ 2017
  *      Author: Itamar
  */
+
 
 
 #include <stdio.h>
@@ -21,8 +22,13 @@ char* commandsAcc(){
     setvbuf (stdout, NULL, _IONBF, 0);
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	fflush(stdout);
-	char input[BUFFER];
+	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
+	if(errorDet==NULL){
+		printf("fgets has faild");
+		free(errorDet);
+		free(input);
+	}
 	printf("the string is %s\n",input);
 	printf("the String length is:%d",strlen(input));
 	return input;
@@ -69,7 +75,7 @@ ChessCommand* cmdParser(const char* str){
 		}
 	}
 	else if((strcmp(token, "load")==0)){
-		token = strtok(NULL, "\t\r\n ");
+		token = strtok(NULL, "\t\r\n");
 		if(!isFileExist(token)){
 			command->cmd = INVALID_FILE;
 			command->validArg = false;
@@ -77,6 +83,7 @@ ChessCommand* cmdParser(const char* str){
 		}
 		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
 		strcpy(command->path,token);
+		command->cmd = LOAD_FILE;
 	}
 	else{
 		command->cmd = INVALID_LINE1;
@@ -87,13 +94,7 @@ ChessCommand* cmdParser(const char* str){
 }
 
 
-/**
 
-	else if(strcmp(token, "load 5")==0){
-		command->cmd = LOAD_FILE;}
-
-}
-**/
 int diffLevelToInt(SETTING_COMMAND cmd){
 	if(cmd==DIFFICULTY_1) return 1;
 	else if(cmd==DIFFICULTY_2) return 2;
@@ -142,7 +143,7 @@ SETTING_COMMAND gameModeDecider(char* str){
 SETTING_COMMAND gameColorDecider(char* str){
 	assert(str!=NULL);
 	int num = atoi(str);
-	if(num<1||num>2) return INVALID_LINE1;
+	if(num<0||num>1) return INVALID_LINE1;
 	else{
 		switch(num){
 			case 0:
@@ -178,14 +179,21 @@ SETTING_COMMAND diffiDecider(char* str){
 		}
 }
 
-bool isFileExist(char*path){
+bool isFileExist(const char* path){
 	assert(path!=NULL);
 	FILE* fp;
-	fp=fopen(path,"r");
+	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
+	assert(realpath!=NULL);
+	strcpy(realpath,path);
+	fp=fopen(realpath,"r");
 	if(fp==NULL){
+		fclose(fp);
+		free(realpath);
 		return false;
 	}
 	fclose(fp);
+	free(realpath);
 	return true;
 }
+
 
