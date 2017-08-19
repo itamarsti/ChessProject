@@ -12,7 +12,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
-#include "settingCommands.h"
+#include "settingParser.h"
 
 #define BUFFER 1024
 
