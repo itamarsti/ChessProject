@@ -41,7 +41,12 @@ typedef struct boardGame{
 boardGame* createBoard();
 void initBoard(boardGame* board);
 void printBoard(boardGame* board);
-
+void destroyBoard(boardGame* board);
+void setDifficult(boardGame* board, int num);
+void setColor(boardGame* board, int num);
+void boardPrintSet(boardGame*board);
+void setNumPlayers(boardGame* board, int num);
+boardGame* copyBoard(boardGame*board);
 
 
 #endif /* BOARDFUNCS_H_ */

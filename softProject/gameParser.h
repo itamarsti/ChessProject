@@ -10,6 +10,18 @@
 
 #include <stdbool.h>
 #include "gameCommands.h"
+#include "gameParser.h"
+
+typedef enum {
+	MOVE,
+	GET_MOVES,
+	SAVE,
+	INVALID_SAVE,
+	UNDO,
+	RESET,
+	QUIT2,
+	INVALID_LINE2
+} GAME_COMMAND;
 
 typedef struct g_command {
 	GAME_COMMAND cmd;

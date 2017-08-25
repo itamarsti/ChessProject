@@ -14,6 +14,7 @@ typedef enum {
 	START,
 	GAME_MODE_1,
 	GAME_MODE_2,
+	INVALID_GAME_MODE,
 	DIFFICULTY_1,
 	DIFFICULTY_2,
 	DIFFICULTY_3,
@@ -37,12 +38,13 @@ typedef struct s_command {
 } ChessCommand;
 
 
-char* settingAcc();
+char* settingAcceptor();
 ChessCommand* settingParser(const char* str);
 bool spParserIsInt(const char* str);
 SETTING_COMMAND diffiDecider(char* str);
 SETTING_COMMAND gameModeDecider(char* str);
 SETTING_COMMAND gameColorDecider(char* str);
 bool isFileExist(const char*path);
+void destroySettingStruct(ChessCommand cmd);
 
 #endif /* SETTINGPARSER_H_ */

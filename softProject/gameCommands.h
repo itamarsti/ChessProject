@@ -10,19 +10,12 @@
 
 #include <stdbool.h>
 #include "boardFuncs.h"
+
 #define BLACK "black"
 #define WHITE "white"
 
-typedef enum {
-	MOVE,
-	GET_MOVES,
-	SAVE,
-	INVALID_SAVE,
-	UNDO,
-	RESET,
-	QUIT2,
-	INVALID_LINE2
-} GAME_COMMAND;
+#include "gameParser.h"
+
 
 void undo(boardGame* board);
 void exUndo(boardGame* board);
@@ -30,6 +23,7 @@ void changePlayer(boardGame* board);
 int NumToRow(int num);
 int NumToCol(int num);
 int RowColToNum(int row, int col);
-
+void quit(boardGame* board);
+boardGame* reset(boardGame* board);
 
 #endif /* GAMECOMMANDS_H_ */

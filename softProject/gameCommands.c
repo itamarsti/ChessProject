@@ -12,6 +12,8 @@
 #include <assert.h>
 #include "gameCommands.h"
 #include "boardFuncs.h"
+#include "gameParser.h"
+
 
 void undo(boardGame* board){
 	assert(board!=NULL);
@@ -80,4 +82,31 @@ void changePlayer(boardGame* board){
 	assert(board!=NULL);
 	if(board->curPlayer==0) board->curPlayer=1;
 	else if (board->curPlayer==1) board->curPlayer=0;
+}
+
+void quit(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	free(board->history->elements);
+	free(board->history);
+	free(board->boardArr);
+	free(board);
+	printf("Exiting...\n");
+	exit(0);
+}
+
+boardGame* reset(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	spDestroyArrayList(board->history);
+	destroyGame(board);
+	boardGame* newBoard = createBoard();
+	initBoard(newBoard);
+	printf("Restarting...\n");
+	return newBoard;
+
 }

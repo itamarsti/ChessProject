@@ -107,6 +107,17 @@ void setDifficult(boardGame* board, int num){
 	board->diffLevel = num;
 }
 
+void setColor(boardGame* board, int num){
+	assert(board!=NULL);
+	board->userCol = num;
+}
+
+void setNumPlayers(boardGame* board, int num){
+	assert(board!=NULL);
+	board->gameMode = num;
+	printf("Game mode is set to %d players\n",board->gameMode);
+}
+
 void boardPrintSet(boardGame*board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -145,4 +156,13 @@ boardGame* copyBoard(boardGame*board){
 	copy->gameMode=board->gameMode;
 	copy->userCol = board->userCol;
 	return copy;
+}
+
+void invalidSettingPrint(SETTING_COMMAND cmd){
+	if(cmd==INVALID_DIFFICULT){
+		printf("Wrong difficulty level. The value should be between 1 to 5\n");
+	}
+	else if(cmd==INVALID_GAME_MODE){
+		printf("Wrong game mode\n");
+	}
 }

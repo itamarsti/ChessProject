@@ -12,13 +12,19 @@
 #include "moveOps.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 
 int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
-    char* var =(char*) settingAcc();
+    bool resetBool = false;
+    while(!resetBool){
+    	boardGame* mainBoard = createBoard();
+		initBoard(mainBoard);
+		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 
+    }
 
 
 

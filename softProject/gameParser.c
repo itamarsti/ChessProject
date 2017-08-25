@@ -37,11 +37,6 @@ char* gameAcc(boardGame* board){
 
 
 
-/**
-
-	,
-
-**/
 
 
 GameCommand* gameParser(const char* str){

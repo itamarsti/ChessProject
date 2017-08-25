@@ -18,10 +18,8 @@
 
 
 
-char* settingAcc(){
-    setvbuf (stdout, NULL, _IONBF, 0);
-	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
-	fflush(stdout);
+char* settingAcceptor(){
+
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
@@ -29,8 +27,6 @@ char* settingAcc(){
 		free(errorDet);
 		free(input);
 	}
-	printf("the string is %s\n",input);
-	printf("the String length is:%d",strlen(input));
 	return input;
 	}
 
@@ -69,7 +65,7 @@ ChessCommand* settingParser(const char* str){
 		else if(decider==2) cmd = diffiDecider(token);
 		else if (decider==3) cmd = gameColorDecider(token);
 		command->cmd = cmd;
-		if(cmd==INVALID_LINE1){
+		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)){
 			command->validArg = false;
 			return command;
 		}
@@ -126,8 +122,10 @@ bool spParserIsInt(const char* str){
 
 SETTING_COMMAND gameModeDecider(char* str){
 	assert(str!=NULL);
+	bool isInt = spParserIsInt(str);
+	if(!isInt) return INVALID_GAME_MODE;
 	int num = atoi(str);
-	if(num<1||num>2) return INVALID_LINE1;
+	if(num<1||num>2) return INVALID_GAME_MODE;
 	else{
 		switch(num){
 			case 1:
@@ -135,13 +133,15 @@ SETTING_COMMAND gameModeDecider(char* str){
 			case 2:
 				return GAME_MODE_2;
 			default:
-				return INVALID_LINE1;
+				return INVALID_GAME_MODE;
 			}
 		}
 	}
 
 SETTING_COMMAND gameColorDecider(char* str){
 	assert(str!=NULL);
+	bool isInt = spParserIsInt(str);
+	if(!isInt) return INVALID_LINE1;
 	int num = atoi(str);
 	if(num<0||num>1) return INVALID_LINE1;
 	else{
@@ -159,6 +159,8 @@ SETTING_COMMAND gameColorDecider(char* str){
 
 SETTING_COMMAND diffiDecider(char* str){
 	assert(str!=NULL);
+	bool isInt = spParserIsInt(str);
+	if(!isInt) return INVALID_DIFFICULT;
 	int num = atoi(str);
 	if(num<1||num>5) return INVALID_DIFFICULT;
 	else{
@@ -174,7 +176,7 @@ SETTING_COMMAND diffiDecider(char* str){
 			case 5:
 				return DIFFICULTY_5;
 			default:
-				return INVALID_LINE1;
+				return INVALID_DIFFICULT;
 			}
 		}
 }
@@ -195,5 +197,15 @@ bool isFileExist(const char* path){
 	free(realpath);
 	return true;
 }
+
+
+void destroySettingStruct(ChessCommand* cmd){
+	assert(cmd!=NULL);
+	if(cmd->path!=NULL)free(cmd->path);
+	free(cmd);
+	return;
+
+}
+
 
 
