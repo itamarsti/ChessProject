@@ -15,7 +15,7 @@
 #include "gameParser.h"
 #include "settingParser.h"
 
-bool cmdToAct(boardGame* board, ChessCommand* command){
+bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	assert(board!=NULL);
 	assert(command!=NULL);
 	if(command->cmd==START) return true;
@@ -65,7 +65,7 @@ void mainSettingFlow(boardGame* board){
 			}
 		}
 		else if (cmd->validArg==true){
-			startBool=cmdToAct(board, cmd);
+			startBool=cmdToActSetting(board, cmd);
 			if(!startBool){
 				if(cmd->cmd==QUIT1){
 					free(string);

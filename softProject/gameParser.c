@@ -111,19 +111,19 @@ bool isTri(char* str){
 
 bool isFileCreated(const char* path){
 	assert(path!=NULL);
-		FILE* fp;
-		char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
-		assert(realpath!=NULL);
-		strcpy(realpath,path);
-		fp=fopen(realpath,"w");
-		if(fp==NULL){
-			fclose(fp);
-			free(realpath);
-			return false;
-		}
+	FILE* fp;
+	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
+	assert(realpath!=NULL);
+	strcpy(realpath,path);
+	fp=fopen(realpath,"w");
+	if(fp==NULL){
 		fclose(fp);
 		free(realpath);
-		return true;
+		return false;
+	}
+	fclose(fp);
+	free(realpath);
+	return true;
 }
 
 
