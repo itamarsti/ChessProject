@@ -6,7 +6,6 @@
  */
 
 
-#include "boardFuncs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,6 +13,7 @@
 #include "gameCommands.h"
 #include "gameParser.h"
 #include "moveOps.h"
+#include "boardFuncs.h"
 
 
 bool mainGameFlow(boardGame* board){
@@ -33,14 +33,7 @@ bool mainGameFlow(boardGame* board){
 	cmd = gameParser(input);
 	assert(cmd!=NULL);
 	if(cmd->validArg){
-		if(cmd->cmd==RESET||(cmd->cmd==QUIT2)){
-			free(input);
-			destroyGameStruct(cmd);
-			if(cmd->cmd==RESET){
-				reset(board);
-				return true;
-			}
-			else quit(board);
+
 		}
 		else if(cmd->cmd==UNDO) undo(board);
 		else if (cmd->cmd==MOVE) moveObj(board,cmd);
@@ -49,34 +42,17 @@ bool mainGameFlow(boardGame* board){
 	destroyGameStruct(cmd);
 	return false;
 
-
-		GET_MOVES,
-		SAVE,
-		INVALID_SAVE,
-		INVALID_LINE2
-		if(cmd->validArg==false){
-			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)){
-				invalidSettingPrint(cmd->cmd);}
-			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
-				printf("Illegal Command\n");
-				continue;
-
-			}
-		}
-		else if (cmd->validArg==true){
-			startBool=cmdToAct(board, cmd);
-			if(!startBool){
-				if(cmd->cmd==QUIT1){
-					free(string);
-					destroySettingStruct(cmd);
-					quit(board);
-				}
-			}
-		}
-		free(string);
-		free(cmd);
-	}
-	return;
 }
+
+bool cmdToActGame(boardGame* board, GameCommand* cmd){
+	assert(board!=NULL);
+	assert(cmd!=NULL);
+	if(cmd->cmd==UNDO) undo(board);
+	else if (cmd->cmd==MOVE) moveObj(board,cmd);
+	else if(cmd->cmd==SAVE) saveFile(board,cmd);
+
+
+}
+
 
 

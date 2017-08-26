@@ -185,8 +185,9 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 	assert(cmd->path!=NULL);
 	char* path = (char*)cmd->path;
 	assert(path!=NULL);
-	FILE* file = (FILE*) fopen(path);
+	FILE* file = (FILE*) fopen(path,"r");
 	assert(file!=NULL);
+
 
 
 }

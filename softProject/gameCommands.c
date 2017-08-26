@@ -115,9 +115,14 @@ void reset(boardGame* board){
 void saveFile(boardGame* board, GameCommand* cmd){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(cmd!=NULL); assert(cmd->path!=NULL);
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
+	if(!isFileCreated(cmd->path)){
+			printf("File cannot be created or modified\n");
+			return;
+		}
 	char* path = cmd->path;
 	FILE* file = (FILE*) fopen(path,"w");
-	assert(file!=NULL);
 	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n",file);
 	fputs("<game>\n",file);
 	fprintf(file,"\t<current_turn>%d</current_turn>\n",board->curPlayer);
@@ -133,12 +138,8 @@ void saveFile(boardGame* board, GameCommand* cmd){
 			fprintf(file,"%c",board->boardArr[i][j]);
 		}
 		fprintf(file,"</row_%d>\n",8-i);
-
 	}
 	fputs("\t</board>\n",file);
 	fputs("</game>",file);
 	fclose(file);
-
-
-
 }

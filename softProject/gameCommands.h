@@ -14,8 +14,10 @@
 #define BLACK "black"
 #define WHITE "white"
 
-#include "gameParser.h"
+
 #include "boardFuncs.h"
+#include "gameParser.h"
+#include <stdbool.h>
 
 void undo(boardGame* board);
 void exUndo(boardGame* board);
@@ -24,7 +26,8 @@ int NumToRow(int num);
 int NumToCol(int num);
 int RowColToNum(int row, int col);
 void quit(boardGame* board);
-boardGame* reset(boardGame* board);
+void reset(boardGame* board);
 void saveFile(boardGame* board, GameCommand* cmd);
+
 
 #endif /* GAMECOMMANDS_H_ */

@@ -26,7 +26,7 @@
 #include "settingParser.h"
 
 bool mainSettingFlow(boardGame* board);
-bool cmdToAct(boardGame* board, SETTING_COMMAND cmd);
+bool cmdToActSetting(boardGame* board, SETTING_COMMAND cmd);
 
 
 
