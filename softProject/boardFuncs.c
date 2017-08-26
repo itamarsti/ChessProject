@@ -178,3 +178,15 @@ void invalidSettingPrint(SETTING_COMMAND cmd){
 	}
 }
 
+void loadFile(boardGame*board, ChessCommand* cmd){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(cmd!=NULL);
+	assert(cmd->path!=NULL);
+	char* path = (char*)cmd->path;
+	assert(path!=NULL);
+	FILE* file = (FILE*) fopen(path);
+	assert(file!=NULL);
+
+
+}

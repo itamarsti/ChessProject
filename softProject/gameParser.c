@@ -17,12 +17,9 @@
 
 #define BUFFER 1024
 
-char* gameAcc(boardGame* board){
-	assert(board!=NULL);assert(board->boardArr!=NULL);assert(board->history!=NULL);	assert(board->history->elements!=NULL);
+char* gameAcceptor(){
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
-    if(board->curPlayer==0)	printf("black player - enter your move:\n");
-    else  if(board->curPlayer==1)printf("white player - enter your move:\n");
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
@@ -95,7 +92,6 @@ GameCommand* gameParser(const char* str){
 				command->destination = RowColToNum(row,col);
 				command->cmd = GET_MOVES;
 				command->validArg = true;
-				return command;
 				}
 			}
 	else{
@@ -128,4 +124,11 @@ bool isFileCreated(const char* path){
 		fclose(fp);
 		free(realpath);
 		return true;
+}
+
+
+void destroyGameStruct(GameCommand* cmd){
+	assert(cmd!=NULL);
+	if(cmd->path!=NULL) free(cmd->path);
+	free(cmd);
 }

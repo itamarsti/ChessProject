@@ -32,10 +32,11 @@ typedef struct g_command {
 } GameCommand;
 
 
-char* gameAcc(boardGame* board);
+char* gameAcceptor();
 GameCommand* gameParser(const char* str);
 bool isFileCreated(const char* path);
 bool isTri(char* str);
+void destroyGameStruct(GameCommand* cmd);
 
 
 

@@ -97,16 +97,48 @@ void quit(boardGame* board){
 	exit(0);
 }
 
-boardGame* reset(boardGame* board){
+void reset(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	spArrayListDestroy(board->history);
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
 	destroyBoard(board);
-	boardGame* newBoard = createBoard();
-	initBoard(newBoard);
 	printf("Restarting...\n");
-	return newBoard;
+	return;
+}
+
+
+
+void saveFile(boardGame* board, GameCommand* cmd){
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(cmd!=NULL); assert(cmd->path!=NULL);
+	char* path = cmd->path;
+	FILE* file = (FILE*) fopen(path,"w");
+	assert(file!=NULL);
+	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n",file);
+	fputs("<game>\n",file);
+	fprintf(file,"\t<current_turn>%d</current_turn>\n",board->curPlayer);
+	fprintf(file,"\t<game_mode>%d</game_mode>\n",board->gameMode);
+	if(board->gameMode==1){
+		fprintf(file,"\t<difficulty>%d</difficulty>\n",board->diffLevel);
+		fprintf(file,"\t<user_color>%d</user_color>\n",board->userCol);
+	}
+	fputs("\t<board>\n",file);
+	for(int i=0;i<ROW;i++){
+		fprintf(file,"\t\t<row_%d>",8-i);
+		for (int j=0;j<COL;j++){
+			fprintf(file,"%c",board->boardArr[i][j]);
+		}
+		fprintf(file,"</row_%d>\n",8-i);
+
+	}
+	fputs("\t</board>\n",file);
+	fputs("</game>",file);
+	fclose(file);
+
+
 
 }

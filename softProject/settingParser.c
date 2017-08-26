@@ -131,10 +131,8 @@ bool isFileExist(const char* path){
 
 void destroySettingStruct(ChessCommand* cmd){
 	assert(cmd!=NULL);
-	assert(cmd->path!=NULL);
-	free(cmd->path);
+	if(cmd->path!=NULL) free(cmd->path);
 	free(cmd);
-
 }
 
 char* settingAcceptor(){
