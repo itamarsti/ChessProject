@@ -29,11 +29,8 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	else if (command->cmd==GAME_MODE_1) setNumPlayers(board, 1);
 	else if (command->cmd==GAME_MODE_2) setNumPlayers(board, 2);
 	else if (command->cmd==DEFAULT) setDefault(board);
-	else if	((command->cmd==QUIT1) || (command->cmd==INVALID_FILE)||(command->cmd==INVALID_LINE1)
-			|| (command->cmd==INVALID_DIFFICULT)||(command->cmd==INVALID_GAME_MODE))
-			return false;
 	else if	(command->cmd==PRINT_SETTINGS)boardPrintSet(board);
-	else if (command->cmd ==LOAD_FILE) return false; 	//handling that case
+	else if (command->cmd ==LOAD_FILE) loadFile(board,command);
 	return false;
 	}
 
@@ -56,22 +53,22 @@ void mainSettingFlow(boardGame* board){
 		cmd = settingParser(string,board->gameMode);
 		assert(cmd!=NULL);
 		if(cmd->validArg==false){
-			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)){
-				invalidSettingPrint(cmd->cmd);}
+			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)
+					|| (cmd->cmd==INVALID_FILE))invalidSettingPrint(cmd->cmd);
 			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
 				printf("Illegal Command\n");
 				continue;
-
 			}
 		}
 		else if (cmd->validArg==true){
+			if(cmd->cmd==QUIT1){
+				free(string);
+				destroySettingStruct(cmd);
+				quit(board);
+			}
 			startBool=cmdToActSetting(board, cmd);
 			if(!startBool){
-				if(cmd->cmd==QUIT1){
-					free(string);
-					destroySettingStruct(cmd);
-					quit(board);
-				}
+
 			}
 		}
 		free(string);

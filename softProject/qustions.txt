@@ -4,3 +4,4 @@
 4. what to do with illegal move
 5. what happens if in setting mode, first user's input is for game color or difficult
 	and later the user's input for "game_mode state" is changed to 2.
+6. the load file need to be parsed!!

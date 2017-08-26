@@ -33,7 +33,7 @@ bool mainGameFlow(boardGame* board){
 	cmd = gameParser(input);
 	assert(cmd!=NULL);
 	if(cmd->validArg){
-		return ;
+
 		}
 		else if(cmd->cmd==UNDO) undo(board);
 		else if (cmd->cmd==MOVE) moveObj(board,cmd);

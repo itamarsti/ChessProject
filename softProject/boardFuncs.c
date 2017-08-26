@@ -170,12 +170,9 @@ void setDefault(boardGame* board){
 }
 
 void invalidSettingPrint(SETTING_COMMAND cmd){
-	if(cmd==INVALID_DIFFICULT){
-		printf("Wrong difficulty level. The value should be between 1 to 5\n");
-	}
-	else if(cmd==INVALID_GAME_MODE){
-		printf("Wrong game mode\n");
-	}
+	if (cmd==INVALID_DIFFICULT)printf ("Wrong difficulty level. The value should be between 1 to 5\n");
+	else if (cmd==INVALID_GAME_MODE) printf("Wrong game mode\n");
+	else if (cmd==INVALID_FILE) printf("Eror: File doesn’t exist or cannot be opened\n");
 }
 
 void loadFile(boardGame*board, ChessCommand* cmd){
@@ -187,7 +184,14 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 	assert(path!=NULL);
 	FILE* file = (FILE*) fopen(path,"r");
 	assert(file!=NULL);
-
+	char buffer[1024];
+	fscanf(file, "%[^\n]\n", buffer);	//xml version & encoding
+	fscanf(file, "%[^\n]\n", buffer); 	//	game
+	fscanf(file, "%[^\n]\n", buffer);	//current turn
+	board->curPlayer = (int) buffer[14]-'0';
+	fscanf(file, "%[^\n]\n", buffer);	//game mode
+	board->gameMode = (int) buffer[11]-'0';
+	printf("the data is:%s \n",buffer);	//game mode
 
 
 }

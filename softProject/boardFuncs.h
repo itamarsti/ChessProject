@@ -50,6 +50,7 @@ void setNumPlayers(boardGame* board, int num);
 boardGame* copyBoard(boardGame*board);
 void setDefault(boardGame* board);
 void invalidSettingPrint(SETTING_COMMAND cmd);
+void loadFile(boardGame*board, ChessCommand* cmd);
 
 
 #endif /* BOARDFUNCS_H_ */
