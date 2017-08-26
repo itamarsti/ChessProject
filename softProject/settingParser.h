@@ -39,12 +39,12 @@ typedef struct s_command {
 
 
 char* settingAcceptor();
-ChessCommand* settingParser(const char* str);
+ChessCommand* settingParser(const char* str, int numPlayers);
 bool spParserIsInt(const char* str);
-SETTING_COMMAND diffiDecider(char* str);
+SETTING_COMMAND diffiDecider(char* str, int Players);
 int diffLevelToInt(SETTING_COMMAND cmd);
 SETTING_COMMAND gameModeDecider(char* str);
-SETTING_COMMAND gameColorDecider(char* str);
+SETTING_COMMAND gameColorDecider(char* str, int numPlayers);
 bool isFileExist(const char*path);
 void destroySettingStruct(ChessCommand* cmd);
 

@@ -48,6 +48,7 @@ void setColor(boardGame* board, int num);
 void boardPrintSet(boardGame*board);
 void setNumPlayers(boardGame* board, int num);
 boardGame* copyBoard(boardGame*board);
+void setDefault(boardGame* board);
 void invalidSettingPrint(SETTING_COMMAND cmd);
 
 

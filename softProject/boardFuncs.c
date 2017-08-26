@@ -67,8 +67,8 @@ void initBoard(boardGame* board){
 	board->boardArr[0][2] = BlackBishop; board->boardArr[0][5] = BlackBishop;
 	board->boardArr[7][3] = WhiteQueen; board->boardArr[7][4] = WhiteKing;
 	board->boardArr[0][3] = BlackQueen; board->boardArr[0][4] = BlackKing;
-	board->gameMode = 1;
-	board->diffLevel = 2;
+	board->gameMode = 1;			//1- 1 player; 2- 2 players
+	board->diffLevel = 2;			//difficult level
 	board->userCol = 1;				//1 - white; 0 - black;
 	board->curPlayer = 1;			//1 = white player, 0 = black player
 }
@@ -160,6 +160,15 @@ boardGame* copyBoard(boardGame*board){
 	return copy;
 }
 
+void setDefault(boardGame* board){
+	assert(board!=NULL);
+	board->gameMode = 1;			//1- 1 player; 2- 2 players
+	board->diffLevel = 2;			//difficult level
+	board->userCol = 1;				//1 - white; 0 - black;
+	board->curPlayer = 1;
+	printf("setting to default was completed");
+}
+
 void invalidSettingPrint(SETTING_COMMAND cmd){
 	if(cmd==INVALID_DIFFICULT){
 		printf("Wrong difficulty level. The value should be between 1 to 5\n");
@@ -168,3 +177,4 @@ void invalidSettingPrint(SETTING_COMMAND cmd){
 		printf("Wrong game mode\n");
 	}
 }
+

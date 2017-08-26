@@ -28,9 +28,10 @@ bool cmdToAct(boardGame* board, ChessCommand* command){
 	else if (command->cmd==USER_COL_1) setColor(board, 1);
 	else if (command->cmd==GAME_MODE_1) setNumPlayers(board, 1);
 	else if (command->cmd==GAME_MODE_2) setNumPlayers(board, 2);
-	else if	((command->cmd==DEFAULT)|| (command->cmd==QUIT1) || (command->cmd==INVALID_FILE)
-			|| (command->cmd==INVALID_DIFFICULT)||(command->cmd==INVALID_GAME_MODE)
-			||(command->cmd==INVALID_LINE1))return false;
+	else if (command->cmd==DEFAULT) setDefault(board);
+	else if	((command->cmd==QUIT1) || (command->cmd==INVALID_FILE)||(command->cmd==INVALID_LINE1)
+			|| (command->cmd==INVALID_DIFFICULT)||(command->cmd==INVALID_GAME_MODE))
+			return false;
 	else if	(command->cmd==PRINT_SETTINGS)boardPrintSet(board);
 	else if (command->cmd ==LOAD_FILE) return false; 	//handling that case
 	return false;
@@ -52,12 +53,16 @@ void mainSettingFlow(boardGame* board){
 	while(!startBool){
 		string = settingAcceptor();
 		assert(string!=NULL);
-		cmd = settingParser(string);
+		cmd = settingParser(string,board->gameMode);
 		assert(cmd!=NULL);
 		if(cmd->validArg==false){
 			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)){
 				invalidSettingPrint(cmd->cmd);}
-			else if(cmd->cmd==INVALID_LINE1)return;		//what to do in that case???
+			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
+				printf("Illegal Command\n");
+				continue;
+
+			}
 		}
 		else if (cmd->validArg==true){
 			startBool=cmdToAct(board, cmd);

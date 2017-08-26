@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include "settingParser.h"
+#include "boardFuncs.h"
 
 #define BUFFER 1024
 
@@ -65,8 +66,9 @@ SETTING_COMMAND gameModeDecider(char* str){
 		}
 	}
 
-SETTING_COMMAND gameColorDecider(char* str){
+SETTING_COMMAND gameColorDecider(char* str, int numPlayers){
 	assert(str!=NULL);
+	if (numPlayers==2) return INVALID_LINE1;
 	bool isInt = spParserIsInt(str);
 	if(!isInt) return INVALID_LINE1;
 	int num = atoi(str);
@@ -84,8 +86,9 @@ SETTING_COMMAND gameColorDecider(char* str){
 	}
 
 
-SETTING_COMMAND diffiDecider(char* str){
+SETTING_COMMAND diffiDecider(char* str, int Players){
 	assert(str!=NULL);
+	if (Players==2) return INVALID_LINE1;
 	bool isInt = spParserIsInt(str);
 	if(!isInt) return INVALID_DIFFICULT;
 	int num = atoi(str);
@@ -147,7 +150,7 @@ char* settingAcceptor(){
 	}
 
 
-ChessCommand* settingParser(const char* str){
+ChessCommand* settingParser(const char* str, int numPlayers){
 	ChessCommand* command = (ChessCommand*)malloc(sizeof(ChessCommand));
 	assert(command!=NULL);
 	assert(str!=NULL);
@@ -178,10 +181,10 @@ ChessCommand* settingParser(const char* str){
 		}
 		SETTING_COMMAND cmd;
 		if (decider==1) cmd = gameModeDecider(token);
-		else if(decider==2) cmd = diffiDecider(token);
-		else if (decider==3) cmd = gameColorDecider(token);
+		else if(decider==2) cmd = diffiDecider(token,numPlayers);
+		else if (decider==3) cmd = gameColorDecider(token, numPlayers);
 		command->cmd = cmd;
-		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)){
+		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)|| cmd==INVALID_LINE1){
 			command->validArg = false;
 			return command;
 		}
