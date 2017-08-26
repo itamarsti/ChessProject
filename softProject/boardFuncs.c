@@ -194,4 +194,5 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 	printf("the data is:%s \n",buffer);	//game mode
 
 
+
 }

@@ -61,11 +61,14 @@ void mainSettingFlow(boardGame* board){
 			}
 		}
 		else if (cmd->validArg==true){
+<<<<<<< HEAD
 			if(cmd->cmd==QUIT1){
 				free(string);
 				destroySettingStruct(cmd);
 				quit(board);
 			}
+=======
+>>>>>>> refs/remotes/origin/master
 			startBool=cmdToActSetting(board, cmd);
 			if(!startBool){
 
