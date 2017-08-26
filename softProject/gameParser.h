@@ -33,6 +33,7 @@ typedef struct g_command {
 
 
 char* gameAcc(boardGame* board);
+GameCommand* gameParser(const char* str);
 bool isFileCreated(const char* path);
 bool isTri(char* str);
 

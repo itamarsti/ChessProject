@@ -9,6 +9,7 @@
 #define BOARDFUNCS_H_
 
 #include "SPArrayList.h"
+#include "settingParser.h"
 
 typedef struct boardGame{
 	char boardArr[8][8];
@@ -47,6 +48,7 @@ void setColor(boardGame* board, int num);
 void boardPrintSet(boardGame*board);
 void setNumPlayers(boardGame* board, int num);
 boardGame* copyBoard(boardGame*board);
+void invalidSettingPrint(SETTING_COMMAND cmd);
 
 
 #endif /* BOARDFUNCS_H_ */

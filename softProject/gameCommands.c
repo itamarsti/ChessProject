@@ -102,8 +102,8 @@ boardGame* reset(boardGame* board){
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	spDestroyArrayList(board->history);
-	destroyGame(board);
+	spArrayListDestroy(board->history);
+	destroyBoard(board);
 	boardGame* newBoard = createBoard();
 	initBoard(newBoard);
 	printf("Restarting...\n");

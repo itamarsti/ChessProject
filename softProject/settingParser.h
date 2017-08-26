@@ -42,9 +42,10 @@ char* settingAcceptor();
 ChessCommand* settingParser(const char* str);
 bool spParserIsInt(const char* str);
 SETTING_COMMAND diffiDecider(char* str);
+int diffLevelToInt(SETTING_COMMAND cmd);
 SETTING_COMMAND gameModeDecider(char* str);
 SETTING_COMMAND gameColorDecider(char* str);
 bool isFileExist(const char*path);
-void destroySettingStruct(ChessCommand cmd);
+void destroySettingStruct(ChessCommand* cmd);
 
 #endif /* SETTINGPARSER_H_ */

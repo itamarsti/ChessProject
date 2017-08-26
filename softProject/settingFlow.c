@@ -15,43 +15,6 @@
 #include "gameParser.h"
 #include "settingParser.h"
 
-void mainSettingFlow(boardGame* board){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(board->history!=NULL);
-	assert(board->history->elements);
-	setvbuf (stdout, NULL, _IONBF, 0);
-	fflush(stdout);
-	bool startBool = false;
-	char* string;
-	ChessCommand* cmd;
-	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
-	while(!startBool){
-		string = settingAcceptor();
-		assert(string!=NULL);
-		cmd = settingParser(string);
-		assert(cmd!=NULL);
-		if(cmd->validArg==false){
-			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)){
-				invalidSettingPrint(cmd->cmd);}
-			else if(cmd->cmd==INVALID_LINE1)return;		//what to do in that case???
-		}
-		else if (cmd->validArg==true){
-			startBool=cmdToAct(board, cmd->cmd);
-			if(!startBool){
-				if(cmd->cmd==QUIT1){
-					free(string);
-					destroySettingStruct(cmd);
-					destroyGame(board);
-				}
-			}
-		}
-		free(string);
-		free(cmd);
-	}
-	return;
-}
-
 bool cmdToAct(boardGame* board, ChessCommand* command){
 	assert(board!=NULL);
 	assert(command!=NULL);
@@ -74,4 +37,41 @@ bool cmdToAct(boardGame* board, ChessCommand* command){
 	}
 
 
+
+void mainSettingFlow(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements);
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
+	bool startBool = false;
+	char* string;
+	ChessCommand* cmd;
+	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
+	while(!startBool){
+		string = settingAcceptor();
+		assert(string!=NULL);
+		cmd = settingParser(string);
+		assert(cmd!=NULL);
+		if(cmd->validArg==false){
+			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)){
+				invalidSettingPrint(cmd->cmd);}
+			else if(cmd->cmd==INVALID_LINE1)return;		//what to do in that case???
+		}
+		else if (cmd->validArg==true){
+			startBool=cmdToAct(board, cmd);
+			if(!startBool){
+				if(cmd->cmd==QUIT1){
+					free(string);
+					destroySettingStruct(cmd);
+					quit(board);
+				}
+			}
+		}
+		free(string);
+		free(cmd);
+	}
+	return;
+}
 

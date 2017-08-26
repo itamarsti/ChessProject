@@ -18,79 +18,6 @@
 
 
 
-char* settingAcceptor(){
-
-	char* input = (char*)malloc(sizeof(char)*BUFFER);
-	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
-	if(errorDet==NULL){
-		printf("fgets has faild");
-		free(errorDet);
-		free(input);
-	}
-	return input;
-	}
-
-
-ChessCommand* settingParser(const char* str){
-	ChessCommand* command = (ChessCommand*)malloc(sizeof(ChessCommand));
-	assert(command!=NULL);
-	assert(str!=NULL);
-	command->validArg = true;
-	char stringDup[1024];
-	strcpy(stringDup,str);
-	char *token = strtok(stringDup, "\t\r\n ");
-	int decider = 0;
-	if(token==NULL) {
-		command->cmd = INVALID_LINE1;
-		command->validArg = false;
-		return command;
-	}
-	else if(strcmp(token, "start")==0)command->cmd = START;
-	else if(strcmp(token, "quit")==0)command->cmd = QUIT1;
-	else if(strcmp(token, "default")==0)command->cmd = DEFAULT;
-	else if(strcmp(token, "print_setting")==0)command->cmd = PRINT_SETTINGS;
-	else if((strcmp(token, "game_mode")==0)||(strcmp(token, "difficulty")==0)
-			||(strcmp(token, "user_color")==0)){
-		if ((strcmp(token, "game_mode")==0)) decider = 1;
-		else if ((strcmp(token, "difficulty")==0)) decider = 2;
-		else if ((strcmp(token, "user_color")==0)) decider = 3;
-		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL || !spParserIsInt(token)){
-			command->cmd = INVALID_LINE1;
-			command->validArg = false;
-			return command;
-		}
-		SETTING_COMMAND cmd;
-		if (decider==1) cmd = gameModeDecider(token);
-		else if(decider==2) cmd = diffiDecider(token);
-		else if (decider==3) cmd = gameColorDecider(token);
-		command->cmd = cmd;
-		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)){
-			command->validArg = false;
-			return command;
-		}
-	}
-	else if((strcmp(token, "load")==0)){
-		token = strtok(NULL, "\t\r\n");
-		if(!isFileExist(token)){
-			command->cmd = INVALID_FILE;
-			command->validArg = false;
-			return command;
-		}
-		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
-		strcpy(command->path,token);
-		command->cmd = LOAD_FILE;
-	}
-	else{
-		command->cmd = INVALID_LINE1;
-		command->validArg = false;
-
-	}
-	return command;
-}
-
-
-
 int diffLevelToInt(SETTING_COMMAND cmd){
 	if(cmd==DIFFICULTY_1) return 1;
 	else if(cmd==DIFFICULTY_2) return 2;
@@ -201,11 +128,84 @@ bool isFileExist(const char* path){
 
 void destroySettingStruct(ChessCommand* cmd){
 	assert(cmd!=NULL);
-	if(cmd->path!=NULL)free(cmd->path);
+	assert(cmd->path!=NULL);
+	free(cmd->path);
 	free(cmd);
-	return;
 
 }
+
+char* settingAcceptor(){
+
+	char* input = (char*)malloc(sizeof(char)*BUFFER);
+	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
+	if(errorDet==NULL){
+		printf("fgets has faild");
+		free(errorDet);
+		free(input);
+	}
+	return input;
+	}
+
+
+ChessCommand* settingParser(const char* str){
+	ChessCommand* command = (ChessCommand*)malloc(sizeof(ChessCommand));
+	assert(command!=NULL);
+	assert(str!=NULL);
+	command->validArg = true;
+	char stringDup[1024];
+	strcpy(stringDup,str);
+	char *token = strtok(stringDup, "\t\r\n ");
+	int decider = 0;
+	if(token==NULL) {
+		command->cmd = INVALID_LINE1;
+		command->validArg = false;
+		return command;
+	}
+	else if(strcmp(token, "start")==0)command->cmd = START;
+	else if(strcmp(token, "quit")==0)command->cmd = QUIT1;
+	else if(strcmp(token, "default")==0)command->cmd = DEFAULT;
+	else if(strcmp(token, "print_setting")==0)command->cmd = PRINT_SETTINGS;
+	else if((strcmp(token, "game_mode")==0)||(strcmp(token, "difficulty")==0)
+			||(strcmp(token, "user_color")==0)){
+		if ((strcmp(token, "game_mode")==0)) decider = 1;
+		else if ((strcmp(token, "difficulty")==0)) decider = 2;
+		else if ((strcmp(token, "user_color")==0)) decider = 3;
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL || !spParserIsInt(token)){
+			command->cmd = INVALID_LINE1;
+			command->validArg = false;
+			return command;
+		}
+		SETTING_COMMAND cmd;
+		if (decider==1) cmd = gameModeDecider(token);
+		else if(decider==2) cmd = diffiDecider(token);
+		else if (decider==3) cmd = gameColorDecider(token);
+		command->cmd = cmd;
+		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)){
+			command->validArg = false;
+			return command;
+		}
+	}
+	else if((strcmp(token, "load")==0)){
+		token = strtok(NULL, "\t\r\n");
+		if(!isFileExist(token)){
+			command->cmd = INVALID_FILE;
+			command->validArg = false;
+			return command;
+		}
+		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
+		strcpy(command->path,token);
+		command->cmd = LOAD_FILE;
+	}
+	else{
+		command->cmd = INVALID_LINE1;
+		command->validArg = false;
+
+	}
+	return command;
+}
+
+
 
 
 

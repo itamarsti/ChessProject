@@ -119,20 +119,22 @@ void setNumPlayers(boardGame* board, int num){
 }
 
 void boardPrintSet(boardGame*board){
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	printf("SETTINGS:/n");
+	printf("SETTINGS:\n");
 	if(board->gameMode==1){
-		printf("GAME MODE: %d",board->gameMode);
+		printf("GAME MODE: %d\n",board->gameMode);
 		return;}
 	else{
-		printf("GAME MODE: %d",board->gameMode);
-		printf("DIFFICULTY_LVL: %d",board->diffLevel);
+		printf("GAME MODE: %d\n",board->gameMode);
+		printf("DIFFICULTY_LVL: %d\n",board->diffLevel);
 		if(board->userCol==0){
-			printf("USER_CLR: BLACK");
+			printf("USER_CLR: BLACK\n");
 		}
 		else if (board->userCol==1){
-			printf("USER_CLR: WHITE");
+			printf("USER_CLR: WHITE\n");
 		}
 		return;
 	}
