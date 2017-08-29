@@ -9,6 +9,10 @@
 #define GAMECOMMANDS_H_
 
 
+
+
+#define BLACK "black"
+#define WHITE "white"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,13 +24,6 @@
 #include "SPArrayList.h"
 
 
-
-#define BLACK "black"
-#define WHITE "white"
-
-
-void saveFile(boardGame* board,GameCommand* cmd);
-void printInvalidMes(GAME_COMMAND cmd);
 void undo(boardGame* board);
 void exUndo(boardGame* board);
 void changePlayer(boardGame* board);
@@ -35,6 +32,8 @@ int NumToCol(int num);
 int RowColToNum(int row, int col);
 void quit(boardGame* board);
 void reset(boardGame* board);
+void saveFile(boardGame* board, const char* path);
+
 
 
 #endif /* GAMECOMMANDS_H_ */

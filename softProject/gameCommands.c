@@ -67,17 +67,15 @@ void reset(boardGame* board){
 
 
 
-void saveFile(boardGame* board, GameCommand* cmd){
+void saveFile(boardGame* board, const char* path){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
-	assert(cmd!=NULL); assert(cmd->path!=NULL);
+	assert(path!=NULL);
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
-	if(!isFileCreated(cmd->path)){
+	if(!isFileCreated(path)){
 			printf("File cannot be created or modified\n");
 			return;
 		}
-	char* path = (char*)cmd->path;
-	assert(path!=NULL);
 	FILE* file = (FILE*) fopen(path,"w");
 	assert(file!=NULL);
 	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n",file);
@@ -101,12 +99,7 @@ void saveFile(boardGame* board, GameCommand* cmd){
 	fclose(file);
 }
 
-void printInvalidMes(GAME_COMMAND cmd){
-	setvbuf (stdout, NULL, _IONBF, 0);
-	fflush(stdout);
-	if(cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
-	else if (cmd==INVALID_LINE2) printf("Illegal Command\n");
-}
+
 
 
 
@@ -156,7 +149,7 @@ void undo(boardGame* board){
 	return;
 }
 
-
+/**
 bool isKingThreatend(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -164,3 +157,4 @@ bool isKingThreatend(boardGame* board){
 
 	}
 }
+**/

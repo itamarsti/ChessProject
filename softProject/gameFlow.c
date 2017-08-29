@@ -28,7 +28,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 	}
 	else if (cmd->cmd==MOVE) moveObj(board,cmd);
 	else if(cmd->cmd==SAVE){
-		saveFile(board,cmd);
+		saveFile(board,cmd->path);
 		return false;
 	}
 	return true;
@@ -69,10 +69,11 @@ bool mainGameFlow(boardGame* board){
 			}
 		}
 		else if (!cmd->validArg){
-			//pintInvalidMes(cmd->cmd);
+				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
+				else if (cmd->cmd==INVALID_LINE2) printf("Illegal Command\n");
+			}
 			continue;
 		}
-	}
 	free(input);
 	destroyGameStruct(cmd);
 	return false;
