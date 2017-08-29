@@ -5,3 +5,7 @@
 5. what happens if in setting mode, first user's input is for game color or difficult
 	and later the user's input for "game_mode state" is changed to 2.
 6. the load file need to be parsed!!
+7. how to react when the player's command is "save file"..the game continues?
+	we wait until the player is doing move?
+8. don't forget to do getMoves
+9. to do all the limitations for 1 player/2 players

@@ -275,10 +275,10 @@ void moveObj(boardGame* board, GameCommand* command){
 	assert(board->boardArr!=NULL);
 	assert(command!=NULL);
 	fflush(stdout);
-	int rowPos = posToRow(command->position);
-	int colPos = posToCol(command->position);
-	int rowDest = posToRow(command->destination);
-	int colDest = posToCol(command->destination);
+	int rowPos = NumToRow(command->position);
+	int colPos = NumToCol(command->position);
+	int rowDest = NumToRow(command->destination);
+	int colDest = NumToCol(command->destination);
 	if ((rowPos<0|| rowPos>7 || colPos<0|| colPos>7 || rowDest<0|| rowDest>7 || colDest<0|| colDest>7)||
 		(board->boardArr[rowPos][colPos]==UNDERSCORE)){
 			printf("Invalid position on the board\n");

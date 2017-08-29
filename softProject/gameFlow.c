@@ -14,6 +14,26 @@
 #include "gameParser.h"
 #include "moveOps.h"
 #include "boardFuncs.h"
+#include "settingParser.h"
+
+
+
+
+bool cmdToActGame(boardGame* board, GameCommand* cmd){
+	assert(board!=NULL);
+	assert(cmd!=NULL);
+	if(cmd->cmd==UNDO){
+		undo(board);
+		undo(board);
+	}
+	else if (cmd->cmd==MOVE) moveObj(board,cmd);
+	else if(cmd->cmd==SAVE){
+		saveFile(board,cmd);
+		return false;
+	}
+	return true;
+}
+
 
 
 bool mainGameFlow(boardGame* board){
@@ -28,30 +48,34 @@ bool mainGameFlow(boardGame* board){
 	bool loopBreaker = false;
 	if(board->curPlayer==0) printf("%s player - enter your move:\n",BLACK);
 	else if(board->curPlayer==0) printf("%s player - enter your move:\n",WHITE);
-	input = gameAcceptor();
-	assert(input!=NULL);
-	cmd = gameParser(input);
-	assert(cmd!=NULL);
-	if(cmd->validArg){
-
+	while(!loopBreaker){
+		input = gameAcceptor();
+		assert(input!=NULL);
+		cmd = gameParser(input);
+		assert(cmd!=NULL);
+		if(cmd->validArg){
+			if(cmd->cmd==RESET || cmd->cmd==QUIT2){
+				free(input);
+				if(cmd->cmd==QUIT2){
+					destroyGameStruct(cmd);
+					quit(board);
+				}
+				else{							//in case of RESET
+					destroyGameStruct(cmd);
+					reset(board);
+					return true;
+				}
+			loopBreaker = cmdToActGame(board,cmd);		//dont forget game_moves
+			}
 		}
-		else if(cmd->cmd==UNDO) undo(board);
-		else if (cmd->cmd==MOVE) moveObj(board,cmd);
+		else if (!cmd->validArg){
+			//pintInvalidMes(cmd->cmd);
+			continue;
+		}
 	}
 	free(input);
 	destroyGameStruct(cmd);
 	return false;
-
-}
-
-bool cmdToActGame(boardGame* board, GameCommand* cmd){
-	assert(board!=NULL);
-	assert(cmd!=NULL);
-	if(cmd->cmd==UNDO) undo(board);
-	else if (cmd->cmd==MOVE) moveObj(board,cmd);
-	else if(cmd->cmd==SAVE) saveFile(board,cmd);
-
-
 }
 
 

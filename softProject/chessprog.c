@@ -11,6 +11,7 @@
 #include "settingParser.h"
 #include "moveOps.h"
 #include "settingFlow.h"
+#include "gameFlow.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -19,15 +20,16 @@
 int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
-    while(1){
-    	bool resetBool = false;
+	bool resetBool = false;
+    while(!resetBool){
     	boardGame* mainBoard = createBoard();
 		initBoard(mainBoard);
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 		while(!resetBool){
 			printBoard(mainBoard);
-			mainGameFlow(board);
+			resetBool = mainGameFlow(mainBoard);
 		}
+		resetBool = true;
     }
 
 

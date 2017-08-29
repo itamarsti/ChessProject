@@ -17,6 +17,42 @@
 
 #define BUFFER 1024
 
+
+
+bool isTri(char* str){
+	assert(str!=NULL);
+	if (strlen(str)!=5) return false;
+	if (str[0]!='<'||str[2]!=','||str[4]!='>')return false;
+	if ((str[1]-'0')<0 || (str[1]-'0')>9 || str[3]<'A' || str[3]>'Z') return false;
+	return true;
+}
+
+bool isFileCreated(const char* path){
+	assert(path!=NULL);
+	FILE* fp;
+	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
+	assert(realpath!=NULL);
+	strcpy(realpath,path);
+	fp=fopen(realpath,"w");
+	if(fp==NULL){
+		fclose(fp);
+		free(realpath);
+		return false;
+	}
+	fclose(fp);
+	free(realpath);
+	return true;
+}
+
+
+void destroyGameStruct(GameCommand* cmd){
+	assert(cmd!=NULL);
+	if(cmd->path!=NULL) free(cmd->path);
+	free(cmd);
+}
+
+
+
 char* gameAcceptor(){
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
@@ -99,36 +135,4 @@ GameCommand* gameParser(const char* str){
 		command->validArg = false;
 	}
 	return command;
-}
-
-bool isTri(char* str){
-	assert(str!=NULL);
-	if (strlen(str)!=5) return false;
-	if (str[0]!='<'||str[2]!=','||str[4]!='>')return false;
-	if ((str[1]-'0')<0 || (str[1]-'0')>9 || str[3]<'A' || str[3]>'Z') return false;
-	return true;
-}
-
-bool isFileCreated(const char* path){
-	assert(path!=NULL);
-	FILE* fp;
-	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
-	assert(realpath!=NULL);
-	strcpy(realpath,path);
-	fp=fopen(realpath,"w");
-	if(fp==NULL){
-		fclose(fp);
-		free(realpath);
-		return false;
-	}
-	fclose(fp);
-	free(realpath);
-	return true;
-}
-
-
-void destroyGameStruct(GameCommand* cmd){
-	assert(cmd!=NULL);
-	if(cmd->path!=NULL) free(cmd->path);
-	free(cmd);
 }

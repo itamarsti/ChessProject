@@ -13,54 +13,9 @@
 #include "gameCommands.h"
 #include "boardFuncs.h"
 #include "gameParser.h"
+#include "settingParser.h"
 
 
-void undo(boardGame* board){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(board->history!=NULL);
-	assert(board->history->elements!=NULL);
-	if(board->gameMode==2){
-		printf("Undo command not available in 2 players mode\n");
-		return;
-	}
-	if(spArrayListIsEmpty(board->history)){
-		printf("Empty history, move cannot be undone\n");
-		return;
-	}
-	exUndo(board);
-	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
-		spArrayListRemoveAt(board->history,i);
-	}
-	board->history->actualSize-=4;
-
-	return;
-}
-
-void exUndo(boardGame* board){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(board->history!=NULL);
-	assert(board->history->elements!=NULL);
-	int index = board->history->actualSize-1;
-	char objDest = (char)board->history->elements[index];
-	int posDest = board->history->elements[index-1];
-	char objSource = (char)board->history->elements[index-2];
-	int posDSource = board->history->elements[index-3];
-	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
-	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
-	if(board->curPlayer==0){
-		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-		BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
-	}
-	else if(board->curPlayer==1){
-		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-		WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
-	}
-	changePlayer(board);
-	return;
-
-}
 
 int NumToRow(int num){
 	int row = num/8;
@@ -121,8 +76,10 @@ void saveFile(boardGame* board, GameCommand* cmd){
 			printf("File cannot be created or modified\n");
 			return;
 		}
-	char* path = cmd->path;
+	char* path = (char*)cmd->path;
+	assert(path!=NULL);
 	FILE* file = (FILE*) fopen(path,"w");
+	assert(file!=NULL);
 	fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n",file);
 	fputs("<game>\n",file);
 	fprintf(file,"\t<current_turn>%d</current_turn>\n",board->curPlayer);
@@ -142,4 +99,68 @@ void saveFile(boardGame* board, GameCommand* cmd){
 	fputs("\t</board>\n",file);
 	fputs("</game>",file);
 	fclose(file);
+}
+
+void printInvalidMes(GAME_COMMAND cmd){
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
+	if(cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
+	else if (cmd==INVALID_LINE2) printf("Illegal Command\n");
+}
+
+
+
+void exUndo(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	int index = board->history->actualSize-1;
+	char objDest = (char)board->history->elements[index];
+	int posDest = board->history->elements[index-1];
+	char objSource = (char)board->history->elements[index-2];
+	int posDSource = board->history->elements[index-3];
+	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
+	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
+	if(board->curPlayer==0){
+		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+		BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+	}
+	else if(board->curPlayer==1){
+		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+		WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+	}
+	return;
+}
+
+
+void undo(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	if(board->gameMode==2){
+		printf("Undo command not available in 2 players mode\n");
+		return;
+	}
+	if(spArrayListIsEmpty(board->history)){
+		printf("Empty history, move cannot be undone\n");
+		return;
+	}
+	exUndo(board);
+	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
+		spArrayListRemoveAt(board->history,i);
+	}
+	board->history->actualSize-=4;
+	changePlayer(board);
+	return;
+}
+
+
+bool isKingThreatend(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if(board->curPlayer==0){
+
+	}
 }

@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "gameParser.h"
-#include "settingParser.h"
 
 bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	assert(board!=NULL);

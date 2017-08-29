@@ -210,7 +210,7 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 			board->boardArr[i][j-7] = (char)buffer[j];
 		}
 	}
-	fclode(file);
+	fclose(file);
 
 
 
