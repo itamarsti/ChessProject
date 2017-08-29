@@ -176,22 +176,42 @@ void invalidSettingPrint(SETTING_COMMAND cmd){
 }
 
 void loadFile(boardGame*board, ChessCommand* cmd){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(cmd!=NULL);
-	assert(cmd->path!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);assert(cmd!=NULL); assert(cmd->path!=NULL);
 	char* path = (char*)cmd->path;
 	assert(path!=NULL);
 	FILE* file = (FILE*) fopen(path,"r");
 	assert(file!=NULL);
 	char buffer[1024];
+	char* token;
 	fscanf(file, "%[^\n]\n", buffer);	//xml version & encoding
 	fscanf(file, "%[^\n]\n", buffer); 	//	game
 	fscanf(file, "%[^\n]\n", buffer);	//current turn
 	board->curPlayer = (int) buffer[14]-'0';
 	fscanf(file, "%[^\n]\n", buffer);	//game mode
 	board->gameMode = (int) buffer[11]-'0';
-	printf("the data is:%s \n",buffer);	//game mode
+	if(board->gameMode==1){
+		fscanf(file, "%[^\n]\n", buffer);	//difficulty turn
+		token = strtok(buffer," <>");
+		if(strcmp(token,"difficulty ")){
+			int difficulty = (int)buffer[12]-'0';
+			board->diffLevel = difficulty;
+		}
+		fscanf(file, "%[^\n]\n", buffer);	//game_color turn
+		token = strtok(buffer," <>");
+		if(strcmp(token,"game_color ")){
+			int gameCol = (int)buffer[12]-'0';
+			board->userCol = gameCol;
+		}
+	}
+	fscanf(file, "%[^\n]\n", buffer);	//board
+	for(int i=0;i<ROW;i++){
+		fscanf(file, "%[^\n]\n", buffer); //row
+		for(int j=7;j<7+COL;j++){
+			board->boardArr[i][j-7] = (char)buffer[j];
+		}
+	}
+	fclode(file);
+
 
 
 

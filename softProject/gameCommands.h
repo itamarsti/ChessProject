@@ -18,6 +18,8 @@
 #include "boardFuncs.h"
 #include "gameParser.h"
 #include <stdbool.h>
+#include "gameFlow.h"
+#include "settingParser.h"
 
 void undo(boardGame* board);
 void exUndo(boardGame* board);
