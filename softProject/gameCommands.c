@@ -132,14 +132,6 @@ void undo(boardGame* board){
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	if(board->gameMode==2){
-		printf("Undo command not available in 2 players mode\n");
-		return;
-	}
-	if(spArrayListIsEmpty(board->history)){
-		printf("Empty history, move cannot be undone\n");
-		return;
-	}
 	exUndo(board);
 	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
 		spArrayListRemoveAt(board->history,i);

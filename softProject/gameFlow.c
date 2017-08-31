@@ -22,9 +22,19 @@
 bool cmdToActGame(boardGame* board, GameCommand* cmd){
 	assert(board!=NULL);
 	assert(cmd!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
 	bool validMove = false;
 	if (cmd->cmd==MOVE) validMove = moveObj(board,cmd);
 	else if(cmd->cmd==UNDO){
+		if(board->gameMode==2){
+			printf("Undo command not available in 2 players mode\n");
+			return false;
+		}
+		if(spArrayListIsEmpty(board->history)){
+			printf("Empty history, move cannot be undone\n");
+			return false;
+		}
 		undo(board);
 		undo(board);
 	}
