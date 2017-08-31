@@ -22,16 +22,14 @@
 bool cmdToActGame(boardGame* board, GameCommand* cmd){
 	assert(board!=NULL);
 	assert(cmd!=NULL);
-	if(cmd->cmd==UNDO){
+	bool validMove = false;
+	if (cmd->cmd==MOVE) validMove = moveObj(board,cmd);
+	else if(cmd->cmd==UNDO){
 		undo(board);
 		undo(board);
 	}
-	else if (cmd->cmd==MOVE) moveObj(board,cmd);
-	else if(cmd->cmd==SAVE){
-		saveFile(board,cmd->path);
-		return false;
-	}
-	return true;
+	else if(cmd->cmd==SAVE) saveFile(board,cmd->path);
+	return validMove;
 }
 
 
@@ -42,7 +40,7 @@ bool mainGameFlow(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
-	assert(board->history->elements);
+	assert(board->history->elements!=NULL);
 	char* input;
 	GameCommand* cmd;
 	bool loopBreaker = false;
@@ -64,8 +62,9 @@ bool mainGameFlow(boardGame* board){
 					reset(board);
 					return true;
 				}
-			loopBreaker = cmdToActGame(board,cmd);		//dont forget game_moves
+
 			}
+			loopBreaker = cmdToActGame(board,cmd);		//dont forget game_moves
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");

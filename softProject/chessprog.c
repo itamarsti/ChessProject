@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
 	bool resetBool = false;
-    while(!resetBool){
+    while(1){
     	boardGame* mainBoard = createBoard();
 		initBoard(mainBoard);
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".

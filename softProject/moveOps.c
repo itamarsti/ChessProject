@@ -20,7 +20,7 @@
 #define MIN(x,y) (((x)>(y))?(y):(x))
 
 
-void movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -30,137 +30,143 @@ void movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
-			return;
+			return true;
 		}
 		else if (secRow){
 			if(rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest){
 				switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
-				return;
+				return true;
 			}
 		}
 		else if (rowDest==rowPos+1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				islower(board->boardArr[rowDest][colDest])){
 			switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
-			return;
+			return true;
 			}
 		}
 	else if (board->curPlayer==1){			//white player case
 		if(rowDest==rowPos-1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
-			return;
+			return true;
 		}
 		else if (secRow){
 			if(rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE){
 				switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
-				return;
+				return true;
 			}
 		}
 		else if (rowDest==rowPos-1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				isupper(board->boardArr[rowDest][colDest])){
 			switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
-			return;
+			return true;
 			}
 		}
 	printf("Illegal move\n");
-	return;
+	return false;
 
 }
 
-void moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid = false;
 	if(rowPos!=rowDest && colPos!=colDest){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 	else if((board->curPlayer==0 && isupper(board->boardArr[rowDest][colDest]))
 			|| (board->curPlayer==1 && islower(board->boardArr[rowDest][colDest]))){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 	else{
 		valid = isValidHorAndVar(board, rowPos, colPos, rowDest, colDest);
 		if (valid==false){
 			printf("Illegal move\n");
-			return;
+			return false;
 		}
 		else{
 			switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackRook, WhiteRook);
+			return true;
 		}
 	}
 }
 
-void moveBishop(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool moveBishop(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid = false;
 	if(rowPos==rowDest || colPos==colDest){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 	valid = isValidDiagonal(board, rowPos, colPos,rowDest,colDest);
 	if (valid==false){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
-	switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackBishop, WhiteBishop);
+	valid = switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackBishop, WhiteBishop);
+	return valid;
 }
 
 
-void moveKnight(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool moveKnight(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	bool valid;
 	if((rowPos==rowDest+2 || rowPos==rowDest-2)&& (colPos==colDest+1||colPos==colDest-1)){
-		switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKnight, WhiteKnight);
-		return;
+		valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKnight, WhiteKnight);
+		return valid;
 	}
 	else if((rowPos==rowDest+1 || rowPos==rowDest-1)&& (colPos==colDest+2||colPos==colDest-2)){
-		switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKnight, WhiteKnight);
-		return;
+		valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKnight, WhiteKnight);
+		return valid;
 	}
 	printf("Illegal move\n");
-	return;
+	return false;
 
 }
-void moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	bool valid;
 	if(abs(rowPos-rowDest)>1 || abs(colPos-colDest)>1){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 	else{
-		switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKing, WhiteKing);
+		valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackKing, WhiteKing);
+		return valid;
 	}
 }
 
 
-void moveQueen(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
+bool moveQueen(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	bool valid;
 	if (rowPos==rowDest || colPos==colDest){
 		if(isValidHorAndVar(board, rowPos, colPos,rowDest,colDest)){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen);
-			return;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen);
+			return valid;
 		}
 	}
 	if (abs(rowPos-rowDest)==abs(colPos-colDest)){
 		if(isValidDiagonal(board, rowPos, colPos,rowDest,colDest)){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen);
-			return;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen);
+			return valid;
 		}
 	}
 	printf("Illegal move\n");
-	return;
+	return false;
 }
 
 
@@ -244,21 +250,23 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 	return !valid;
 }
 
-void switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2){
+bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	if((board->curPlayer==0) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		islower(board->boardArr[rowDest][colDest]))){
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
+			return true;
 		}
 	else if((board->curPlayer==1) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isupper(board->boardArr[rowDest][colDest]))){
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
+			return true;
 		}
 	else{
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 }
 
@@ -270,11 +278,13 @@ void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDes
 	board->boardArr[rowDest][colDest] = obj;
 }
 
-void moveObj(boardGame* board, GameCommand* command){
+bool moveObj(boardGame* board, GameCommand* command){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(command!=NULL);
 	fflush(stdout);
+	printf("doing the moveObj func\n");
+	bool validMove = false;
 	int rowPos = NumToRow(command->position);
 	int colPos = NumToCol(command->position);
 	int rowDest = NumToRow(command->destination);
@@ -282,30 +292,30 @@ void moveObj(boardGame* board, GameCommand* command){
 	if ((rowPos<0|| rowPos>7 || colPos<0|| colPos>7 || rowDest<0|| rowDest>7 || colDest<0|| colDest>7)||
 		(board->boardArr[rowPos][colPos]==UNDERSCORE)){
 			printf("Invalid position on the board\n");
-			return;
+			return false;
 	}
 	else if ((board->curPlayer==0) && islower(board->boardArr[rowPos][colPos])){	//black and lower
 		printf("The specified position does not contain your piece\n");
-		return;
+		return false;
 	}
 	else if ((board->curPlayer==1) && isupper(board->boardArr[rowPos][colPos])){	//white and upper
 		printf("The specified position does not contain your piece\n");
-		return;
+		return false;
 	}
 	else if(rowPos==rowDest && colPos==colDest){
 		printf("Illegal move\n");
-		return;
+		return false;
 	}
 	char obj = board->boardArr[rowPos][colPos];
-		 if (obj=='M' || obj =='m') movePawn(board,rowPos,colPos,rowDest,colDest);
-	else if (obj=='R' || obj =='r') moveRook(board,rowPos,colPos,rowDest,colDest);
-	else if (obj=='B' || obj =='b') moveBishop(board,rowPos,colPos,rowDest,colDest);
-	else if (obj=='N' || obj =='n') moveKnight(board,rowPos,colPos,rowDest,colDest);
-	else if (obj=='K' || obj =='k') moveKing(board,rowPos,colPos,rowDest,colDest);
-	else if (obj=='Q' || obj =='q') moveQueen(board,rowPos,colPos,rowDest,colDest);
+		 if (obj=='M' || obj =='m') validMove = movePawn(board,rowPos,colPos,rowDest,colDest);
+	else if (obj=='R' || obj =='r') validMove = moveRook(board,rowPos,colPos,rowDest,colDest);
+	else if (obj=='B' || obj =='b') validMove = moveBishop(board,rowPos,colPos,rowDest,colDest);
+	else if (obj=='N' || obj =='n') validMove = moveKnight(board,rowPos,colPos,rowDest,colDest);
+	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest);
+	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest);
 	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
 	changePlayer(board);
-
+	return validMove;
 }
 
 

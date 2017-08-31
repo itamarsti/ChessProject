@@ -196,6 +196,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 		}
 		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
 		strcpy(command->path,token);
+		int n = strlen(token)-1;
 		command->cmd = LOAD_FILE;
 	}
 	else{

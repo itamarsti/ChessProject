@@ -23,7 +23,7 @@ bool isTri(char* str){
 	assert(str!=NULL);
 	if (strlen(str)!=5) return false;
 	if (str[0]!='<'||str[2]!=','||str[4]!='>')return false;
-	if ((str[1]-'0')<0 || (str[1]-'0')>9 || str[3]<'A' || str[3]>'Z') return false;
+	if ((int)(str[1]-'0')<0 || (int)(str[1]-'0')>9 || (int)str[3]<'A' || (int)str[3]>'Z') return false;
 	return true;
 }
 
@@ -63,8 +63,6 @@ char* gameAcceptor(){
 		free(errorDet);
 		free(input);
 	}
-	printf("the string is %s\n",input);
-	printf("the String length is:%d",strlen(input));
 	return input;
 	}
 
@@ -77,6 +75,8 @@ GameCommand* gameParser(const char* str){
 	assert(command!=NULL);
 	assert(str!=NULL);
 	command->validArg = true;
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
 	char stringDup[1024];
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
@@ -99,19 +99,19 @@ GameCommand* gameParser(const char* str){
 		strcpy(command->path,token);
 		command->cmd = SAVE;
 	}
-	else if(strcmp(token, "move")){
+	else if(strcmp(token, "move ")){
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		token = strtok(NULL, "\t\r\n ");
 		if(token!=NULL && isTri(token)){
-			int row = token[1]-'0';
+			int row = token[1]-'1';
 			int col = token[3]-'A';
-			command->position = RowColToNum(row,col);
+			command->position = RowColToNum(7-row,col);
 			token = strtok(NULL, "\t\r\n ");
 			if(token!=NULL && isTri(token)){
-				int row = token[1]-'0';
+				int row = token[1]-'1';
 				int col = token[3]-'A';
-				command->destination = RowColToNum(row,col);
+				command->destination = RowColToNum(7-row,col);
 				command->cmd = MOVE;
 				command->validArg = true;
 			}
