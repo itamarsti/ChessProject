@@ -29,14 +29,11 @@ int main(int argc, char* argv[]) {
     	boardGame* mainBoard = createBoard();
 		initBoard(mainBoard);
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
-		printf("process is right\n");
-		printBoard(mainBoard);
-		destroyBoard(mainBoard);
-		//while(!resetBool){
-			//printBoard(mainBoard);
-			//resetBool = mainGameFlow(mainBoard);
-		//}
-		//resetBool = true;
+		while(!resetBool){
+			printBoard(mainBoard);
+			resetBool = mainGameFlow(mainBoard);
+		}
+		resetBool = true;
     }
 
 
