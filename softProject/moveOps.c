@@ -312,15 +312,12 @@ bool moveObj(boardGame* board, GameCommand* command){
 	else if (obj=='N' || obj =='n') validMove = moveKnight(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest);
-    if(validMove) addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
+    if(!validMove) return validMove;
+    else if(validMove) addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
 	validMove = isMyKingSafe(board);
 	if (validMove) changePlayer(board);
 	else if(!validMove){
-		assert(board->history!=NULL);
-		assert(board->history->elements!=NULL);
-		for(int i=0;i<4;i++){
-			spArrayListRemoveLast(board->history);
-		}
+		undo(board,false,false);		//no need to change player
 		printf("Illegal move\n");
 	}
 	return validMove;

@@ -24,8 +24,8 @@
 #include "SPArrayList.h"
 
 
-void undo(boardGame* board);
-void exUndo(boardGame* board);
+void undo(boardGame* board,bool printActivate, bool playerChangeAcivate);
+void exUndo(boardGame* board,bool printActivate);
 void changePlayer(boardGame* board);
 int NumToRow(int num);
 int NumToCol(int num);

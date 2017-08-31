@@ -35,8 +35,8 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 			printf("Empty history, move cannot be undone\n");
 			return false;
 		}
-		undo(board);
-		undo(board);
+		undo(board,true,true);
+		undo(board,true,true);
 	}
 	else if(cmd->cmd==SAVE) saveFile(board,cmd->path);
 	return validMove;

@@ -103,7 +103,7 @@ void saveFile(boardGame* board, const char* path){
 
 
 
-void exUndo(boardGame* board){
+void exUndo(boardGame* board,bool printActivate){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
@@ -115,29 +115,31 @@ void exUndo(boardGame* board){
 	int posDSource = board->history->elements[index-3];
 	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
 	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
-	if(board->curPlayer==0){
-		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-		BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
-	}
-	else if(board->curPlayer==1){
-		printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-		WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+	if(printActivate){
+		if(board->curPlayer==0){
+			printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+			BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+		}
+		else if(board->curPlayer==1){
+			printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+			WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+		}
 	}
 	return;
 }
 
 
-void undo(boardGame* board){
+void undo(boardGame* board,bool printActivate, bool playerChangeAcivate){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	exUndo(board);
+	exUndo(board,printActivate);
 	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
 		spArrayListRemoveAt(board->history,i);
 	}
 	board->history->actualSize-=4;
-	changePlayer(board);
+	if (playerChangeAcivate)changePlayer(board);
 	return;
 }
 
