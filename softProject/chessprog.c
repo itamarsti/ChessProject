@@ -12,6 +12,7 @@
 #include "moveOps.h"
 #include "settingFlow.h"
 #include "gameFlow.h"
+#include "gameCommands.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -27,12 +28,10 @@ int main(int argc, char* argv[]) {
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 		while(!resetBool){
 			printBoard(mainBoard);
-			resetBool = mainGameFlow(mainBoard);
-		}
+			resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we are checking the opponent's king
+			if(!isMyKingSafe(mainBoard))printCheckMessage(mainBoard->curPlayer);
 		resetBool = true;
+		}
     }
-
-
-
 	return 0;
 }

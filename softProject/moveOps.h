@@ -23,4 +23,13 @@ bool moveObj(boardGame* board, GameCommand* command);
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj);
 bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2);
 void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest);
+int trackKingPosition(boardGame* board, char symbol);
+bool isMyKingSafe(boardGame* board);
+bool safeArea(boardGame* board,int position,char symbol);
+bool isSafeStraight(boardGame* board,int row, int col,char symbol);
+bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol);
+bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol);
+bool isSafeFromPawn(boardGame* board,int row, int col,char symbol);
+
+
 #endif /* MOVEOPS_H_ */

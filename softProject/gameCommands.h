@@ -34,6 +34,8 @@ void quit(boardGame* board);
 void reset(boardGame* board);
 void saveFile(boardGame* board, const char* path);
 void moveMessage(boardGame* board);
+void printCheckMessage(int player);
+
 
 
 #endif /* GAMECOMMANDS_H_ */

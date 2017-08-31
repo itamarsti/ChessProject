@@ -62,7 +62,6 @@ bool mainGameFlow(boardGame* board){
 					reset(board);
 					return true;
 				}
-
 			}
 			loopBreaker = cmdToActGame(board,cmd);		//dont forget game_moves
 		}

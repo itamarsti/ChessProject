@@ -312,10 +312,248 @@ bool moveObj(boardGame* board, GameCommand* command){
 	else if (obj=='N' || obj =='n') validMove = moveKnight(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest);
-	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
-	changePlayer(board);
+    if(validMove) addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
+	validMove = isMyKingSafe(board);
+	if (validMove) changePlayer(board);
+	else if(!validMove){
+		assert(board->history!=NULL);
+		assert(board->history->elements!=NULL);
+		for(int i=0;i<4;i++){
+			spArrayListRemoveLast(board->history);
+		}
+		printf("Illegal move\n");
+	}
 	return validMove;
 }
+
+bool isMyKingSafe(boardGame* board){
+	assert(board!=NULL);
+	bool safe = false;
+	int position = -1;
+	if(board->curPlayer==1){
+		position = trackKingPosition(board, WhiteKing);
+		if(position==-1){
+			printf("whiteKing wasn't found");
+			return true;
+		}
+		safe = safeArea(board, position,WhiteKing);
+	}
+	else if (board->curPlayer==0){
+		position = trackKingPosition(board, BlackKing);
+		if(position==-1){
+			printf("whiteKing wasn't found");
+			return true;
+		}
+		safe = safeArea(board, position,BlackKing);
+	}
+	return safe;
+}
+
+bool safeArea(boardGame* board,int position,char symbol){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	int row = NumToRow(position);
+	int col = NumToCol(position);
+	bool safe = true;
+	if((safe = isSafeStraight(board,row, col, symbol))==false) return false;	//covers queen&rook
+	if((safe = isSafeDiagnoal(board,row, col, symbol))==false) return false;	//covers queen&bishop
+	if((safe = isSafeFromKingAndKnight(board,row, col, symbol))==false) return false;	//covers king&knight
+	if((safe = isSafeFromPawn(board,row, col, symbol))==false) return false;	//covers pawn
+	return true;
+}
+
+bool isSafeStraight(boardGame* board,int row, int col,char symbol){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if(symbol==WhiteKing){
+		for(int i=row+1;i<ROW;i++){
+			if(board->boardArr[i][col]==UNDERSCORE) continue;
+			else if(board->boardArr[i][col]==BlackRook||board->boardArr[i][col]==BlackQueen)
+				return false;
+			else break;
+		}
+		for(int i=row-1;i>=0;i--){
+			if(board->boardArr[i][col]==UNDERSCORE) continue;
+			else if(board->boardArr[i][col]==BlackRook||board->boardArr[i][col]==BlackQueen)
+				return false;
+			else break;
+		}
+		for(int i=col+1;i<COL;i++){
+			if(board->boardArr[row][i]==UNDERSCORE) continue;
+			else if(board->boardArr[row][i]==BlackRook||board->boardArr[row][i]==BlackQueen)
+				return false;
+			else break;
+		}
+		for(int i=col-1;i>=0;i--){
+			if(board->boardArr[row][i]==UNDERSCORE) continue;
+			else if(board->boardArr[row][i]==BlackRook||board->boardArr[row][i]==BlackQueen)
+				return false;
+			else break;
+		}
+	}
+	else if(symbol==BlackKing){
+		for(int i=row+1;i<ROW;i++){
+			if(board->boardArr[i][col]==UNDERSCORE) continue;
+			else if(board->boardArr[i][col]==WhiteRook||board->boardArr[i][col]==WhiteQueen)
+				return false;
+			else break;
+		}
+		for(int i=row-1;i>=0;i--){
+			if(board->boardArr[i][col]==UNDERSCORE) continue;
+			else if(board->boardArr[i][col]==WhiteRook||board->boardArr[i][col]==WhiteQueen)
+				return false;
+			else break;
+		}
+		for(int i=col+1;i<COL;i++){
+			if(board->boardArr[row][i]==UNDERSCORE) continue;
+			else if(board->boardArr[row][i]==WhiteRook||board->boardArr[row][i]==WhiteQueen)
+				return false;
+			else break;
+		}
+		for(int i=col-1;i>=0;i--){
+			if(board->boardArr[row][i]==UNDERSCORE) continue;
+			else if(board->boardArr[row][i]==WhiteRook||board->boardArr[row][i]==WhiteQueen)
+				return false;
+			else break;
+		}
+	}
+	return true;
+}
+
+
+bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if(symbol==WhiteKing){
+		for (int i=row+1;i<ROW;i++){
+			for (int j=col+1;j<COL;j++){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
+					return false;
+				else break;}}
+		for (int i=row+1;i<ROW;i++){
+			for (int j=col-1;j>=0;j--){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
+					return false;
+				else break;}}
+		for (int i=row-1;i>=0;i--){
+			for (int j=col+1;j<COL;j++){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
+					return false;
+				else break;}}
+		for (int i=row-1;i>=0;i--){
+			for (int j=col-1;j>=0;j--){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
+					return false;
+				else break;}}
+	}
+	else if(symbol==BlackKing){
+		for (int i=row+1;i<ROW;i++){
+			for (int j=col+1;j<COL;j++){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
+					return false;
+				else break;}}
+		for (int i=row+1;i<ROW;i++){
+			for (int j=col-1;j>=0;j--){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
+					return false;
+				else break;}}
+		for (int i=row-1;i>=0;i--){
+			for (int j=col+1;j<COL;j++){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
+					return false;
+				else break;}}
+		for (int i=row-1;i>=0;i--){
+			for (int j=col-1;j>=0;j--){
+				if(board->boardArr[i][j]==UNDERSCORE) continue;
+				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
+					return false;
+				else break;}}
+	}
+	return true;
+}
+
+bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol){
+	if(symbol==WhiteKing){
+		for(int i=0;i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				if(board->boardArr[i][j]==BlackKing){
+					if (abs(i-row)==1 && abs(j-col)==1) return false;
+				}
+				if(board->boardArr[i][j]==BlackKnight){
+					if ((abs(i-row)==2 && abs(j-col)==1)||(abs(i-row)==1 && abs(j-col)==2))
+						return false;
+				}
+			}
+		}
+	}
+	else if(symbol==BlackKing){
+		for(int i=0;i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				if(board->boardArr[i][j]==WhiteKing){
+					if (abs(i-row)==1 && abs(j-col)==1) return false;
+				}
+				if(board->boardArr[i][j]==WhiteKnight){
+					if ((abs(i-row)==2 && abs(j-col)==1)||(abs(i-row)==1 && abs(j-col)==2))
+						return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+
+bool isSafeFromPawn(boardGame* board,int row, int col,char symbol){
+	if(symbol==WhiteKing){
+		if(row>0){
+			if(col>=1 && col<=6){
+				if(board->boardArr[row-1][col-1]==BlackPawn ||
+					board->boardArr[row-1][col+1]==BlackPawn)return false;
+			}
+			else if(col==0){
+				if(board->boardArr[row-1][col+1]==BlackPawn) return false;
+			}
+			else if(col==7){
+				if(board->boardArr[row-1][col-1]==BlackPawn) return false;
+			}
+		}
+	}
+	else if(symbol==BlackKing){
+		if(row<7){
+			if(col>=1 && col<=6){
+				if(board->boardArr[row+1][col-1]==WhitePawn ||
+					board->boardArr[row+1][col+1]==WhitePawn)return false;
+			}
+			else if(col==0){
+				if(board->boardArr[row+1][col+1]==WhitePawn) return false;
+			}
+			else if(col==7){
+				if(board->boardArr[row+1][col-1]==WhitePawn) return false;
+			}
+		}
+	}
+	return true;
+}
+
+
+int trackKingPosition(boardGame* board, char symbol){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	for (int i=0;i<ROW;i++){
+		for (int j=0;j<COL;j++){
+			if (board->boardArr[i][j]==symbol) return RowColToNum(i,j);
+		}
+	}
+	return -1;				// in case the king wasn't found
+}
+
 
 
 void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest){
@@ -335,6 +573,5 @@ void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int col
 	board->history->elements[index+3] = (int) board->boardArr[rowDest][colDest];
 	board->history->actualSize+=4;
 	return;
-
 }
 

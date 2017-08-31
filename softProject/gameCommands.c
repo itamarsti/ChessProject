@@ -163,12 +163,7 @@ void moveMessage(boardGame* board){
 	}
 }
 
-/**
-bool isKingThreatend(boardGame* board){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	if(board->curPlayer==0){
-
-	}
+void printCheckMessage(int player){
+	if(player==1) printf("Check: %s King is threatend!\n",WHITE);
+	else if(player==1) printf("Check: %s King is threatend!\n",BLACK);
 }
-**/
