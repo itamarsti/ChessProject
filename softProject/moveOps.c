@@ -283,7 +283,6 @@ bool moveObj(boardGame* board, GameCommand* command){
 	assert(board->boardArr!=NULL);
 	assert(command!=NULL);
 	fflush(stdout);
-	printf("doing the moveObj func\n");
 	bool validMove = false;
 	int rowPos = NumToRow(command->position);
 	int colPos = NumToCol(command->position);

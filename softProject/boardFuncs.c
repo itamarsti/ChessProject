@@ -76,20 +76,23 @@ void initBoard(boardGame* board){
 void printBoard(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	for(int i=0;i<ROW;i++){
-		printf("%d%c",8-i,PIPE);
-		for(int j=0;j<COL;j++){
-			printf(" %c",board->boardArr[i][j]);
+	if(board->gameMode==2 || (board->gameMode==1 && board->userCol==board->curPlayer)){
+		for(int i=0;i<ROW;i++){
+			printf("%d%c",8-i,PIPE);
+			for(int j=0;j<COL;j++){
+				printf(" %c",board->boardArr[i][j]);
+			}
+			printf(" %c\n",PIPE);
 		}
-		printf(" %c\n",PIPE);
+		printf("  ");
+		for (int k=0;k<17;k++){
+			printf("%c",HYPHEN);
+		}
+		printf(" \n");
+		printf("   ");
+		printf("A B C D E F G H  \n");
 	}
-	printf("  ");
-	for (int k=0;k<17;k++){
-		printf("%c",HYPHEN);
-	}
-	printf(" \n");
-	printf("   ");
-	printf("A B C D E F G H  \n");
+	else return;
 }
 
 void destroyBoard(boardGame* board){
