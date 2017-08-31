@@ -82,7 +82,7 @@ void saveFile(boardGame* board, const char* path){
 	fputs("<game>\n",file);
 	fprintf(file,"\t<current_turn>%d</current_turn>\n",board->curPlayer);
 	fprintf(file,"\t<game_mode>%d</game_mode>\n",board->gameMode);
-	if(board->gameMode==1){
+	if(board->gameMode==2){
 		fprintf(file,"\t<difficulty>%d</difficulty>\n",board->diffLevel);
 		fprintf(file,"\t<user_color>%d</user_color>\n",board->userCol);
 	}

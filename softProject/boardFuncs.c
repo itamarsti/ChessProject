@@ -124,7 +124,7 @@ void boardPrintSet(boardGame*board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	printf("SETTINGS:\n");
-	if(board->gameMode==1){
+	if(board->gameMode==2){
 		printf("GAME MODE: %d\n",board->gameMode);
 		return;}
 	else{
@@ -166,7 +166,7 @@ void setDefault(boardGame* board){
 	board->diffLevel = 2;			//difficult level
 	board->userCol = 1;				//1 - white; 0 - black;
 	board->curPlayer = 1;
-	printf("setting to default was completed");
+	printf("setting to default was completed\n");
 }
 
 void invalidSettingPrint(SETTING_COMMAND cmd){
@@ -189,7 +189,7 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 	board->curPlayer = (int) buffer[14]-'0';
 	fscanf(file, "%[^\n]\n", buffer);	//game mode
 	board->gameMode = (int) buffer[11]-'0';
-	if(board->gameMode==1){
+	if(board->gameMode==2){
 		fscanf(file, "%[^\n]\n", buffer);	//difficulty turn
 		token = strtok(buffer," <>");
 		if(strcmp(token,"difficulty ")){

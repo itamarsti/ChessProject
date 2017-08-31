@@ -21,15 +21,22 @@ int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
 	bool resetBool = false;
+	boardGame* mainBoard = createBoard();
+	initBoard(mainBoard);
+	printBoard(mainBoard);
+
     while(!resetBool){
     	boardGame* mainBoard = createBoard();
 		initBoard(mainBoard);
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
-		while(!resetBool){
-			printBoard(mainBoard);
-			resetBool = mainGameFlow(mainBoard);
-		}
-		resetBool = true;
+		printf("process is right\n");
+		printBoard(mainBoard);
+		destroyBoard(mainBoard);
+		//while(!resetBool){
+			//printBoard(mainBoard);
+			//resetBool = mainGameFlow(mainBoard);
+		//}
+		//resetBool = true;
     }
 
 

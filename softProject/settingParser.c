@@ -207,6 +207,3 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 }
 
 
-
-
-

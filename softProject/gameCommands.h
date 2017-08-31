@@ -35,5 +35,4 @@ void reset(boardGame* board);
 void saveFile(boardGame* board, const char* path);
 
 
-
 #endif /* GAMECOMMANDS_H_ */
