@@ -304,7 +304,7 @@ bool moveObj(boardGame* board, GameCommand* command){
 	}
 	else if(rowPos==rowDest && colPos==colDest){
 		printf("Illegal move\n");
-		return false;
+		return true;
 	}
 	char obj = board->boardArr[rowPos][colPos];
 		 if (obj=='M' || obj =='m') validMove = movePawn(board,rowPos,colPos,rowDest,colDest);
