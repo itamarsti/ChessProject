@@ -37,17 +37,16 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 
 
 bool mainGameFlow(boardGame* board){
+	setvbuf (stdout, NULL, _IONBF, 0);
+	fflush(stdout);
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements);
-	setvbuf (stdout, NULL, _IONBF, 0);
-	fflush(stdout);
 	char* input;
 	GameCommand* cmd;
 	bool loopBreaker = false;
-	if(board->curPlayer==0) printf("%s player - enter your move:\n",BLACK);
-	else if(board->curPlayer==0) printf("%s player - enter your move:\n",WHITE);
+	moveMessage( board);
 	while(!loopBreaker){
 		input = gameAcceptor();
 		assert(input!=NULL);

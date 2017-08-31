@@ -33,6 +33,7 @@ int RowColToNum(int row, int col);
 void quit(boardGame* board);
 void reset(boardGame* board);
 void saveFile(boardGame* board, const char* path);
+void moveMessage(boardGame* board);
 
 
 #endif /* GAMECOMMANDS_H_ */

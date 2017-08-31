@@ -21,10 +21,6 @@ int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
 	bool resetBool = false;
-	boardGame* mainBoard = createBoard();
-	initBoard(mainBoard);
-	printBoard(mainBoard);
-
     while(!resetBool){
     	boardGame* mainBoard = createBoard();
 		initBoard(mainBoard);
