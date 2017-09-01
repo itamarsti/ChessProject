@@ -25,7 +25,12 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	bool validMove = false;
-	if (cmd->cmd==MOVE) validMove = moveObj(board,cmd);
+	if (cmd->cmd==MOVE){
+		validMove = moveObj(board,cmd);
+		if(validMove){
+			if(!isMyKingSafe(board)) printCheckMessage(board->curPlayer);
+		}
+	}
 	else if(cmd->cmd==UNDO){
 		if(board->gameMode==2){
 			printf("Undo command not available in 2 players mode\n");
@@ -54,7 +59,7 @@ bool mainGameFlow(boardGame* board){
 	char* input;
 	GameCommand* cmd;
 	bool loopBreaker = false;
-	moveMessage( board);
+	moveMessage(board);
 	while(!loopBreaker){
 		input = gameAcceptor();
 		assert(input!=NULL);

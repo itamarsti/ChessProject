@@ -158,6 +158,6 @@ void moveMessage(boardGame* board){
 }
 
 void printCheckMessage(int player){
-	if(player==1) printf("Check: %s King is threatend!\n",WHITE);
-	else if(player==1) printf("Check: %s King is threatend!\n",BLACK);
+	if(player==1) printf("Check: %s King is threatened!\n",WHITE);
+	else if(player==1) printf("Check: %s King is threatened!\n",BLACK);
 }
