@@ -29,38 +29,38 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	if (board->curPlayer==0){			//black player case
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
-			switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
+			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 			return true;
 		}
 		else if (secRow){
 			if(rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest){
-				switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
+				switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 				return true;
 			}
 		}
 		else if (rowDest==rowPos+1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				islower(board->boardArr[rowDest][colDest])){
-			switchObj(board,rowPos,colPos,rowDest, colDest,BlackPawn);
+			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 			return true;
 			}
 		}
 	else if (board->curPlayer==1){			//white player case
 		if(rowDest==rowPos-1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
-			switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
+			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 			return true;
 		}
 		else if (secRow){
 			if(rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE){
-				switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
+				switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 				return true;
 			}
 		}
 		else if (rowDest==rowPos-1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				isupper(board->boardArr[rowDest][colDest])){
-			switchObj(board,rowPos,colPos,rowDest, colDest,WhitePawn);
+			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
 			return true;
 			}
 		}
@@ -89,7 +89,7 @@ bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 			printf("Illegal move\n");
 			return false;
 		}
-		else{
+	else{
 			switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackRook, WhiteRook);
 			return true;
 		}
@@ -270,11 +270,14 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		}
 	else if((board->curPlayer==1) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isupper(board->boardArr[rowDest][colDest]))){
-		switchObj(copy, rowPos, colPos, rowDest, colDest,obj1);
+		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2);
 		valid = isMyKingSafe(copy);
 		destroyBoard(copy);
+		printf("destroy copy was done\n");
 		if(valid){
-			switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
+			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
+			printf("switch object done\n");
+			printBoard(board);
 			return true;
 		}
 	}
@@ -345,6 +348,7 @@ bool isMyKingSafe(boardGame* board){
 		}
 		safe = safeArea(board, position,WhiteKing);
 		if(!safe) printf("not safe\n");
+		if (safe) printf("the king is safe\n");
 	}
 	else if (board->curPlayer==0){
 		position = trackKingPosition(board, BlackKing);
@@ -371,6 +375,7 @@ bool safeArea(boardGame* board,int position,char symbol){
 	if((safe = isSafeFromKingAndKnight(board,row, col, symbol))==false) return false;	//covers king&knight
 	printf("safe pawn\n");
 	if((safe = isSafeFromPawn(board,row, col, symbol))==false) return false;	//covers pawn
+	printf("the kins is safe\n");
 	return true;
 }
 
@@ -585,12 +590,10 @@ void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int col
 			spArrayListRemoveFirst(board->history);
 		}
 	}
-	int index = board->history->actualSize-1;
-	board->history->elements[index] = RowColToNum(rowPos,colPos);
-	board->history->elements[index+1] = (int) board->boardArr[rowPos][colPos];
-	board->history->elements[index+2] =RowColToNum(rowDest,colDest);
-	board->history->elements[index+3] = (int) board->boardArr[rowDest][colDest];
-	board->history->actualSize+=4;
+	spArrayListAddLast(board->history, RowColToNum(rowPos,colPos));
+	spArrayListAddLast(board->history, (int) board->boardArr[rowPos][colPos]);
+	spArrayListAddLast(board->history, RowColToNum(rowDest,colDest));
+	spArrayListAddLast(board->history, (int) board->boardArr[rowDest][colDest]);
 	return;
 }
 

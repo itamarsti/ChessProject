@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "settingParser.h"
 #include "SPArrayList.h"
+#include "SPArrayList.h"
 
 
 typedef struct boardGame{
@@ -155,11 +156,17 @@ boardGame* copyBoard(boardGame*board){
 			copy->boardArr[i][j]=board->boardArr[i][j];
 		}
 	}
-	copy->history = board->history;
+	SPArrayList* histCopy = spArrayListCreate(HISTORY);
+	histCopy->actualSize = board->history->actualSize;
+	histCopy->maxSize = board->history->maxSize;
+	for(int i=0;i<board->history->actualSize;i++){
+		histCopy->elements[i] = board->history->elements[i];
+	}
 	copy->curPlayer=board->curPlayer;
 	copy->diffLevel=board->diffLevel;
 	copy->gameMode=board->gameMode;
 	copy->userCol = board->userCol;
+	copy->history = histCopy;
 	return copy;
 }
 

@@ -30,6 +30,8 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 		if(validMove){
 			if(!isMyKingSafe(board)) printCheckMessage(board->curPlayer);
 		}
+		printf("the actual size is %d\n",board->history->actualSize);
+		printf("the max size is %d\n",board->history->maxSize);
 	}
 	else if(cmd->cmd==UNDO){
 		if(board->gameMode==2){
