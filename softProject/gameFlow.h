@@ -28,7 +28,7 @@
 
 
 
-bool cmdToActGame(boardGame* board, GameCommand* cmd);
+bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input);
 bool mainGameFlow(boardGame* board);
 
 #endif /* GAMEFLOW_H_ */

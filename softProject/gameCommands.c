@@ -14,6 +14,7 @@
 #include "boardFuncs.h"
 #include "gameParser.h"
 #include "settingParser.h"
+#include "moveOps.h"
 
 
 
@@ -160,4 +161,76 @@ void moveMessage(boardGame* board){
 void printCheckMessage(int player){
 	if(player==1) printf("Check: %s King is threatened!\n",WHITE);
 	else if(player==1) printf("Check: %s King is threatened!\n",BLACK);
+}
+
+bool isCheckMate(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	bool valid = false;
+	if(board->curPlayer==0){
+		for(int i=0; i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				if(isupper(board->boardArr[i][j])){
+					valid = everyOptionMove(board,i,j);
+					if(valid) return true;
+				}
+			}
+		}
+
+	}
+	else if(board->curPlayer==1){
+		for(int i=0; i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				if(islower(board->boardArr[i][j])){
+					valid = everyOptionMove(board,i,j);
+					if(valid) return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool everyOptionMove(boardGame* board,int row,int col){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	boardGame* copy = copyBoard(board);
+	assert(copy!=NULL);
+	assert(copy->boardArr!=NULL);
+	assert(copy->history!=NULL);
+	assert(copy->history->elements!=NULL);
+	for(int i=0;i<ROW;i++){
+		for(int j=0;j<COL;j++){
+			if(moveObj(copy,RowColToNum(row,col),RowColToNum(i,j))){
+				destroyBoard(copy);
+				return true;
+			}
+			undo(copy,false,false);
+		}
+	}
+	destroyBoard(copy);
+	return false;
+}
+
+
+void terminateGame(boardGame* board,bool mate, bool tie){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if(mate){
+		if(board->curPlayer==0){
+			printf("Checkmate! %s player wins the game\n",WHITE);
+		}
+		else if(board->curPlayer==1){
+			printf("Checkmate! %s player wins the game\n",BLACK);
+		}
+		destroyBoard(board);
+		exit(0);
+	}
+	else if (tie){
+		printf("The game is tied\n");
+		destroyBoard(board);
+		exit(0);
+	}
 }

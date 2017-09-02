@@ -19,7 +19,7 @@ bool moveKing(boardGame* board, int xPos, int yPos, int xDest, int yDest);
 bool moveQueen(boardGame* board, int xPos, int yPos, int xDest, int yDest);
 bool isValidDiagonal(boardGame* board, int rowPos, int colPos, int rowDest, int colDest);
 bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int colDest);
-bool moveObj(boardGame* board, GameCommand* command);
+bool moveObj(boardGame* board,int position, int destination);
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj);
 bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2);
 void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest);

@@ -35,7 +35,9 @@ void reset(boardGame* board);
 void saveFile(boardGame* board, const char* path);
 void moveMessage(boardGame* board);
 void printCheckMessage(int player);
-
+bool isCheckMate(boardGame* board);
+bool everyOptionMove(boardGame* board,int row,int col);
+void terminateGame(boardGame* board,bool mate, bool tie);
 
 
 #endif /* GAMECOMMANDS_H_ */

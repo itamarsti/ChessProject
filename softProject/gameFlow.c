@@ -19,17 +19,27 @@
 
 
 
-bool cmdToActGame(boardGame* board, GameCommand* cmd){
+bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	assert(board!=NULL);
 	assert(cmd!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	bool validMove = false;
+	bool isMate = false;
+	bool isTie = false;
 	if (cmd->cmd==MOVE){
-		validMove = moveObj(board,cmd);
-		if(validMove) printf("it's valid move\n");
+		validMove = moveObj(board,cmd->position,cmd->destination);
 		if(validMove){
-			if(!isMyKingSafe(board)) printCheckMessage(board->curPlayer);
+			if(!isMyKingSafe(board)){
+				isMate = isCheckMate(board);
+				if(isMate || isTie){
+					free(input);
+					destroyGameStruct(cmd);
+					if (isMate)terminateGame(board,true, false);
+					else if (isTie)terminateGame(board,false, true);
+				}
+				printCheckMessage(board->curPlayer);
+			}
 		}
 	}
 	else if(cmd->cmd==UNDO){
@@ -79,7 +89,7 @@ bool mainGameFlow(boardGame* board){
 					return true;
 				}
 			}
-			loopBreaker = cmdToActGame(board,cmd);		//dont forget game_moves
+			loopBreaker = cmdToActGame(board,cmd, input);		//dont forget game_moves
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
