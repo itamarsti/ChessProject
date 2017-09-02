@@ -24,44 +24,45 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	bool valid = false;
 	bool secRow = false;
 	if (rowPos==1 || rowPos==6) secRow=true;
 	if (board->curPlayer==0){			//black player case
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-			return true;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+			return valid;
 		}
 		else if (secRow){
 			if(rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest){
-				switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-				return true;
+				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+				return valid;
 			}
 		}
 		else if (rowDest==rowPos+1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				islower(board->boardArr[rowDest][colDest])){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-			return true;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+			return valid;
 			}
 		}
 	else if (board->curPlayer==1){			//white player case
 		if(rowDest==rowPos-1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-			return true;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+			return valid;
 		}
 		else if (secRow){
 			if(rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE){
-				switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-				return true;
+				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+				return valid;
 			}
 		}
 		else if (rowDest==rowPos-1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				isupper(board->boardArr[rowDest][colDest])){
-			switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
-			return true;
+			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn);
+			return valid;
 			}
 		}
 	printf("Illegal move\n");
@@ -90,8 +91,8 @@ bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 			return false;
 		}
 	else{
-			switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackRook, WhiteRook);
-			return true;
+		valid = switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackRook, WhiteRook);
+		return valid;
 		}
 	}
 }
