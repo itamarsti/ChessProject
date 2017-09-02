@@ -255,20 +255,31 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	bool valid = false;
+	boardGame* copy = copyBoard(board);
+	assert(copy!=NULL);
 	if((board->curPlayer==0) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		islower(board->boardArr[rowDest][colDest]))){
-			switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
-			return true;
+			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1);
+			valid = isMyKingSafe(copy);
+			destroyBoard(copy);
+			if(valid){
+				switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
+				return true;
+			}
 		}
 	else if((board->curPlayer==1) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isupper(board->boardArr[rowDest][colDest]))){
-			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
+		switchObj(copy, rowPos, colPos, rowDest, colDest,obj1);
+		valid = isMyKingSafe(copy);
+		destroyBoard(copy);
+		if(valid){
+			switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
 			return true;
 		}
-	else{
-		printf("Illegal move\n");
-		return false;
 	}
+	printf("Illegal move\n");
+	return false;
 }
 
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj){
@@ -314,14 +325,11 @@ bool moveObj(boardGame* board, GameCommand* command){
 	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest);
 	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest);
     if(!validMove) return validMove;
-    else if(validMove) addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
-    printf("move was done\n");
-	validMove = isMyKingSafe(board);
-	if (validMove) changePlayer(board);
-	else if(!validMove){
-		undo(board,false,false);		//no need to change player
-		printf("Illegal move\n");
-	}
+    else if(validMove){
+    	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
+    	changePlayer(board);
+    }
+	printf("move was done\n");
 	return validMove;
 }
 
@@ -428,95 +436,63 @@ bool isSafeStraight(boardGame* board,int row, int col,char symbol){
 bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	bool loopBreaker1 = false;
-	bool loopBreaker2 = false;
-	bool loopBreaker3 = false;
-	bool loopBreaker4 = false;
+	int i = 1;
 	if(symbol==WhiteKing){
-		for (int i=row+1;i<ROW;i++){
-			if(loopBreaker1) break;
-			printf("first loop\n");
-			for (int j=col+1;j<COL;j++){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
-					return false;
-				else{
-					loopBreaker1 = true;
-					break;}}
+		while (row+i<ROW && col+i<COL){
+			if(board->boardArr[row+i][col+i]==UNDERSCORE) i++;
+			else if(board->boardArr[row+i][col+i]==BlackBishop||board->boardArr[row+i][col+i]==BlackQueen)
+				return false;
+			else break;
 		}
-		for (int i=row+1;i<ROW;i++){
-			if(loopBreaker2) break;
-			printf("2 loop\n");
-			for (int j=col-1;j>=0;j--){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
-					return false;
-				else{
-					loopBreaker2 = true;
-					break;}}
-				}
-		for (int i=row-1;i>=0;i--){
-			if(loopBreaker3) break;
-			printf("3 loop\n");
-			for (int j=col+1;j<COL;j++){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
-					return false;
-				else{
-					loopBreaker3 = true;
-					break;}}
-		}		for (int i=row-1;i>=0;i--){
-			if(loopBreaker4) break;
-			printf("4 loop\n");
-			for (int j=col-1;j>=0;j--){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==BlackBishop||board->boardArr[i][j]==BlackQueen)
-					return false;
-				else{
-					loopBreaker4 = true;
-					break;}}
+		i = 1;
+		while (row-i>=0 && col+i<COL){
+			if(board->boardArr[row-i][col+i]==UNDERSCORE) i++;
+			else if(board->boardArr[row-i][col+i]==BlackBishop||board->boardArr[row-i][col+i]==BlackQueen)
+				return false;
+			else break;
+		}
+		i = 1;
+		while (row-i>=0 && col-i>=COL){
+			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
+			else if(board->boardArr[row-i][col-i]==BlackBishop||board->boardArr[row-i][col-i]==BlackQueen)
+				return false;
+			else break;
+		}
+		i = 1;
+		while (row+i>=0 && col-i<COL){
+			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
+			else if(board->boardArr[row+i][col-i]==BlackBishop||board->boardArr[row+i][col-i]==BlackQueen)
+				return false;
+			else break;
 		}
 	}
 	else if(symbol==BlackKing){
-		for (int i=row+1;i<ROW;i++){
-			if(loopBreaker1) break;
-			for (int j=col+1;j<COL;j++){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
-					return false;
-				else{
-					loopBreaker1 = true;
-					break;}}
+		while (row+i<ROW && col+i<COL){
+			if(board->boardArr[row+i][col+i]==UNDERSCORE) i++;
+			else if(board->boardArr[row+i][col+i]==WhiteBishop||board->boardArr[row+i][col+i]==WhiteQueen)
+				return false;
+			else break;
 		}
-		for (int i=row+1;i<ROW;i++){
-			if(loopBreaker2) break;
-			for (int j=col-1;j>=0;j--){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
-					return false;
-				else{
-					loopBreaker2 = true;
-					break;}}
+		i = 1;
+		while (row-i>=0 && col+i<COL){
+			if(board->boardArr[row-i][col+i]==UNDERSCORE) i++;
+			else if(board->boardArr[row-i][col+i]==WhiteBishop||board->boardArr[row-i][col+i]==WhiteQueen)
+				return false;
+			else break;
 		}
-		for (int i=row-1;i>=0;i--){
-			if(loopBreaker3) break;
-			for (int j=col+1;j<COL;j++){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
-					return false;
-				else{
-					loopBreaker3 = true;
-					break;}}
+		i = 1;
+		while (row-i>=0 && col-i>=COL){
+			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
+			else if(board->boardArr[row-i][col-i]==WhiteBishop||board->boardArr[row-i][col-i]==WhiteQueen)
+				return false;
+			else break;
 		}
-		for (int i=row-1;i>=0;i--){
-			if(loopBreaker4) break;
-			for (int j=col-1;j>=0;j--){
-				if(board->boardArr[i][j]==UNDERSCORE) continue;
-				else if(board->boardArr[i][j]==WhiteBishop||board->boardArr[i][j]==WhiteQueen)
-					return false;
-				else{
-					loopBreaker4 = true;
-					break;}}
+		i = 1;
+		while (row+i>=0 && col-i<COL){
+			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
+			else if(board->boardArr[row+i][col-i]==WhiteBishop||board->boardArr[row+i][col-i]==WhiteQueen)
+				return false;
+			else break;
 		}
 	}
 	return true;
