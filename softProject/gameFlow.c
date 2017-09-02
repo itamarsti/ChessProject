@@ -27,11 +27,10 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd){
 	bool validMove = false;
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd);
+		if(validMove) printf("it's valid move\n");
 		if(validMove){
 			if(!isMyKingSafe(board)) printCheckMessage(board->curPlayer);
 		}
-		printf("the actual size is %d\n",board->history->actualSize);
-		printf("the max size is %d\n",board->history->maxSize);
 	}
 	else if(cmd->cmd==UNDO){
 		if(board->gameMode==2){

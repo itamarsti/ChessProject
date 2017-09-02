@@ -139,7 +139,6 @@ bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	fflush(stdout);
 	bool valid;
 	if(abs(rowPos-rowDest)>1 || abs(colPos-colDest)>1){
-		printf("king cant move");
 		printf("Illegal move\n");
 		return false;
 	}
@@ -274,10 +273,8 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2);
 		valid = isMyKingSafe(copy);
 		destroyBoard(copy);
-		printf("destroy copy was done\n");
 		if(valid){
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
-			printf("switch object done\n");
 			printBoard(board);
 			return true;
 		}
@@ -333,11 +330,11 @@ bool moveObj(boardGame* board, GameCommand* command){
     	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
     	changePlayer(board);
     }
-	printf("move was done\n");
 	return validMove;
 }
 
 bool isMyKingSafe(boardGame* board){
+	printf("myKingSafe Function was activated\n");
 	assert(board!=NULL);
 	bool safe = false;
 	int position = -1;
@@ -348,8 +345,6 @@ bool isMyKingSafe(boardGame* board){
 			return true;
 		}
 		safe = safeArea(board, position,WhiteKing);
-		if(!safe) printf("not safe\n");
-		if (safe) printf("the king is safe\n");
 	}
 	else if (board->curPlayer==0){
 		position = trackKingPosition(board, BlackKing);
@@ -359,6 +354,7 @@ bool isMyKingSafe(boardGame* board){
 		}
 		safe = safeArea(board, position,BlackKing);
 	}
+	if(safe) printf("the king is safe\n");
 	return safe;
 }
 
@@ -368,15 +364,10 @@ bool safeArea(boardGame* board,int position,char symbol){
 	int row = NumToRow(position);
 	int col = NumToCol(position);
 	bool safe = true;
-	printf("safe straight\n");
 	if((safe = isSafeStraight(board,row, col, symbol))==false) return false;	//covers queen&rook
-	printf("safe diagnoal\n");
 	if((safe = isSafeDiagnoal(board,row, col, symbol))==false) return false;	//covers queen&bishop
-	printf("safe kingAndKnight\n");
 	if((safe = isSafeFromKingAndKnight(board,row, col, symbol))==false) return false;	//covers king&knight
-	printf("safe pawn\n");
 	if((safe = isSafeFromPawn(board,row, col, symbol))==false) return false;	//covers pawn
-	printf("the kins is safe\n");
 	return true;
 }
 
@@ -458,14 +449,14 @@ bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
 			else break;
 		}
 		i = 1;
-		while (row-i>=0 && col-i>=COL){
+		while (row-i>=0 && col-i>=0){
 			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col-i]==BlackBishop||board->boardArr[row-i][col-i]==BlackQueen)
 				return false;
 			else break;
 		}
 		i = 1;
-		while (row+i>=0 && col-i<COL){
+		while (row+i<ROW && col-i>=0){
 			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col-i]==BlackBishop||board->boardArr[row+i][col-i]==BlackQueen)
 				return false;
@@ -487,14 +478,14 @@ bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
 			else break;
 		}
 		i = 1;
-		while (row-i>=0 && col-i>=COL){
+		while (row-i>=0 && col-i>=0){
 			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col-i]==WhiteBishop||board->boardArr[row-i][col-i]==WhiteQueen)
 				return false;
 			else break;
 		}
 		i = 1;
-		while (row+i>=0 && col-i<COL){
+		while (row+i<ROW && col-i>=0){
 			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col-i]==WhiteBishop||board->boardArr[row+i][col-i]==WhiteQueen)
 				return false;
