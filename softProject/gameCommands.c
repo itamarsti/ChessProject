@@ -170,28 +170,27 @@ bool isCheckMate(boardGame* board){
 	if(board->curPlayer==0){
 		for(int i=0; i<ROW;i++){
 			for(int j=0;j<COL;j++){
-				if(isupper(board->boardArr[i][j])){
-					valid = everyOptionMove(board,i,j);
-					if(valid) return true;
+				if(isBlackPlayer(board->boardArr[i][j])){
+					valid = isThereOptionMove(board,i,j);
+					if(valid) return false;
 				}
 			}
 		}
-
 	}
 	else if(board->curPlayer==1){
 		for(int i=0; i<ROW;i++){
 			for(int j=0;j<COL;j++){
-				if(islower(board->boardArr[i][j])){
-					valid = everyOptionMove(board,i,j);
-					if(valid) return true;
+				if(isWhitePlayer(board->boardArr[i][j])){
+					valid = isThereOptionMove(board,i,j);
+					if(valid) return false;
 				}
 			}
 		}
 	}
-	return false;
+	return true;
 }
 
-bool everyOptionMove(boardGame* board,int row,int col){
+bool isThereOptionMove(boardGame* board,int row,int col){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
@@ -201,13 +200,14 @@ bool everyOptionMove(boardGame* board,int row,int col){
 	assert(copy->boardArr!=NULL);
 	assert(copy->history!=NULL);
 	assert(copy->history->elements!=NULL);
+	bool valid = false;
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
-			if(moveObj(copy,RowColToNum(row,col),RowColToNum(i,j))){
+			valid = moveObj(copy,RowColToNum(row,col),RowColToNum(i,j));
+			if(valid){
 				destroyBoard(copy);
 				return true;
 			}
-			undo(copy,false,false);
 		}
 	}
 	destroyBoard(copy);
@@ -215,7 +215,7 @@ bool everyOptionMove(boardGame* board,int row,int col){
 }
 
 
-void terminateGame(boardGame* board,bool mate, bool tie){
+void terminateGame(boardGame* board, bool mate, bool tie){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	if(mate){
@@ -233,4 +233,14 @@ void terminateGame(boardGame* board,bool mate, bool tie){
 		destroyBoard(board);
 		exit(0);
 	}
+}
+
+bool isWhitePlayer(char c){
+	if (c=='n' || c=='b' || c=='p' || c=='r' || c=='k' || c=='q') return true;
+	return false;
+}
+
+bool isBlackPlayer(char c){
+	if (c=='N' || c=='N' || c=='N' || c=='N' || c=='N' || c=='N') return true;
+	return false;
 }
