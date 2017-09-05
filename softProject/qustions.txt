@@ -10,3 +10,4 @@
 8. don't forget to do getMoves
 9. to do all the limitations for 1 player/2 players
 10. adding the case if it's not an XML FILE
+11. is game_moves also possible in 2players mode

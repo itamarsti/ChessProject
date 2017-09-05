@@ -40,5 +40,7 @@ bool isThereOptionMove(boardGame* board,int row,int col);
 void terminateGame(boardGame* board,bool mate, bool tie);
 bool isWhitePlayer(char c);
 bool isBlackPlayer(char c);
+void getMovesFunc(boardGame* board,int position);
+
 
 #endif /* GAMECOMMANDS_H_ */

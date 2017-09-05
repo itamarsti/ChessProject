@@ -244,3 +244,41 @@ bool isBlackPlayer(char c){
 	if (c=='N' || c=='N' || c=='N' || c=='N' || c=='N' || c=='N') return true;
 	return false;
 }
+
+
+void getMovesFunc(boardGame* board,int position){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if (position>63 || position<0) printf("Invalid position on the board\n");
+	int row = NumToRow(position);
+	int col = NumToCol(position);
+	if (board->curPlayer==0 && isWhitePlayer(board->boardArr[row][col]))
+		printf("The specified position does not contain %s player piece\n",BLACK);
+	else if (board->curPlayer==1 && isBlackPlayer(board->boardArr[row][col]))
+		printf("The specified position does not contain %s player piece\n",WHITE);
+	else{
+		bool valid = false;
+		int rowDest =0;
+		int colDest = 0;
+		int dest = 0;
+		for(int i=7; i>=0;i--){
+			rowDest = i;
+			for (int j=0;j<COL;j++){
+				colDest = j;
+				if (rowDest==row && colDest ==col) continue;
+				dest = RowColToNum(rowDest,colDest);
+				valid = moveObj(board,position,dest);
+				if(valid){
+					if(board->gameMode==1 && (board->diffLevel==1 || board->diffLevel==2)){
+						if((board->curPlayer==0 && isWhitePlayer(board->boardArr[rowDest][colDest]))
+							||(board->curPlayer==1 && isBlackPlayer(board->boardArr[rowDest][colDest])))
+							printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
+					}
+					else if (board->boardArr[rowDest][colDest]==UNDERSCORE)
+						printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+				}
+			}
+		}
+	}
+	return;
+}

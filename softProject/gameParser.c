@@ -125,7 +125,7 @@ GameCommand* gameParser(const char* str){
 				int row = token[1]-'0';
 				int col = token[3]-'A';
 				command->position = RowColToNum(row,col);
-				command->destination = RowColToNum(row,col);
+				command->destination = 64;
 				command->cmd = GET_MOVES;
 				command->validArg = true;
 				}

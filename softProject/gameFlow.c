@@ -61,6 +61,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 		undo(board,true,true);
 	}
 	else if(cmd->cmd==SAVE) saveFile(board,cmd->path);
+	else if(cmd->cmd==GET_MOVES) getMovesFunc(board,cmd->position);
 	return validMove;
 }
 
@@ -95,7 +96,7 @@ bool mainGameFlow(boardGame* board){
 					return true;
 				}
 			}
-			loopBreaker = cmdToActGame(board,cmd, input);		//dont forget game_moves
+			loopBreaker = cmdToActGame(board,cmd, input);
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
