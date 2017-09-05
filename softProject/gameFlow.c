@@ -28,19 +28,16 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	bool isMate = false;
 	bool isTie = false;
 	if (cmd->cmd==MOVE){
-		validMove = moveObj(board,cmd->position,cmd->destination);
+		validMove = moveObj(board,cmd->position,cmd->destination, true);
 		if(validMove){
 			if(!isMyKingSafe(board)){
-
 				if((isMate = isCheckMate(board))==true){
 					free(input);
 					destroyGameStruct(cmd);
 					terminateGame(board,true, false);
 				}
-
 				printCheckMessage(board->curPlayer);
 			}
-
 			else if ((isTie = isCheckMate(board))==true){
 				free(input);
 				destroyGameStruct(cmd);

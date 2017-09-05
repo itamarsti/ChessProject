@@ -118,11 +118,11 @@ void exUndo(boardGame* board,bool printActivate){
 	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
 	if(printActivate){
 		if(board->curPlayer==0){
-			printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+			if(printActivate) printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
 			BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
 		}
 		else if(board->curPlayer==1){
-			printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
+			if(printActivate)printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
 			WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
 		}
 	}
@@ -203,11 +203,11 @@ bool isThereOptionMove(boardGame* board,int row,int col){
 	bool valid = false;
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
-			valid = moveObj(copy,RowColToNum(row,col),RowColToNum(i,j));
+			valid = moveObj(copy,RowColToNum(row,col),RowColToNum(i,j),false);
 			if(valid){
 				destroyBoard(copy);
 				return true;
-			}
+			}				// no need to undo/destroy cause if !valid - no move was done
 		}
 	}
 	destroyBoard(copy);
@@ -257,32 +257,47 @@ void getMovesFunc(boardGame* board,int position){
 	else if (board->curPlayer==1 && isBlackPlayer(board->boardArr[row][col]))
 		printf("The specified position does not contain %s player piece\n",WHITE);
 	else{
-		bool valid = false;
+		bool valid,valid1,valid2 = false;
 		int rowDest =0;
 		int colDest = 0;
 		int dest = 0;
+		boardGame* copy = copyBoard(board);
+		assert(copy!=NULL); assert(copy->boardArr!=NULL);
+		assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
 		for(int i=7; i>=0;i--){
 			rowDest = i;
 			for (int j=0;j<COL;j++){
 				colDest = j;
-				if (rowDest==row && colDest ==col) continue;
+				if (rowDest==row && colDest==col) continue;
 				dest = RowColToNum(rowDest,colDest);
-				boardGame* copy = copyBoard(board);
-				assert(copy!=NULL); assert(copy->boardArr!=NULL);
-				assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
-				valid = moveObj(copy,position,dest);
-				if(valid){
+				if((board->curPlayer==0 && isWhitePlayer(board->boardArr[rowDest][colDest]))
+					||(board->curPlayer==1 && isBlackPlayer(board->boardArr[rowDest][colDest])))
+					valid1 = true;		// need to be checked before the move action
+				valid = moveObj(copy,position,dest, false);
+				if(!valid) continue;
+				else{				//if valid move == true
 					if(board->gameMode==1 && (board->diffLevel==1 || board->diffLevel==2)){
-						if((board->curPlayer==0 && isWhitePlayer(board->boardArr[rowDest][colDest]))
-							||(board->curPlayer==1 && isBlackPlayer(board->boardArr[rowDest][colDest])))
-							printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
-					}
-					else if (board->boardArr[rowDest][colDest]==UNDERSCORE)
-						printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+						for(int k=0;k<ROW;k++){
+							for(int l=0;l<COL;l++){
+								valid2 = moveObj(copy,RowColToNum(k,l),dest, false);
+								if(valid2==true && valid1==true) printf("<%d,%c>*^\n",7-rowDest,(char)(colDest+'a'));
+								else if (valid2==true && valid1==false)printf("<%d,%c>*\n",7-rowDest,(char)(colDest+'a'));
+								else if (valid2==false && valid1==true)printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
+								else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+								if(valid2) undo(copy,false,true);
+								valid2 = false;
+								}
+							}
+						}
+					else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+					undo(copy,false,true);		//if we are here, move was done
 				}
-				destroyBoard(copy);
+				valid1 = false;
 			}
 		}
-	}
+		destroyBoard(copy);
+		}
 	return;
-}
+	}
+
+
