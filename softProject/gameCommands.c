@@ -267,7 +267,10 @@ void getMovesFunc(boardGame* board,int position){
 				colDest = j;
 				if (rowDest==row && colDest ==col) continue;
 				dest = RowColToNum(rowDest,colDest);
-				valid = moveObj(board,position,dest);
+				boardGame* copy = copyBoard(board);
+				assert(copy!=NULL); assert(copy->boardArr!=NULL);
+				assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
+				valid = moveObj(copy,position,dest);
 				if(valid){
 					if(board->gameMode==1 && (board->diffLevel==1 || board->diffLevel==2)){
 						if((board->curPlayer==0 && isWhitePlayer(board->boardArr[rowDest][colDest]))
@@ -277,6 +280,7 @@ void getMovesFunc(boardGame* board,int position){
 					else if (board->boardArr[rowDest][colDest]==UNDERSCORE)
 						printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
 				}
+				destroyBoard(copy);
 			}
 		}
 	}
