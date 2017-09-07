@@ -431,8 +431,6 @@ bool spArrayListIsFull(SPArrayList* src){
     if(src==NULL||src->actualSize<src->maxSize){
         return false;
     }
-    printf("the actual size is %d\n",src->actualSize);
-    printf("the max size is %d\n",src->maxSize);
     assert(src->actualSize==src->maxSize);    //to make sure it's the same size - not suppose to ever act
     return true;;
 }

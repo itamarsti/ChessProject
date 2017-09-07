@@ -271,7 +271,6 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		destroyBoard(copy);
 		if(valid){
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
-			printBoard(board);
 			return true;
 		}
 	}

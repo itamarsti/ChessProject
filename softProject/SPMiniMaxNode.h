@@ -12,7 +12,7 @@
  * @return
  * the calculated score of the given play
  */
-int recursiveFunc(SPFiarGame* game,bool minmax,unsigned int depth);
+//int recursiveFunc(SPFiarGame* game,bool minmax,unsigned int depth);
 /**
  * helper func to calculate the score of a given board
  *

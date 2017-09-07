@@ -81,11 +81,12 @@ GameCommand* gameParser(const char* str){
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	if(token==NULL) {
+		printf("NULL");
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		return command;
 	}
-	else if(strcmp(token, "quit")==0)command->cmd = QUIT2;
+	else if(strcmp(token, "quit")==0) command->cmd = QUIT2;
 	else if(strcmp(token, "undo")==0)command->cmd = UNDO;
 	else if(strcmp(token, "reset")==0)command->cmd = RESET;
 	else if((strcmp(token, "save")==0)){
@@ -99,7 +100,7 @@ GameCommand* gameParser(const char* str){
 		strcpy(command->path,token);
 		command->cmd = SAVE;
 	}
-	else if(strcmp(token, "move ")){
+	else if(strcmp(token, "move")==0){
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		token = strtok(NULL, "\t\r\n ");
@@ -117,7 +118,7 @@ GameCommand* gameParser(const char* str){
 			}
 		}
 	}
-	else if(strcmp(token, "get_moves")){
+	else if((strcmp(token, "get_moves")==0)){
 			command->cmd = INVALID_LINE2;
 			command->validArg = false;
 			token = strtok(NULL, "\t\r\n ");

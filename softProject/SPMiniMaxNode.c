@@ -1,10 +1,9 @@
 #include <limits.h>
 #include "SPMiniMaxNode.h"
-#include "SPFIARGame.h"
 #include <stdbool.h>
 #define OFFSET 3
 
-
+/**
 int recursiveFunc(SPFiarGame* game,bool minmax,unsigned int depth){
     if (depth==0)return score(game);
     else{
@@ -47,6 +46,8 @@ int recursiveFunc(SPFiarGame* game,bool minmax,unsigned int depth){
         else{return maxWinner;}
     }
 }
+
+**/
 
 
 int score(boardGame* board){

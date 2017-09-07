@@ -24,13 +24,11 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	assert(cmd!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	bool validMove = false;
-	bool isMate = false;
-	bool isTie = false;
+	bool validMove, isMate, isTie= false;
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd->position,cmd->destination, true);
 		if(validMove){
-			if(!isMyKingSafe(board)){
+			if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
 				if((isMate = isCheckMate(board))==true){
 					free(input);
 					destroyGameStruct(cmd);

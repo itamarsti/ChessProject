@@ -247,20 +247,24 @@ bool isBlackPlayer(char c){
 
 
 void getMovesFunc(boardGame* board,int position){
+	printf("get moves was acted");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	if (position>63 || position<0) printf("Invalid position on the board\n");
+
 	int row = NumToRow(position);
 	int col = NumToCol(position);
-	if (board->curPlayer==0 && isWhitePlayer(board->boardArr[row][col]))
+	if (position>63 || position<0 ){
+		printf("Invalid position on the board\n");}
+	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)) printf("illegal move\n");
+	if (board->curPlayer==0 &&
+			(isWhitePlayer(board->boardArr[row][col])|| board->boardArr[row][col]==UNDERSCORE))
 		printf("The specified position does not contain %s player piece\n",BLACK);
-	else if (board->curPlayer==1 && isBlackPlayer(board->boardArr[row][col]))
+	else if (board->curPlayer==1 &&
+			(isBlackPlayer(board->boardArr[row][col])|| board->boardArr[row][col]==UNDERSCORE))
 		printf("The specified position does not contain %s player piece\n",WHITE);
 	else{
 		bool valid,valid1,valid2 = false;
-		int rowDest =0;
-		int colDest = 0;
-		int dest = 0;
+		int rowDest, colDest, dest =0;
 		boardGame* copy = copyBoard(board);
 		assert(copy!=NULL); assert(copy->boardArr!=NULL);
 		assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
@@ -276,23 +280,20 @@ void getMovesFunc(boardGame* board,int position){
 				valid = moveObj(copy,position,dest, false);
 				if(!valid) continue;
 				else{				//if valid move == true
-					if(board->gameMode==1 && (board->diffLevel==1 || board->diffLevel==2)){
-						for(int k=0;k<ROW;k++){
-							for(int l=0;l<COL;l++){
-								valid2 = moveObj(copy,RowColToNum(k,l),dest, false);
-								if(valid2==true && valid1==true) printf("<%d,%c>*^\n",7-rowDest,(char)(colDest+'a'));
-								else if (valid2==true && valid1==false)printf("<%d,%c>*\n",7-rowDest,(char)(colDest+'a'));
-								else if (valid2==false && valid1==true)printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
-								else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
-								if(valid2) undo(copy,false,true);
-								valid2 = false;
-								}
+					for(int k=0;k<ROW;k++){
+						for(int l=0;l<COL;l++){
+							valid2 = moveObj(copy,RowColToNum(k,l),dest, false);
+							if(valid2==true && valid1==true) printf("<%d,%c>*^\n",7-rowDest,(char)(colDest+'a'));
+							else if (valid2==true && valid1==false)printf("<%d,%c>*\n",7-rowDest,(char)(colDest+'a'));
+							else if (valid2==false && valid1==true)printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
+							else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+							if(valid2) undo(copy,false,true);
+							valid2 = false;
 							}
 						}
-					else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
+					}
 					undo(copy,false,true);		//if we are here, move was done
-				}
-				valid1 = false;
+					valid1 = false;
 			}
 		}
 		destroyBoard(copy);
