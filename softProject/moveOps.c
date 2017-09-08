@@ -26,7 +26,7 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	fflush(stdout);
 	bool valid = false;
 	bool secRow = false;
-	if (rowPos==1 || rowPos==6) secRow=true;
+	if ((rowPos==1 && board->curPlayer==0) || (rowPos==6 && board->curPlayer==1)) secRow=true;
 	if (board->curPlayer==0){			//black player case
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
@@ -146,19 +146,25 @@ bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 
 
 bool moveQueen(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
+	//printf("move queen was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid;
 	if (rowPos==rowDest || colPos==colDest){
+		//printf("straight was acted\n");
 		if(isValidHorAndVar(board, rowPos, colPos,rowDest,colDest)){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen, doPrint);
 			return valid;
 		}
 	}
-	if (abs(rowPos-rowDest)==abs(colPos-colDest)){
+	else if (abs(rowPos-rowDest)==abs(colPos-colDest)){
+		//printf("diagonal was acted\n");
 		if(isValidDiagonal(board, rowPos, colPos,rowDest,colDest)){
+			//printf("isvalidDiagnoal is true\n");
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen, doPrint);
+			//if(valid) printf("switch and check is true\n");
+			//if(!valid) printf("switch and check false\n");
 			return valid;
 		}
 	}
@@ -171,32 +177,30 @@ bool isValidDiagonal(boardGame* board, int rowPos, int colPos, int rowDest, int 
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
-
 	bool valid = false;
 	if (abs(rowPos-rowDest)!=abs(colPos-colDest))return valid;
-	else if(rowPos<rowDest && colPos<colDest){
+	if(rowPos<rowDest && colPos<colDest){
 			for(int i=rowPos+1, j=colPos+1; i<rowDest;i++,j++){
 				if(board->boardArr[i][j]!=UNDERSCORE){
 					return valid;
 				}
 			}
 		}
-
-	else if(rowPos<rowDest && colPos>colDest){
+	if(rowPos<rowDest && colPos>colDest){
 		for(int i=rowPos+1, j=colPos-1; i<rowDest;i++,j--){
 			if(board->boardArr[i][j]!=UNDERSCORE){
 				return valid;
 			}
 		}
 	}
-	else if(rowPos>rowDest && colPos<colDest){
+	if(rowPos>rowDest && colPos<colDest){
 		for(int i=rowPos-1, j=colPos+1; i>rowDest;i--,j++){
 			if(board->boardArr[i][j]!=UNDERSCORE){
 				return valid;
 			}
 		}
 	}
-	else if(rowPos>rowDest && colPos>colDest){
+	if(rowPos>rowDest && colPos>colDest){
 		for(int i=rowPos-1, j=colPos-1; i>rowDest;i--,j--){
 			if(board->boardArr[i][j]!=UNDERSCORE){
 				return valid;
@@ -253,24 +257,27 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	fflush(stdout);
 	bool valid = false;
 	boardGame* copy = copyBoard(board);
-	assert(copy!=NULL);
+	assert(copy!=NULL); assert(copy->boardArr!=NULL);
 	if((board->curPlayer==0) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		islower(board->boardArr[rowDest][colDest]))){
-			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1);
+			//printf("is my king safe 0 was acted");
+			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1,false);
 			valid = isMyKingSafe(copy);
 			destroyBoard(copy);
 			if(valid){
-				switchObj(board, rowPos, colPos, rowDest, colDest,obj1);
+				switchObj(board, rowPos, colPos, rowDest, colDest,obj1,true);
 				return true;
 			}
 		}
 	else if((board->curPlayer==1) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isupper(board->boardArr[rowDest][colDest]))){
-		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2);
+		//printf("is my king safe 1 was acted");
+		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2,false);
 		valid = isMyKingSafe(copy);
+		//if(!valid) printf("the king is not safe");
 		destroyBoard(copy);
 		if(valid){
-			switchObj(board, rowPos, colPos, rowDest, colDest,obj2);
+			switchObj(board, rowPos, colPos, rowDest, colDest,obj2,true);
 			return true;
 		}
 	}
@@ -278,12 +285,14 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	return false;
 }
 
-void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj){
+void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj,bool chaPla){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
+	addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
 	board->boardArr[rowPos][colPos] = UNDERSCORE;
 	board->boardArr[rowDest][colDest] = obj;
+	if(chaPla) changePlayer(board);
 }
 
 bool moveObj(boardGame* board,int position, int destination,bool doPrint){
@@ -319,33 +328,36 @@ bool moveObj(boardGame* board,int position, int destination,bool doPrint){
 	else if (obj=='N' || obj =='n') validMove = moveKnight(board,rowPos,colPos,rowDest,colDest, doPrint);
 	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest, doPrint);
 	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest, doPrint);
-	if(validMove){
-		addMoveToHistory(board,rowPos,colPos,rowDest,colDest);
-    	changePlayer(board);
-    }
-	return validMove;
+	return validMove;	//change player and add move to history are in switchObj func.
 }
 
 bool isMyKingSafe(boardGame* board){
-	//printf("myKingSafe Function was activated\n");
+
 	assert(board!=NULL);
 	bool safe = false;
 	int position = -1;
 	if(board->curPlayer==1){
+		//printf("ismyKingSafe1 Function was activated\n");
 		position = trackKingPosition(board, WhiteKing);
 		if(position==-1){
 			printf("whiteKing wasn't found"); // never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,WhiteKing);
+		//if(safe) printf("it's safe  here 1\n");
+		//if(!safe) printf("it's not safe here1\n");
+
 	}
 	else if (board->curPlayer==0){
+		//printf("ismyKingSafe 0 Function was activated\n");
 		position = trackKingPosition(board, BlackKing);
 		if(position==-1){
 			printf("whiteKing wasn't found");  //never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,BlackKing);
+		//if(safe) printf("it's safe here 0\n");
+		//if(!safe) printf("it's not safe here0\n");
 	}
 	//if(safe) printf("the king is safe\n");
 	return safe;

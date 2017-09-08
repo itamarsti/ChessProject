@@ -123,9 +123,9 @@ GameCommand* gameParser(const char* str){
 			command->validArg = false;
 			token = strtok(NULL, "\t\r\n ");
 			if(token!=NULL && isTri(token)){
-				int row = token[1]-'0';
+				int row = token[1]-'1';
 				int col = token[3]-'A';
-				command->position = RowColToNum(row,col);
+				command->position = RowColToNum(7-row,col);
 				command->destination = 64;
 				command->cmd = GET_MOVES;
 				command->validArg = true;

@@ -113,34 +113,35 @@ void exUndo(boardGame* board,bool printActivate){
 	char objDest = (char)board->history->elements[index];
 	int posDest = board->history->elements[index-1];
 	char objSource = (char)board->history->elements[index-2];
-	int posDSource = board->history->elements[index-3];
+	int posSource = board->history->elements[index-3];
 	board->boardArr[NumToRow(posDest)][NumToCol(posDest)] = objDest;
-	board->boardArr[NumToRow(posDSource)][NumToCol(posDSource)] = objSource;
+	board->boardArr[NumToRow(posSource)][NumToCol(posSource)] = objSource;
 	if(printActivate){
+		char po = (char) (NumToCol(posSource)+'A');
+		char de = (char) (NumToCol(posDest)+'A');
 		if(board->curPlayer==0){
-			if(printActivate) printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-			BLACK,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+			if(printActivate) printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
+			BLACK,8-NumToRow(posSource),po,8-NumToRow(posDest),de);
 		}
 		else if(board->curPlayer==1){
-			if(printActivate)printf("Undo move for player %s : <%d,%d> -> <%d,%d>\n",
-			WHITE,NumToRow(posDSource)+1,NumToCol(posDSource)+1,NumToRow(posDest)+1,NumToCol(posDest)+1);
+			if(printActivate)printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
+			WHITE,8-NumToRow(posSource),po,8-NumToRow(posDest),de);
 		}
 	}
 	return;
 }
 
 
-void undo(boardGame* board,bool printActivate, bool playerChangeAcivate){
+void undo(boardGame* board, bool printActivate, bool playerChangeAcivate){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	exUndo(board,printActivate);
-	for(int i=board->history->actualSize-1; i>board->history->actualSize-5;i--){
-		spArrayListRemoveAt(board->history,i);
-	}
-	board->history->actualSize-=4;
 	if (playerChangeAcivate)changePlayer(board);
+	exUndo(board,printActivate);
+	for(int i=0;i<4;i++){
+		spArrayListRemoveLast(board->history);
+	}
 	return;
 }
 
@@ -160,7 +161,7 @@ void moveMessage(boardGame* board){
 
 void printCheckMessage(int player){
 	if(player==1) printf("Check: %s King is threatened!\n",WHITE);
-	else if(player==1) printf("Check: %s King is threatened!\n",BLACK);
+	else if(player==0) printf("Check: %s King is threatened!\n",BLACK);
 }
 
 bool isCheckMate(boardGame* board){
@@ -236,34 +237,34 @@ void terminateGame(boardGame* board, bool mate, bool tie){
 }
 
 bool isWhitePlayer(char c){
-	if (c=='n' || c=='b' || c=='p' || c=='r' || c=='k' || c=='q') return true;
+	if (c=='n' || c=='b' || c=='m' || c=='r' || c=='k' || c=='q') return true;
 	return false;
 }
 
 bool isBlackPlayer(char c){
-	if (c=='N' || c=='N' || c=='N' || c=='N' || c=='N' || c=='N') return true;
+	if (c=='N' || c=='B' || c=='M' || c=='R' || c=='K' || c=='Q') return true;
 	return false;
 }
 
 
 void getMovesFunc(boardGame* board,int position){
-	printf("get moves was acted");
+	printf("getmovesFunc was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-
 	int row = NumToRow(position);
 	int col = NumToCol(position);
 	if (position>63 || position<0 ){
 		printf("Invalid position on the board\n");}
+	//printf("current player is %d, the row is %d, the col is: %d\n",board->curPlayer,row,col);
 	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)) printf("illegal move\n");
 	if (board->curPlayer==0 &&
 			(isWhitePlayer(board->boardArr[row][col])|| board->boardArr[row][col]==UNDERSCORE))
 		printf("The specified position does not contain %s player piece\n",BLACK);
 	else if (board->curPlayer==1 &&
 			(isBlackPlayer(board->boardArr[row][col])|| board->boardArr[row][col]==UNDERSCORE))
-		printf("The specified position does not contain %s player piece\n",WHITE);
+			printf("The specified position does not contain %s player piece\n",WHITE);
 	else{
-		bool valid,valid1,valid2 = false;
+		bool valid,valid1 = false;
 		int rowDest, colDest, dest =0;
 		boardGame* copy = copyBoard(board);
 		assert(copy!=NULL); assert(copy->boardArr!=NULL);
@@ -278,22 +279,15 @@ void getMovesFunc(boardGame* board,int position){
 					||(board->curPlayer==1 && isBlackPlayer(board->boardArr[rowDest][colDest])))
 					valid1 = true;		// need to be checked before the move action
 				valid = moveObj(copy,position,dest, false);
-				if(!valid) continue;
-				else{				//if valid move == true
-					for(int k=0;k<ROW;k++){
-						for(int l=0;l<COL;l++){
-							valid2 = moveObj(copy,RowColToNum(k,l),dest, false);
-							if(valid2==true && valid1==true) printf("<%d,%c>*^\n",7-rowDest,(char)(colDest+'a'));
-							else if (valid2==true && valid1==false)printf("<%d,%c>*\n",7-rowDest,(char)(colDest+'a'));
-							else if (valid2==false && valid1==true)printf("<%d,%c>^\n",7-rowDest,(char)(colDest+'a'));
-							else printf("<%d,%c>\n",7-rowDest,(char)(colDest+'a'));
-							if(valid2) undo(copy,false,true);
-							valid2 = false;
-							}
-						}
-					}
-					undo(copy,false,true);		//if we are here, move was done
+				if(!valid){
 					valid1 = false;
+					continue;
+				}
+				else if (valid){				//if valid move == true
+					getMovesPrintFunc(copy, valid1,rowDest, colDest, dest);
+					undo(copy,false,true);		//if we are here, move was done
+					}
+				valid1 = false;
 			}
 		}
 		destroyBoard(copy);
@@ -301,4 +295,29 @@ void getMovesFunc(boardGame* board,int position){
 	return;
 	}
 
+void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest){
+	assert(copy!=NULL);
+	assert(copy->boardArr!=NULL);
+	assert(copy->history!=NULL);
+	assert(copy->history->elements!=NULL);
+	bool valid2 = false;
+	for(int k=0;k<ROW;k++){
+		for(int l=0;l<COL;l++){
+			valid2 = moveObj(copy,RowColToNum(k,l),dest, false);
+			if(valid2==true && valid1==true){
+				printf("<%d,%c>*^\n",8-rowDest,(char)(colDest+'a'));
+				undo(copy,false,true);
+				return;
+			}
+			else if (valid2==true && valid1==false){
+				printf("<%d,%c>*\n",8-rowDest,(char)(colDest+'a'));
+				undo(copy,false,true);
+				return;
+			}
+		}
+	}
+	if (valid1==true)printf("<%d,%c>^\n",8-rowDest,(char)(colDest+'a'));
+	else printf("<%d,%c>\n",8-rowDest,(char)(colDest+'a'));
+
+}
 

@@ -28,13 +28,17 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd->position,cmd->destination, true);
 		if(validMove){
+			//printf("checking the opponent state checkmate/tie\n");
 			if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
+				//printf("there is a risk on the king");
 				if((isMate = isCheckMate(board))==true){
+					printf("the is checkMate");
 					free(input);
 					destroyGameStruct(cmd);
 					terminateGame(board,true, false);
 				}
 				printCheckMessage(board->curPlayer);
+				//printf("we got yill here");
 			}
 			else if ((isTie = isCheckMate(board))==true){
 				free(input);
@@ -54,6 +58,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 		}
 		undo(board,true,true);
 		undo(board,true,true);
+		return true;
 	}
 	else if(cmd->cmd==SAVE) saveFile(board,cmd->path);
 	else if(cmd->cmd==GET_MOVES) getMovesFunc(board,cmd->position);

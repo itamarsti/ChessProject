@@ -41,6 +41,7 @@ void terminateGame(boardGame* board,bool mate, bool tie);
 bool isWhitePlayer(char c);
 bool isBlackPlayer(char c);
 void getMovesFunc(boardGame* board,int position);
+void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest);
 
 
 #endif /* GAMECOMMANDS_H_ */
