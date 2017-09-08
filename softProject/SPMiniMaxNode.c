@@ -71,13 +71,13 @@ int scoreFuncId(char symbol){
 	else if(symbol == WhitePawn) return -1;
 	else if(symbol == BlackBishop) return 3;
 	else if(symbol == WhiteBishop) return -3;
-	else if(symbol == BlackRook) return 5;
-	else if(symbol == WhiteRook) return -5;
 	else if(symbol == BlackKnight) return 3;
 	else if(symbol == WhiteKnight) return -3;
+	else if(symbol == BlackRook) return 5;
+	else if(symbol == WhiteRook) return -5;
 	else if(symbol == BlackQueen) return 9;
 	else if(symbol == WhiteQueen) return -9;
-	else if(symbol == WhiteKing) return 100;
-	else if(symbol == BlackKing) return -100;
+	else if(symbol == BlackKing) return 100;
+	else if(symbol == WhiteKing) return -100;
 	else return 0;
 }
