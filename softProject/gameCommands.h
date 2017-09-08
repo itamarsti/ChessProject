@@ -42,6 +42,6 @@ bool isWhitePlayer(char c);
 bool isBlackPlayer(char c);
 void getMovesFunc(boardGame* board,int position);
 void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest);
-
+bool isWinner(boardGame* board);
 
 #endif /* GAMECOMMANDS_H_ */

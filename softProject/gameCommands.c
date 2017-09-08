@@ -248,7 +248,7 @@ bool isBlackPlayer(char c){
 
 
 void getMovesFunc(boardGame* board,int position){
-	printf("getmovesFunc was acted\n");
+	//printf("getmovesFunc was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	int row = NumToRow(position);
@@ -321,3 +321,15 @@ void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, i
 
 }
 
+
+bool isWinner(boardGame* board){
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board->history!=NULL); assert(board->history->elements!=NULL);
+	bool isKingSafe = isMyKingSafe(board);
+	bool checkMate = isCheckMate(board);
+	if(isKingSafe==false && checkMate==true) return true;
+	return false;
+
+
+
+}
