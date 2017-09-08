@@ -38,23 +38,23 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         					}
         					else if(minmax==true){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,maxWinner);
+        						if(scoreWinner>maxWinner){
+									maxWinner = scoreWinner;
+								}
         						if(scoreWinner>=recScore){
 									undo(board,false,true);
 									return scoreWinner;
 								}
-        						if(scoreWinner>maxWinner){
-        							maxWinner = scoreWinner;
-        						}
         					}
         					else if(minmax==false){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,minWinner);
+        						if(scoreWinner<minWinner){
+									minWinner = scoreWinner ;
+								}
         						if(scoreWinner<=recScore){
                 					undo(board,false,true);
                 					return scoreWinner;
         						}
-        						if(scoreWinner<minWinner){
-									minWinner = scoreWinner ;
-								}
         					}
         					undo(board,false,true);
         				}

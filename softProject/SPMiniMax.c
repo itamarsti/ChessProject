@@ -9,21 +9,29 @@
 
 /*
  */
-/**
+/*
 int spAlphaBetaSuggestMove(boardGame* board,unsigned int maxDepth){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
-    if (maxDepth<=0) return -1;
+	assert(board->history!=NULL); assert(board->history->elements!=NULL);
+	int maxCompare = INT_MIN;
+	int minCompare = INT_MAX;
+	if (maxDepth<=0) return -1; 		// check this
     else{
-        int maxCompare = INT_MIN;
-        int minCompare = INT_MAX;
         int WinnerIndex = -1;
         int winnerScore;
-        SPFiarGame* gameCopy = spFiarGameCopy(currentGame);
-        gameCopy->simulate = true;
-        bool maxPlayer = true;
-        if(currentGame->currentPlayer==SP_FIAR_GAME_PLAYER_2_SYMBOL) maxPlayer=false;
-        if(gameCopy==NULL)return -1;
-        for(int i=0;i<SP_FIAR_GAME_N_COLUMNS;i++){
+        boardGame* copy = copyBoard(board);
+        assert(copy!=NULL); assert(copy->boardArr!=NULL);
+        assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
+        //gameCopy->simulate = true;
+        bool maxPlayer = false;
+        int player = board->curPlayer;
+        if(copy->curPlayer==0) maxPlayer=true;
+        for(int i=0;i<ROW;i++){
+        	for(int j=0; j<COL;j++){
+        		if((player==1 && !isWhitePlayer(board->boardArr[i][j]))||
+				   (player==0 && !isBlackPlayer(board->boardArr[i][j]))||
+				   board->boardArr[i][j]==UNDERSCORE) continue;
+        	}
             if (spFiarGameIsValidMove(gameCopy,i)){
                 spFiarGameSetMove(gameCopy,i);
                 char win = spFiarCheckWinner(gameCopy);
