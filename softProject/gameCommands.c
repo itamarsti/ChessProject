@@ -339,7 +339,7 @@ bool isWinner(boardGame* board){
 void moveAIobj(boardGame* board){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
-	int* moveArr = (int*) AlphaBetaMove(board);
+	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
 	if(valid){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
