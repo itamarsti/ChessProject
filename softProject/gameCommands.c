@@ -256,7 +256,10 @@ void getMovesFunc(boardGame* board,int position){
 	if (position>63 || position<0 ){
 		printf("Invalid position on the board\n");}
 	//printf("current player is %d, the row is %d, the col is: %d\n",board->curPlayer,row,col);
-	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)) printf("illegal move\n");
+	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)){
+		printf("illegal move\n");
+		return;
+	}
 	if (board->curPlayer==0 &&
 			(isWhitePlayer(board->boardArr[row][col])|| board->boardArr[row][col]==UNDERSCORE))
 		printf("The specified position does not contain %s player piece\n",BLACK);
