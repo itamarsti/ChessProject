@@ -22,7 +22,7 @@
 #include "gameParser.h"
 #include "settingParser.h"
 #include "SPArrayList.h"
-
+#include "alphaBetaMinMax.h"
 
 void undo(boardGame* board,bool printActivate, bool playerChangeAcivate);
 void exUndo(boardGame* board,bool printActivate);
