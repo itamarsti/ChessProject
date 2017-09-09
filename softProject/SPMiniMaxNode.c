@@ -5,7 +5,6 @@
 #include "moveOps.h"
 #include <stdbool.h>
 #include <assert.h>
-#define OFFSET 3
 
 
 int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore){

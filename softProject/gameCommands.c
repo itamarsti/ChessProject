@@ -15,6 +15,7 @@
 #include "gameParser.h"
 #include "settingParser.h"
 #include "moveOps.h"
+include SPMiniMax
 
 
 
@@ -230,7 +231,8 @@ void terminateGame(boardGame* board, bool mate, bool tie){
 		exit(0);
 	}
 	else if (tie){
-		printf("The game is tied\n");
+		if(board->gameMode==2)printf("The game is tied\n");
+		else if(board->gameMode==1) printg("The game ends in a tie\n");
 		destroyBoard(board);
 		exit(0);
 	}
@@ -338,29 +340,25 @@ bool isWinner(boardGame* board){
 void moveAIobj(boardGame* board){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
-	int moveArr[2];
+	int moveArr[2] = AlphaBetaMove(board);
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
 	if(valid){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
 		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
 			//printf("there is a risk on the king");
 			if(isCheckMate(board)){
-				//printf("the is checkMate");
 				free(moveArr);
 				terminateGame(board,true, false);
 			}
 			printCheckMessage(board->curPlayer);
 			//printf("we got yill here");
 		}
-		else if ((isTie = isCheckMate(board))==true){
-			free(input);
-			destroyGameStruct(cmd);
+		else if (isCheckMate(board)){
+			free(moveArr);
 			terminateGame(board,false, true);
 		}
 	}
-
-
-
+	free(moveArr);
 }
 
 
