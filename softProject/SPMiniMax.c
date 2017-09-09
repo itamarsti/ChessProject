@@ -48,7 +48,14 @@ int* spAlphaBetaSuggestMove(boardGame* board,unsigned int maxDepth){
         						return arrMoves;
         					}
         					else if(player==0){
-        						winnerScore = recursiveFunc(board , !minmax, maxDepth-1, recScore)
+        						winnerScore = recursiveFunc(board , !minmax, maxDepth-1, maxCompare);
+        						if (winnerScore == INT_MAX){
+            						destroyBoard(copy);
+            						arrMoves[0] = RowColToNum(i,j);
+									arrMoves[1] = RowColToNum(k,l);
+									return arrMoves;
+        						}
+)
         					}
         				}
         			}
