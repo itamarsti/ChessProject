@@ -332,7 +332,50 @@ bool isWinner(boardGame* board){
 	bool checkMate = isCheckMate(board);
 	if(isKingSafe==false && checkMate==true) return true;
 	return false;
+}
 
+
+void moveAIobj(boardGame* board){
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board->history!=NULL); assert(board->history->elements!=NULL);
+	int moveArr[2];
+	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
+	if(valid){
+		computerMoveMessage(board,moveArr[0],moveArr[1]);
+		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
+			//printf("there is a risk on the king");
+			if(isCheckMate(board)){
+				//printf("the is checkMate");
+				free(moveArr);
+				terminateGame(board,true, false);
+			}
+			printCheckMessage(board->curPlayer);
+			//printf("we got yill here");
+		}
+		else if ((isTie = isCheckMate(board))==true){
+			free(input);
+			destroyGameStruct(cmd);
+			terminateGame(board,false, true);
+		}
+	}
+
+
+
+}
+
+
+void computerMoveMessage(boardGame* board, int position, int destination){
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	int posRow = NumToRow(position); int posCol = NumToCol(position);
+	int destRow = NumToRow(destination); int destCol = NumToCol(destination);
+	printf("Computer: move ");
+	if(board->boardArr[destRow][destCol]==BlackPawn) printf("pawn");
+	else if(board->boardArr[destRow][destCol]==BlackBishop) printf("bishop");
+	else if(board->boardArr[destRow][destCol]==BlackKnight) printf("knight");
+	else if(board->boardArr[destRow][destCol]==BlackRook) printf("rook");
+	else if(board->boardArr[destRow][destCol]==BlackQueen) printf("queen]");
+	else if(board->boardArr[destRow][destCol]==BlackKing) printf("king");
+	printf(" at <%d,%c> to <%d,%c>\n",8-posRow,(char)(posCol+'A'),8-destRow, (char)(destCol+'A'));
 
 
 }

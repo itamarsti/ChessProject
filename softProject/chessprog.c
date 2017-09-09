@@ -32,6 +32,9 @@ int main(int argc, char* argv[]) {
 		while(!resetBool){
 			printBoard(mainBoard);
 			resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we are checking the opponent's king
+			if(mainBoard->gameMode==1){
+				moveAIobj(mainBoard);
+			}
 		}
 		resetBool = false;
 

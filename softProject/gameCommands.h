@@ -43,5 +43,8 @@ bool isBlackPlayer(char c);
 void getMovesFunc(boardGame* board,int position);
 void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest);
 bool isWinner(boardGame* board);
+void moveAIobj(boardGame* board);
+void computerMoveMessage(boardGame* board, int position, int destination);
+
 
 #endif /* GAMECOMMANDS_H_ */
