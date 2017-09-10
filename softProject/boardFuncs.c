@@ -77,7 +77,7 @@ void initBoard(boardGame* board){
 void printBoard(boardGame* board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
-	if(board->gameMode==2 || (board->gameMode==1 && board->userCol==board->curPlayer)){
+	if(board->gameMode==2 || (board->gameMode==1 )){
 		for(int i=0;i<ROW;i++){
 			printf("%d%c",8-i,PIPE);
 			for(int j=0;j<COL;j++){

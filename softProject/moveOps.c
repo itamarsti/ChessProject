@@ -21,6 +21,7 @@
 
 
 bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
+	//printf("move pawn was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -31,18 +32,20 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+			//if(valid) printf( "valid");
 			return valid;
 		}
-		else if (secRow){
-			if(rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
-					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest){
+		else if((rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
+					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest)
+				&& secRow){
 				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+				//if(valid) printf( "valid");
 				return valid;
 			}
-		}
 		else if (rowDest==rowPos+1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				islower(board->boardArr[rowDest][colDest])){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+			//if(valid) printf( "valid");
 			return valid;
 			}
 		}
@@ -50,18 +53,21 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		if(rowDest==rowPos-1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+			//if(valid) printf( "valid");
 			return valid;
 		}
-		else if (secRow){
-			if(rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
-					&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE){
+		else if((rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
+				&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE)
+				 && secRow){
 				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+				//if(valid) printf( "valid");
 				return valid;
 			}
-		}
 		else if (rowDest==rowPos-1 && (colPos==colDest+1 || colPos==colDest-1)&&
-				isupper(board->boardArr[rowDest][colDest])){
+				isBlackPlayer(board->boardArr[rowDest][colDest])){
+			//printf("was in this term\n");
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
+			//if(valid) printf( "valid");
 			return valid;
 			}
 		}
@@ -252,6 +258,7 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 }
 
 bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2, bool print){
+	//printf("switch and check was acted from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -263,6 +270,7 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 			//printf("is my king safe 0 was acted");
 			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1,false);
 			valid = isMyKingSafe(copy);
+			//if(!valid) printf("king is not safe for move from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
 			destroyBoard(copy);
 			if(valid){
 				switchObj(board, rowPos, colPos, rowDest, colDest,obj1,true);

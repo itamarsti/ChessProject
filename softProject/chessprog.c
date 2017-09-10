@@ -31,8 +31,10 @@ int main(int argc, char* argv[]) {
 		mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 		while(!resetBool){
 			printBoard(mainBoard);
-			resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we are checking the opponent's king
-			if(mainBoard->gameMode==1){
+			resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we also checking the opponent's king
+			//printBoard(mainBoard);
+			if(mainBoard->gameMode==1 && mainBoard->curPlayer==0){
+				//printf("ready to start moveAiObj\n");
 				moveAIobj(mainBoard);
 			}
 		}

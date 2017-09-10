@@ -205,6 +205,8 @@ bool isThereOptionMove(boardGame* board,int row,int col){
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			valid = moveObj(copy,RowColToNum(row,col),RowColToNum(i,j),false);
+			//printf("current player is:%d",copy->curPlayer);
+			//if(!valid)printf("move from %d,%d to %d,%d\n",row,col,i,j);
 			if(valid){
 				destroyBoard(copy);
 				return true;
@@ -231,7 +233,7 @@ void terminateGame(boardGame* board, bool mate, bool tie){
 	}
 	else if (tie){
 		if(board->gameMode==2)printf("The game is tied\n");
-		else if(board->gameMode==1) printg("The game ends in a tie\n");
+		else if(board->gameMode==1) printf("The game ends in a tie\n");
 		destroyBoard(board);
 		exit(0);
 	}
@@ -335,12 +337,24 @@ bool isWinner(boardGame* board){
 	return false;
 }
 
+bool isTie(boardGame* board){
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board->history!=NULL); assert(board->history->elements!=NULL);
+	bool isKingSafe = isMyKingSafe(board);
+	bool checkMate = isCheckMate(board);
+	if(isKingSafe==true && checkMate==true) return true;
+	return false;
+}
 
 void moveAIobj(boardGame* board){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
+	//printf("inside moveAiObj\n");
+	//printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
+	//if(!valid) printf("not valid\n");
+	//if(valid) printf("computer move is valid\n");
 	if(valid){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
 		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened

@@ -70,10 +70,8 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 bool mainGameFlow(boardGame* board){
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(board->history!=NULL);
-	assert(board->history->elements!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	char* input;
 	GameCommand* cmd;
 	bool loopBreaker = false;

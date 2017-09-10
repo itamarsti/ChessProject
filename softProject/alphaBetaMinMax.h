@@ -16,7 +16,6 @@
 int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore);
 int score(boardGame* board);
 int scoreFuncId(char symbol);
-int AlphaBetaMove(boardGame* board,unsigned int maxDepth);
-
+int* AlphaBetaMove(boardGame* board,unsigned int maxDepth);
 
 #endif /* ALPHABETAMINMAX_H_ */
