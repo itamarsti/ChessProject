@@ -16,6 +16,15 @@
 #include <SDL2/SDL_video.h>
 
 
+
+typedef struct MANAGER{
+	boardGame* board;
+	SDL_Window* mainWindow;
+	SDL_Window* newGame;
+	SDL_Window* game;
+} manager;
+
+SDL_Window* createMainWindow();
 void guiMain(boardGame* board);
 
 #endif /* GUI_H_ */

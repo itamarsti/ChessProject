@@ -14,13 +14,31 @@
 
 
 void guiMain(boardGame* board){
-	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* mainWindow = NULL;
-	mainWindow = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED,
-			SDL_WINDOWPOS_CENTERED,800,600,SDL_WINDOW_RESIZABLE);
-	if (mainWindow==NULL) printf("Error: unable to create window: %s\n",SDL_GetError());
-	SDL_Renderer* renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer==NULL) printf("Error: unable to create renderer: %s\n",SDL_GetError());
-	SDL_Delay(10000);
-	SDL_Quit();
+	SDL_Window* main = createMainWindow();
 }
+
+SDL_Window* createMainWindow(){
+	SDL_Window* main = SDL_CreateWindow("Main Window", SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,600,600, SDL_WINDOW_OPENGL);
+	if(main==NULL){
+		printf("Error: unable to create window: %s\n",SDL_GetError());
+		SDL_Quit();
+		exit(0);
+	}
+	SDL_Renderer* renderer = SDL_CreateRenderer(main,-1,SDL_RENDERER_ACCELERATED);
+	if(main==NULL){
+		printf("Error: unable to create renderer: %s\n",SDL_GetError());
+		SDL_DestroyWindow(main);
+		SDL_Quit();
+		exit(0);
+	}
+	SDL_SetRenderDrawColor(renderer,255,0,0,1);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(10000);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(main);
+	SDL_Quit();
+	exit(0);
+}
+
