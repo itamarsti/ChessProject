@@ -22,7 +22,7 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	else if (command->cmd==DIFFICULTY_2) setDifficult(board, 2);
 	else if (command->cmd==DIFFICULTY_3) setDifficult(board, 3);
 	else if (command->cmd==DIFFICULTY_4) setDifficult(board, 4);
-	else if (command->cmd==DIFFICULTY_5) setDifficult(board, 5);
+	//else if (command->cmd==DIFFICULTY_5) setDifficult(board, 5);
 	else if (command->cmd==USER_COL_0) setColor(board,0);
 	else if (command->cmd==USER_COL_1) setColor(board, 1);
 	else if (command->cmd==GAME_MODE_1) setNumPlayers(board, 1);
@@ -64,6 +64,10 @@ void mainSettingFlow(boardGame* board){
 				free(string);
 				destroySettingStruct(cmd);
 				quit(board);
+			}
+			else if (cmd->cmd==DIFFICULTY_5){
+				printf("Expert level not supported, please choose a value between 1 to 4:\n");
+				continue;
 			}
 			startBool=cmdToActSetting(board, cmd);
 			if(!startBool){
