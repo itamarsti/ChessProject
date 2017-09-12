@@ -25,10 +25,24 @@ typedef struct MAINWINDOW{
 	SDL_Texture* welcome;
 	SDL_Texture* newGame;
 	SDL_Texture* loadGame;
-	SDL_Texture* Quit;
+	SDL_Texture* quit;
 }MainWindow;
 
+
+typedef enum {
+	MAIN_WINDOW_LOAD_GAME,
+	MAIN_WINDOW_NEW_GAME,
+	MAIN_WINDOW_EVENT_QUIT,
+	MAIN_WINDOW_EVENT_NONE,
+	MAIN_WINDOW_INVALID
+} MAIN_WINDOW_EVENT;
+
+
+
+bool isClickOnNewGame(int x, int y);
+bool isClickOnLoadGame(int x, int y);
+bool isClickOnQuit(int x, int y);
 void destroyMainWindow(MainWindow* mw);
 MainWindow* createMW();
-
+void drawMainWindow(MainWindow* mw);
 #endif /* MAINWINDOWGUI_H_ */
