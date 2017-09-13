@@ -153,7 +153,8 @@ void moveMessage(boardGame* board){
 	}
 	else if(board->gameMode==1){
 		if(board->curPlayer==board->userCol){
-			printf("%s player - enter your move:\n",WHITE);
+			if(board->curPlayer==0) printf("%s player - enter your move:\n",BLACK);
+			else if(board->curPlayer==1) printf("%s player - enter your move:\n",WHITE);
 		}
 		else return;
 	}

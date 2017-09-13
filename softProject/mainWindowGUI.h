@@ -9,8 +9,8 @@
 #define MAINWINDOWGUI_H_
 
 
-#include "GUI.h"
-#include "boardFuncs.h"
+#include <stdbool.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -18,7 +18,6 @@
 
 
 typedef struct MAINWINDOW{
-	boardGame* board;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* bg;
@@ -39,10 +38,14 @@ typedef enum {
 
 
 
+MainWindow* createMW();
+void destroyMainWindow(MainWindow* mw);
+void drawMainWindow(MainWindow* mw);
+MAIN_WINDOW_EVENT mainWindowHandleEvent(MainWindow* mw, SDL_Event* event);
 bool isClickOnNewGame(int x, int y);
 bool isClickOnLoadGame(int x, int y);
 bool isClickOnQuit(int x, int y);
-void destroyMainWindow(MainWindow* mw);
-MainWindow* createMW();
-void drawMainWindow(MainWindow* mw);
+void mainWindowHide(MainWindow* mw);
+void mainWindowShow(MainWindow* mw);
+
 #endif /* MAINWINDOWGUI_H_ */

@@ -8,19 +8,14 @@
 
 #include "mainWindowGUI.h"
 #include <assert.h>
+#include "boardFuncs.h"
+
 
 MainWindow* createMW(){
 	MainWindow* mw = (MainWindow*) malloc(sizeof(MainWindow));
 	SDL_Surface* surface = NULL;
 	if(mw==NULL){
 		printf("Couldn't create MainWindow struct\n");
-		return NULL ;
-	}
-	// creating the Game Board
-	mw->board = createBoard();
-	if (mw->board==NULL){
-		printf("Couldn't create game\n");
-		destroyMainWindow(mw);
 		return NULL ;
 	}
 	// creating the Main Window Object
@@ -122,7 +117,6 @@ MainWindow* createMW(){
 
 void destroyMainWindow(MainWindow* mw){
 	if (mw==NULL) return;
-	if (mw->board!=NULL) destroyBoard(mw->board);
 	if (mw->window != NULL) SDL_DestroyWindow(mw->window);
 	if (mw->renderer!=NULL) SDL_DestroyRenderer(mw->renderer);
 	if (mw->loadGame!=NULL) SDL_DestroyTexture(mw->loadGame);
@@ -161,8 +155,8 @@ void drawMainWindow(MainWindow* mw){
 
 
 
-MAIN_WINDOW_EVENT spGameWindowHandleEvent(MainWindow* src, SDL_Event* event) {
-	if (event == NULL || src == NULL ) {
+MAIN_WINDOW_EVENT mainWindowHandleEvent(MainWindow* mw, SDL_Event* event) {
+	if (event == NULL || mw == NULL ) {
 		return MAIN_WINDOW_INVALID;
 	}
 	switch (event->type) {
@@ -177,14 +171,14 @@ MAIN_WINDOW_EVENT spGameWindowHandleEvent(MainWindow* src, SDL_Event* event) {
 				 return  MAIN_WINDOW_EVENT_QUIT;
 			 }
 			 break;
-	case SDL_WINDOWEVENT:
-		if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
-			return MAIN_WINDOW_EVENT_QUIT;
+		case SDL_WINDOWEVENT:
+			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
+				return MAIN_WINDOW_EVENT_QUIT;
+			}
+			break;
+		default:
+			return MAIN_WINDOW_EVENT_NONE;
 		}
-		break;
-	default:
-		return MAIN_WINDOW_EVENT_NONE;
-	}
 	return MAIN_WINDOW_EVENT_NONE;
 }
 
@@ -209,4 +203,13 @@ bool isClickOnQuit(int x, int y) {
 		return true;
 	}
 	return false;
+}
+
+
+void mainWindowHide(MainWindow* mw) {
+	SDL_HideWindow(mw->window);
+}
+
+void mainWindowShow(MainWindow* mw) {
+	SDL_ShowWindow(mw->window);
 }

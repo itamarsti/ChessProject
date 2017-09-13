@@ -8,23 +8,24 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-#include "GUI.h"
 #include "boardFuncs.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
-
+#include "mainWindowGUI.h"
+#include "settingsWindowGUI.h"
 
 
 typedef struct MANAGER{
 	boardGame* board;
-	SDL_Window* mainWindow;
-	SDL_Window* newGame;
-	SDL_Window* game;
-} manager;
+	MainWindow* mw;
+	SettingsWindow* sw;
+	//SDL_Window* game;
+} Manager;
 
-SDL_Window* createMainWindow();
+Manager* createManager();
+void destroyManager(Manager* manager);
 void guiMain(boardGame* board);
 
 #endif /* GUI_H_ */

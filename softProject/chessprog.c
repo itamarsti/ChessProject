@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 				printBoard(mainBoard);
 				resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we also checking the opponent's king
 				//printBoard(mainBoard);
-				if(mainBoard->gameMode==1 && mainBoard->curPlayer==0){
+				if(mainBoard->gameMode==1 && mainBoard->curPlayer!=mainBoard->userCol){
 					//printf("ready to start moveAiObj\n");
 					moveAIobj(mainBoard);
 				}
