@@ -7,9 +7,13 @@
 
 
 #include "GUIManager.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 
-void quitMainWindow(Manager* manager){
+void quitGame(Manager* manager){
 	if(manager!=NULL){
 		destroyManager(manager);
 		SDL_Quit();
@@ -17,4 +21,9 @@ void quitMainWindow(Manager* manager){
 		exit(0);
 	}
 }
+
+
+
+
+//void setNumPlayers(boardGame* board, int num);
 

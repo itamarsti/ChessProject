@@ -71,6 +71,6 @@ bool isClickOnBack(int x, int y);
 void destroySettingsWindow(SettingsWindow* sw);
 SettingsWindow* createSW();
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event);
-//void drawMainWindow(SettingsWindow* sw);
+void drawSettingsWindow(SettingsWindow* sw);
 
 #endif /* SETTINGSWINDOWGUI_H_ */

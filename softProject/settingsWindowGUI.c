@@ -83,7 +83,10 @@ SettingsWindow* createSW(){
 
 
 	//Creating a settings texture:
-
+	/*
+	 *
+	 *
+	 *
 	surface = SDL_LoadBMP("./utilities/settings.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
@@ -269,12 +272,10 @@ SettingsWindow* createSW(){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
+
+	*/
 	return sw;
 }
-/**
-void drawMainWindow(SettingsWindow* sw);
-**/
-
 
 
 
@@ -293,7 +294,6 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 	}
 	switch (event->type) {
 		case SDL_MOUSEBUTTONUP:
-
 			if(isClickOnGameMode1(event->button.x,event->button.y)){
 				return SETTINGS_WINDOW_GAME_MODE_1;
 			}
@@ -337,6 +337,23 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 			return SETTINGS_WINDOW_EVENT_NONE;
 		}
 	return SETTINGS_WINDOW_EVENT_NONE;
+}
+
+void drawSettingsWindow(SettingsWindow* sw){
+	if(sw==NULL){
+			printf("sw is NULL");
+			return;
+		}
+	assert(sw->window != NULL);	assert(sw->renderer!=NULL); assert(sw->bg!=NULL);
+	//assert(sw->back!=NULL);	assert(sw->colBlack!=NULL);	assert(sw->colWhite!=NULL);
+	//assert(sw->difficulty!=NULL); assert(sw->easy!=NULL); assert(sw->gameMode1!=NULL);
+	//assert(sw->gameMode2!=NULL); assert(sw->hard!=NULL); assert(sw->moderate!=NULL);
+	//assert(sw->noob!=NULL);	assert(sw->settings!=NULL); assert(sw->start!=NULL);
+	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
+	SDL_SetRenderDrawColor(sw->renderer, 255, 255, 255, 255);
+	SDL_RenderClear(sw->renderer);
+	SDL_RenderCopy(sw->renderer, sw->bg, NULL, &rec);
+	SDL_RenderPresent(sw->renderer);
 }
 
 

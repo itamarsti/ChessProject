@@ -18,7 +18,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-void quitMainWindow(Manager* manager);
+void quitGame(Manager* manager);
 
 
 #endif /* GUIMANAGER_H_ */
