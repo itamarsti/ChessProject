@@ -352,7 +352,7 @@ void moveAIobj(boardGame* board){
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
 	//printf("inside moveAiObj\n");
-	printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
+	//printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
 	//if(!valid) printf("not valid\n");
 	//if(valid) printf("computer move is not!!! valid\n");
@@ -381,12 +381,13 @@ void computerMoveMessage(boardGame* board, int position, int destination){
 	int posRow = NumToRow(position); int posCol = NumToCol(position);
 	int destRow = NumToRow(destination); int destCol = NumToCol(destination);
 	printf("Computer: move ");
-	if(board->boardArr[destRow][destCol]==BlackPawn) printf("pawn");
-	else if(board->boardArr[destRow][destCol]==BlackBishop) printf("bishop");
-	else if(board->boardArr[destRow][destCol]==BlackKnight) printf("knight");
-	else if(board->boardArr[destRow][destCol]==BlackRook) printf("rook");
-	else if(board->boardArr[destRow][destCol]==BlackQueen) printf("queen]");
-	else if(board->boardArr[destRow][destCol]==BlackKing) printf("king");
+	char c = board->boardArr[destRow][destCol];
+	if(c==BlackPawn|| c==WhitePawn) printf("pawn");
+	else if(c==BlackBishop || c==WhiteBishop) printf("bishop");
+	else if(c==BlackKnight|| c==WhiteKnight) printf("knight");
+	else if(c==BlackRook || c==WhiteRook) printf("rook");
+	else if(c==BlackQueen || c==WhiteQueen) printf("queen]");
+	else if(c==BlackKing || c==WhiteKing) printf("king");
 	printf(" at <%d,%c> to <%d,%c>\n",8-posRow,(char)(posCol+'A'),8-destRow, (char)(destCol+'A'));
 
 
