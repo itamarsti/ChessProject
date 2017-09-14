@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
 	bool resetBool = false;
-	bool consoleBool = false;
+	bool consoleBool = true;
 
 	if(!consoleBool){
 		boardGame* mainBoard = createBoard();
@@ -37,11 +37,17 @@ int main(int argc, char* argv[]) {
 			mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 			while(!resetBool){
 				printBoard(mainBoard);
-				resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we also checking the opponent's king
-				//printBoard(mainBoard);
-				if(mainBoard->gameMode==1 && mainBoard->curPlayer!=mainBoard->userCol){
-					//printf("ready to start moveAiObj\n");
-					moveAIobj(mainBoard);
+				if(mainBoard->gameMode==1){
+					if(mainBoard->curPlayer!=mainBoard->userCol){
+						//printf("ready to start moveAiObj\n");
+						moveAIobj(mainBoard);
+					}
+					else if(mainBoard->curPlayer==mainBoard->userCol){
+					resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we also checking the opponent's king
+					}
+				}
+				else if (mainBoard->gameMode==2){
+					resetBool = mainGameFlow(mainBoard);	//we changed the turns so now we also checking the opponent's king
 				}
 			}
 			resetBool = false;

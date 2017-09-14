@@ -352,10 +352,10 @@ void moveAIobj(boardGame* board){
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
 	//printf("inside moveAiObj\n");
-	//printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
+	printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
 	//if(!valid) printf("not valid\n");
-	//if(valid) printf("computer move is valid\n");
+	//if(valid) printf("computer move is not!!! valid\n");
 	if(valid){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
 		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened

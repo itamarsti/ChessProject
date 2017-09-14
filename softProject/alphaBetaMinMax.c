@@ -128,12 +128,12 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
         //gameCopy->simulate = true;
         // bool maxPlayer = false;
-        int player = board->curPlayer;
+        if(copy->curPlayer==1) minmax = false;
         //if(copy->curPlayer==0) maxPlayer=true;
         for(int i=0;i<ROW;i++){
         	for(int j=0; j<COL;j++){
-        		if((player==1 && !isWhitePlayer(copy->boardArr[i][j]))||
-				   (player==0 && !isBlackPlayer(copy->boardArr[i][j]))||
+        		if((!minmax && !isWhitePlayer(copy->boardArr[i][j]))||
+				   (minmax && !isBlackPlayer(copy->boardArr[i][j]))||
 				   copy->boardArr[i][j]==UNDERSCORE) continue;
         		for (int k=0;k<ROW;k++){
         			for(int l=0;l<COL;l++){
@@ -147,7 +147,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         						arrMoves[1] = RowColToNum(k,l);
         						return arrMoves;
         					}
-        					else if(player==0){
+        					else if(minmax){
         						winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, maxCompare);
         						if (winnerScore == INT_MAX){
             						destroyBoard(copy);
@@ -163,7 +163,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 
         						}
         					}
-        					else if(player==1){
+        					else if(!minmax){
 								winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, minCompare);
 								if (winnerScore == INT_MIN){
 									destroyBoard(copy);
@@ -171,9 +171,9 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 									arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
 								}
-								if(winnerScore<maxCompare){
+								if(winnerScore<minCompare){
 									minCompare = winnerScore;
-        							arrMoves[0]=RowColToNum(i,j); RowColToNum(k,l);
+        							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
         							//printf("arrMoves[0] is:%d\n",arrMoves[0]);
 									//printf("arrMoves[1] is:%d\n",arrMoves[1]);
 								}
