@@ -20,8 +20,9 @@
 
 void guiMain(boardGame* board){
 	bool back = false;
-	while(!back){
-		Manager* manager = createManager();
+	Manager* manager = createManager();
+	while(1){
+		manager->mw = (MainWindow*) createMW();
 		drawMainWindow(manager->mw);
 		SDL_Event event;
 		while(!back){
@@ -40,27 +41,35 @@ void guiMain(boardGame* board){
 					if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
 						quitGame(manager);
 					}
+
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_BACK){
-						destroyManager(manager);
+						destroySettingsWindow(manager->sw);
+						setDefault(manager->board);
 						back = true;
 						break;
 					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PLAY){
+					/*
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_START){
 						destroySettingsWindow(manager->sw);
 						manager->game = (GameWindow*) createGW();
-						drawSettingsWindow(manager->sw);
+						drawGameWindow(manager->gw);
+						while(1){
+						SDL_Event event1;
+						SDL_WaitEvent(&event1);
+						}
 					}
+					*/
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
 						setNumPlayers(board,1);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,1,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,1,2);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
 						setNumPlayers(board,2);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(2,1,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,2,1,2);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -68,8 +77,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->userCol==1) continue;
 						setColor(board,1);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,1,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,1,board->diffLevel);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -77,8 +86,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->userCol==0) continue;
 						setColor(board,0);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,0,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,0,board->diffLevel);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -86,8 +95,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->diffLevel==1) continue;
 						setDifficult(board,1);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,board->userCol,1);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,board->userCol,1);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -95,8 +104,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->diffLevel==2) continue;
 						setDifficult(board,2);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,board->userCol,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,board->userCol,2);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -104,8 +113,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->diffLevel==3) continue;
 						setDifficult(board,3);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,board->userCol,3);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,board->userCol,3);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -113,8 +122,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->diffLevel==4) continue;
 						setDifficult(board,4);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,board->userCol,4);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,board->userCol,4);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -122,8 +131,8 @@ void guiMain(boardGame* board){
 						if(board->gameMode==2) continue;
 						if(board->diffLevel==5) continue;
 						setDifficult(board,5);
-						destroySettingsWindow(manager->sw);
-						manager->sw = (SettingsWindow*) createSW(1,board->userCol,5);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,board->userCol,5);
 						drawSettingsWindow(manager->sw);
 						continue;
 					}
@@ -153,13 +162,10 @@ Manager* createManager(){
 	}
 	initBoard(manager->board);
 	setDefault(manager->board);
-	manager->mw = createMW();
-	if(manager->mw==NULL){
-		printf("couldn't create GUI mainWindow");
-		destroyManager(manager);
-		return NULL;
-	}
+	manager->mw = NULL;
 	manager->sw = NULL;
+	manager->game = NULL;
+
 	return manager;
 }
 

@@ -47,9 +47,14 @@ GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
 void drawGameWindow(GameWindow* gw);
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* mw, SDL_Event* event);
-//bool isClickOnNewGame(int x, int y);
-//bool isClickOnLoadGame(int x, int y);
-//bool isClickOnQuit(int x, int y);
+
+bool isClickOnSaveGame(int x, int y);
+bool isClickOnLoadGameWindow(int x, int y);
+bool isClickOnQuitGameWindow(int x, int y);
+bool isClickOnRestart(int x, int y);
+bool isClickOnUndo(int x, int y);
+bool isClickOnMainMenu(int x, int y);
+
 void gameWindowHide(GameWindow* gw);
 void gameWindowShow(GameWindow* gw);
 

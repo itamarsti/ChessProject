@@ -19,6 +19,7 @@
 #include <SDL2/SDL_video.h>
 
 void quitGame(Manager* manager);
+void gameModeGUI(Manager* manager, int numOfPlayers, int color, int difficulty);
 
 
 #endif /* GUIMANAGER_H_ */

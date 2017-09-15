@@ -150,12 +150,15 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         					else if(minmax){
         						winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, maxCompare);
         						if (winnerScore == INT_MAX){
+									printf("the winner score is int_max\n");
+
             						destroyBoard(copy);
             						arrMoves[0] = RowColToNum(i,j);
 									arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
         						}
         						if(winnerScore>maxCompare){
+
         							maxCompare = winnerScore;
         							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
             						//printf("arrMoves[0] is:%d\n",arrMoves[0]);
@@ -166,6 +169,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         					else if(!minmax){
 								winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, minCompare);
 								if (winnerScore == INT_MIN){
+									printf("the winner score is int_min\n");
 									destroyBoard(copy);
 									arrMoves[0] = RowColToNum(i,j);
 									arrMoves[1] = RowColToNum(k,l);
@@ -185,6 +189,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         	}
         }
     	destroyBoard(copy);
+    	printf("the winner score is: %d\n", winnerScore);
 	}
 	return arrMoves;
 }

@@ -41,7 +41,7 @@ typedef struct SETTINGSWINDOW{
 
 typedef enum {
 	SETTINGS_WINDOW_BACK,
-	SETTINGS_WINDOW_PLAY,
+	SETTINGS_WINDOW_START,
 	SETTINGS_WINDOW_GAME_MODE_1,
 	SETTINGS_WINDOW_GAME_MODE_2,
 	SETTINGS_WINDOW_COL_WHITE,
@@ -66,11 +66,13 @@ bool isClickOnNoob(int x, int y);
 bool isClickOnEasy(int x, int y);
 bool isClickOnModerate(int x, int y);
 bool isClickOnHard(int x, int y);
-bool isClickOnExpert(int x, int y);
+//bool isClickOnExpert(int x, int y);
 bool isClickOnPlay(int x, int y);
 bool isClickOnBack(int x, int y);
+void destroySettingsRenderer(SettingsWindow* sw);
 void destroySettingsWindow(SettingsWindow* sw);
-SettingsWindow* createSW();
+SettingsWindow* createSW(int numPlayers, int color, int diffi);
+SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi);
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event);
 void drawSettingsWindow(SettingsWindow* sw);
 

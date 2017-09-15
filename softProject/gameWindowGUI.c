@@ -165,10 +165,55 @@ void destroyGameWindow(GameWindow* gw){
 }
 
 //void drawGameWindow(GameWindow* gw);
-//GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event)
-//bool isClickOnNewGame(int x, int y);
-//bool isClickOnLoadGame(int x, int y);
-//bool isClickOnQuit(int x, int y);
+
+
+GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
+	if (event == NULL || gw == NULL ) {
+		return GAME_WINDOW_INVALID;
+	}
+	switch (event->type) {
+		case SDL_MOUSEBUTTONUP:
+			 if(isClickOnSaveGame(event->button.x, event->button.y)){
+				return GAME_WINDOW_SAVE_GAME;
+			 }
+			 else if(isClickOnLoadGameWindow(event->button.x, event->button.y)){
+				 return GAME_WINDOW_LOAD_GAME;
+			 }
+			 else if(isClickOnQuitGameWindow(event->button.x, event->button.y)){
+				 return  GAME_WINDOW_EVENT_QUIT;
+			 }
+			 else if(isClickOnRestart(event->button.x, event->button.y)){
+				 return  GAME_WINDOW_RESTART_GAME;
+			 }
+			 else if(isClickOnUndo(event->button.x, event->button.y)){
+				 return  GAME_WINDOW_UNDO;
+			 }
+			 else if(isClickOnMainMenu(event->button.x, event->button.y)){
+				 return  GAME_WINDOW_MAIN_MENU;
+			 }
+			 break;
+		case SDL_WINDOWEVENT:
+			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
+				return GAME_WINDOW_EVENT_QUIT;
+			}
+			break;
+		default:
+			return GAME_WINDOW_EVENT_NONE;
+		}
+	return GAME_WINDOW_EVENT_NONE;
+}
+
+
+bool isClickOnSaveGame(int x, int y){return false;}
+bool isClickOnLoadGameWindow(int x, int y){return false;}
+bool isClickOnQuitGameWindow(int x, int y){return false;}
+bool isClickOnRestart(int x, int y){return false;}
+bool isClickOnUndo(int x, int y){return false;}
+bool isClickOnMainMenu(int x, int y){return false;}
+
+
+
+
 void gameWindowHide(GameWindow* gw){
 	SDL_HideWindow(gw->window);
 }
