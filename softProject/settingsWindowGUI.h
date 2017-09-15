@@ -23,9 +23,10 @@ typedef struct SETTINGSWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* bg;
-	SDL_Texture* settings;
+	SDL_Texture* mode;
 	SDL_Texture* gameMode1;
 	SDL_Texture* gameMode2;
+	SDL_Texture* color;
 	SDL_Texture* colWhite;
 	SDL_Texture* colBlack;
 	SDL_Texture* difficulty;
