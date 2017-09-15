@@ -120,6 +120,11 @@ void setNumPlayers(boardGame* board, int num){
 	assert(board!=NULL);
 	board->gameMode = num;
 	printf("Game mode is set to %d players\n",board->gameMode);
+	if(num==1){
+		board->diffLevel=2;
+		board->userCol=1;
+		board->curPlayer=1;
+	}
 }
 
 void boardPrintSet(boardGame*board){

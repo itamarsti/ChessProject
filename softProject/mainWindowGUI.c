@@ -34,7 +34,7 @@ MainWindow* createMW(){
 		return NULL ;
 	}
 	//Creating a background texture:
-	surface= SDL_LoadBMP("./utilities/mainWindow.bmp");
+	surface= SDL_LoadBMP("./utilities/mainWindow/mainWindow.bmp");
 	if (surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
@@ -50,7 +50,7 @@ MainWindow* createMW(){
 
 	//Creating a Welcome texture:
 
-	surface = SDL_LoadBMP("./utilities/welcome.bmp");
+	surface = SDL_LoadBMP("./utilities/mainWindow/welcome.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -66,7 +66,7 @@ MainWindow* createMW(){
 
 	//Creating a NewGame texture:
 
-	surface = SDL_LoadBMP("./utilities/newGame.bmp");
+	surface = SDL_LoadBMP("./utilities/mainWindow/newGame.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -82,7 +82,7 @@ MainWindow* createMW(){
 
 	//Creating a Load Game texture:
 
-	surface = SDL_LoadBMP("./utilities/loadGame.bmp");
+	surface = SDL_LoadBMP("./utilities/mainWindow/loadGame.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -98,7 +98,7 @@ MainWindow* createMW(){
 
 	//Creating a Quit texture:
 
-	surface = SDL_LoadBMP("./utilities/quitMain.bmp");
+	surface = SDL_LoadBMP("./utilities/mainWindow/quitMain.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;

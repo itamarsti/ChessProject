@@ -15,6 +15,7 @@
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
 #include "GUIManager.h"
+#include "gameWindowGUI.h"
 
 
 void guiMain(boardGame* board){
@@ -33,8 +34,8 @@ void guiMain(boardGame* board){
 				destroyMainWindow(manager->mw);
 				manager->sw = createSW();
 				drawSettingsWindow(manager->sw);
-				SDL_Event event1;
 				while(1){
+					SDL_Event event1;
 					SDL_WaitEvent(&event1);
 					if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
 						quitGame(manager);
@@ -45,34 +46,86 @@ void guiMain(boardGame* board){
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PLAY){
-						return;
+						destroySettingsWindow(manager->sw);
+						manager->game = (GameWindow*) createGW();
+						drawSettingsWindow(manager->sw);
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
 						setNumPlayers(board,1);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,1,2);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
 						setNumPlayers(board,2);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(2,1,2);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_WHITE){
+						if(board->gameMode==2) continue;
+						if(board->userCol==1) continue;
 						setColor(board,1);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,1,2);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_BLACK){
+						if(board->gameMode==2) continue;
+						if(board->userCol==0) continue;
 						setColor(board,0);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,0,2);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
+						if(board->gameMode==2) continue;
+						if(board->diffLevel==1) continue;
 						setDifficult(board,1);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,board->userCol,1);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
+						if(board->gameMode==2) continue;
+						if(board->diffLevel==2) continue;
 						setDifficult(board,2);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,board->userCol,2);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
+						if(board->gameMode==2) continue;
+						if(board->diffLevel==3) continue;
 						setDifficult(board,3);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,board->userCol,3);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
+						if(board->gameMode==2) continue;
+						if(board->diffLevel==4) continue;
 						setDifficult(board,4);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,board->userCol,4);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
+						if(board->gameMode==2) continue;
+						if(board->diffLevel==5) continue;
 						setDifficult(board,5);
+						destroySettingsWindow(manager->sw);
+						manager->sw = (SettingsWindow*) createSW(1,board->userCol,5);
+						drawSettingsWindow(manager->sw);
+						continue;
 					}
 				}
 			}

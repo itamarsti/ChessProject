@@ -45,7 +45,7 @@ void destroySettingsWindow(SettingsWindow* sw){
 	free(sw);
 }
 
-SettingsWindow* createSW(){
+SettingsWindow* createSW(int numPlayers, int color, int diffi){
 	SettingsWindow* sw = (SettingsWindow*) malloc(sizeof(SettingsWindow));
 	SDL_Surface* surface = NULL;
 	if(sw==NULL){
@@ -102,8 +102,8 @@ SettingsWindow* createSW(){
 	SDL_FreeSurface(surface);
 
 	//Creating a gameMode1 texture:
-
-	surface = SDL_LoadBMP("./utilities/gameMode1.bmp");
+	if(numPlayer==1)	surface = SDL_LoadBMP("./utilities/gameMode1Clicked.bmp");
+	else if(numPlayer==2) surface = SDL_LoadBMP("./utilities/gameMode1.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -118,7 +118,8 @@ SettingsWindow* createSW(){
 	SDL_FreeSurface(surface);
 
 	//Creating a gameMode2 texture:
-	surface = SDL_LoadBMP("./utilities/gameMode2.bmp");
+	if(numPlayer==1)	surface = SDL_LoadBMP("./utilities/gameMode2.bmp");
+	else if(numPlayer==2) surface = SDL_LoadBMP("./utilities/gameMode2Clicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -133,7 +134,11 @@ SettingsWindow* createSW(){
 	SDL_FreeSurface(surface);
 
 	//Creating a colWhite texture:
-	surface = SDL_LoadBMP("./utilities/colWhite.bmp");
+	if(numPlayer==2) surface = SDL_LoadBMP("./utilities/colWhiteClicked.bmp");
+	else if (numPlayer==1){
+		if(color==0) surface = SDL_LoadBMP("./utilities/colWhite.bmp");
+		else if(color==1) surface = SDL_LoadBMP("./utilities/colWhiteClicked.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -149,7 +154,11 @@ SettingsWindow* createSW(){
 
 
 	//Creating a colBlack texture:
-	surface = SDL_LoadBMP("./utilities/colBlack.bmp");
+	if(numPlayer==2) surface = SDL_LoadBMP("./utilities/colBlack.bmp");
+	else if (numPlayer==1){
+		if(color==0) surface = SDL_LoadBMP("./utilities/colBlackClicked.bmp");
+		else if(color==1) surface = SDL_LoadBMP("./utilities/colBlack.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -181,7 +190,11 @@ SettingsWindow* createSW(){
 
 
 	//Creating a noob texture:
-	surface = SDL_LoadBMP("./utilities/noob.bmp");
+	if(numPlayer==2) surface = surface = SDL_LoadBMP("./utilities/noob.bmp");
+	else if (numPlayer==1){
+		if(diffi==1) surface = SDL_LoadBMP("./utilities/noobClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/noob.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -197,7 +210,11 @@ SettingsWindow* createSW(){
 
 
 	//Creating a easy texture:
-	surface = SDL_LoadBMP("./utilities/easy.bmp");
+	if(numPlayer==2) 	surface = SDL_LoadBMP("./utilities/easyClicked.bmp");
+	else if (numPlayer==1){
+		if(diffi==2) surface = SDL_LoadBMP("./utilities/easyClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/easy.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -212,7 +229,12 @@ SettingsWindow* createSW(){
 	SDL_FreeSurface(surface);
 
 	//Creating a moderate texture:
-	surface = SDL_LoadBMP("./utilities/moderate.bmp");
+
+	if(numPlayer==2) surface = SDL_LoadBMP("./utilities/moderate.bmp");
+	else if (numPlayer==1){
+		if(diffi==3) surface = SDL_LoadBMP("./utilities/moderateClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/moderate.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -228,7 +250,12 @@ SettingsWindow* createSW(){
 
 
 	//Creating a hard texture:
-	surface = SDL_LoadBMP("./utilities/hard.bmp");
+
+	if(numPlayer==2) surface = SDL_LoadBMP("./utilities/hard.bmp");
+	else if (numPlayer==1){
+		if(diffi==4) surface = SDL_LoadBMP("./utilities/hardClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/hard.bmp");
+	}
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return NULL;
@@ -242,6 +269,25 @@ SettingsWindow* createSW(){
 	}
 	SDL_FreeSurface(surface);
 
+	//Creating an expert texture:
+
+	if(numPlayer==2) surface = SDL_LoadBMP("./utilities/expert.bmp");
+	else if (numPlayer==1){
+		if(diffi==5) surface = SDL_LoadBMP("./utilities/expertClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/expert.bmp");
+	}
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return NULL;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	sw->expert = SDL_CreateTextureFromSurface(expert->renderer, surface);
+	if (sw->expert==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroySettingsWindow(sw);
+		return NULL ;
+	}
+	SDL_FreeSurface(surface);
 
 	//Creating a back texture:
 	surface = SDL_LoadBMP("./utilities/back.bmp");

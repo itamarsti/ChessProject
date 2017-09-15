@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
 	bool resetBool = false;
-	bool consoleBool = true;
+	bool consoleBool = false;
 
 	if(!consoleBool){
 		boardGame* mainBoard = createBoard();

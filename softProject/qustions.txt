@@ -11,3 +11,4 @@
 9. to do all the limitations for 1 player/2 players
 10. adding the case if it's not an XML FILE
 11. is game_moves also possible in 2players mode
+12. to ask if every time we are moving to 2-players state - everything need to be defaulted.

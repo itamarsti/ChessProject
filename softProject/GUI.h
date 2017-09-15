@@ -15,13 +15,14 @@
 #include <SDL2/SDL_video.h>
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
+#include "gameWindowGUI.h"
 
 
 typedef struct MANAGER{
 	boardGame* board;
 	MainWindow* mw;
 	SettingsWindow* sw;
-	//SDL_Window* game;
+	GameWindow* game;
 } Manager;
 
 Manager* createManager();
