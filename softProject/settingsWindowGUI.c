@@ -70,13 +70,13 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 	//Creating a background texture:
 	surface= SDL_LoadBMP("./utilities/settingsWindow/settingsBackground.bmp");
 	if (surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a bg surface: %s\n", SDL_GetError());
 		destroySettingsWindow(sw);
 		return NULL ;
 	}
 	sw->bg = SDL_CreateTextureFromSurface(sw->renderer, surface);
 	if (sw->bg==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a bg texture: %s\n", SDL_GetError());
 		destroySettingsWindow(sw);
 		return NULL ;
 	}
@@ -97,9 +97,9 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 	}
 	SDL_FreeSurface(surface);
 
-	/*
+
 	//Creating a gameMode1 texture:
-	if(numPlayers==1)surface = SDL_LoadBMP("./utilities/./utilities/settingsWindow/gameMode1Clicked.bmp");
+	if(numPlayers==1)surface = SDL_LoadBMP("./utilities/settingsWindow/gameMode1Clicked.bmp");
 	else if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/gameMode1.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
@@ -113,6 +113,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
+
 
 	//Creating a gameMode2 texture:
 	if(numPlayers==1)surface = SDL_LoadBMP("./utilities/settingsWindow/gameMode2.bmp");
@@ -129,7 +130,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
-*/
+
 
 	//Creating a color texture:
 	surface = SDL_LoadBMP("./utilities/settingsWindow/color.bmp");
@@ -145,9 +146,9 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
-/*
+
 	//Creating a colWhite texture:
-	if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/whiteClicked.bmp");
+	if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/white.bmp");
 	else if (numPlayers==1){
 		if(color==0) surface = SDL_LoadBMP("./utilities/settingsWindow/white.bmp");
 		else if(color==1) surface = SDL_LoadBMP("./utilities/settingsWindow/whiteClicked.bmp");
@@ -185,7 +186,6 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 	}
 	SDL_FreeSurface(surface);
 
-*/
 	//Creating a difficulty texture:
 	surface = SDL_LoadBMP("./utilities/settingsWindow/difficulty.bmp");
 	if(surface==NULL){
@@ -200,7 +200,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
-/*
+
 
 	//Creating a noob texture:
 	if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/noob.bmp");
@@ -223,7 +223,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 
 
 	//Creating a easy texture:
-	if(numPlayers==2) 	surface = SDL_LoadBMP("./utilities/settingsWindow/easyClicked.bmp");
+	if(numPlayers==2) 	surface = SDL_LoadBMP("./utilities/settingsWindow/easy.bmp");
 	else if (numPlayers==1){
 		if(diffi==2) surface = SDL_LoadBMP("./utilities/settingsWindow/easyClicked.bmp");
 		else surface = SDL_LoadBMP("./utilities/settingsWindow/easy.bmp");
@@ -281,7 +281,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		return NULL ;
 	}
 	SDL_FreeSurface(surface);
-*/
+
 	//Creating an expert texture:
 /*
 	if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/expert.bmp");
@@ -405,21 +405,40 @@ void drawSettingsWindow(SettingsWindow* sw){
 			return;
 		}
 	assert(sw->window != NULL);	assert(sw->renderer!=NULL); assert(sw->bg!=NULL);
-	//assert(sw->back!=NULL); assert(sw->colBlack!=NULL);	assert(sw->colWhite!=NULL);
-	// assert(sw->easy!=NULL); assert(sw->gameMode1!=NULL);
-	//assert(sw->gameMode2!=NULL); assert(sw->hard!=NULL); assert(sw->moderate!=NULL);
-	//assert(sw->noob!=NULL);	 assert(sw->start!=NULL);
+	//assert(sw->back!=NULL); assert(sw->start!=NULL);
 	assert(sw->mode!=NULL); assert(sw->color!=NULL); assert(sw->difficulty!=NULL);
+	assert(sw->gameMode2!=NULL); assert(sw->gameMode1!=NULL); assert(sw->easy!=NULL);
+	assert(sw->colBlack!=NULL);	assert(sw->colWhite!=NULL); assert(sw->noob!=NULL);
+	assert(sw->hard!=NULL); assert(sw->moderate!=NULL);
+
 	SDL_SetRenderDrawColor(sw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(sw->renderer);
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_RenderCopy(sw->renderer, sw->bg, NULL, &rec);
-	rec.x = 260; rec.y = 0;rec.w = 250; rec.h = 114;	//mode message
+	rec.x = 300; rec.y = 30;rec.w = 162; rec.h = 72;	//mode message
 	SDL_RenderCopy(sw->renderer, sw->mode, NULL, &rec);
-	rec.x = 250; rec.y = 85;rec.w = 276; rec.h = 126;	//color message
+	rec.x = 300; rec.y = 135;rec.w = 158; rec.h = 72;	//color message
 	SDL_RenderCopy(sw->renderer, sw->color, NULL, &rec);
-	rec.x = 240; rec.y = 190;rec.w = 386; rec.h = 128;	//difficulty message
+	rec.x = 285; rec.y = 230;rec.w = 240; rec.h = 88;	//difficulty message
 	SDL_RenderCopy(sw->renderer, sw->difficulty, NULL, &rec);
+	rec.x = 520; rec.y = 20;rec.w = 190; rec.h = 84;	//gameMode1 message
+	SDL_RenderCopy(sw->renderer, sw->gameMode1, NULL, &rec);
+	rec.x = 750; rec.y = 20;rec.w = 190; rec.h = 84;	//gameMode2 message
+	SDL_RenderCopy(sw->renderer, sw->gameMode2, NULL, &rec);
+	rec.x = 520; rec.y = 130;rec.w = 190; rec.h = 84;	//white message
+	SDL_RenderCopy(sw->renderer, sw->colWhite, NULL, &rec);
+	rec.x = 750; rec.y = 130;rec.w = 190; rec.h = 84;	//black message
+	SDL_RenderCopy(sw->renderer, sw->colBlack, NULL, &rec);
+
+	rec.x = 340; rec.y = 340;rec.w = 126; rec.h = 122;	//noob message
+	SDL_RenderCopy(sw->renderer, sw->noob, NULL, &rec);
+	rec.x = 495; rec.y = 340;rec.w = 128; rec.h = 122;	//easy message
+	SDL_RenderCopy(sw->renderer, sw->easy, NULL, &rec);
+	rec.x = 650; rec.y = 340;rec.w = 124; rec.h = 122;	//moderate message
+	SDL_RenderCopy(sw->renderer, sw->moderate, NULL, &rec);
+	rec.x = 805; rec.y = 340;rec.w = 126; rec.h = 122;	//hard message
+	SDL_RenderCopy(sw->renderer, sw->hard, NULL, &rec);
+
 	SDL_RenderPresent(sw->renderer);
 }
 

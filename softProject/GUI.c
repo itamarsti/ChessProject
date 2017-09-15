@@ -32,7 +32,7 @@ void guiMain(boardGame* board){
 			}
 			else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
 				destroyMainWindow(manager->mw);
-				manager->sw = createSW();
+				manager->sw = createSW(board->gameMode,board->userCol, board->diffLevel);
 				drawSettingsWindow(manager->sw);
 				while(1){
 					SDL_Event event1;
