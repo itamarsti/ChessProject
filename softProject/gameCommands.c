@@ -386,9 +386,32 @@ void computerMoveMessage(boardGame* board, int position, int destination){
 	else if(c==BlackBishop || c==WhiteBishop) printf("bishop");
 	else if(c==BlackKnight|| c==WhiteKnight) printf("knight");
 	else if(c==BlackRook || c==WhiteRook) printf("rook");
-	else if(c==BlackQueen || c==WhiteQueen) printf("queen]");
+	else if(c==BlackQueen || c==WhiteQueen) printf("queen");
 	else if(c==BlackKing || c==WhiteKing) printf("king");
 	printf(" at <%d,%c> to <%d,%c>\n",8-posRow,(char)(posCol+'A'),8-destRow, (char)(destCol+'A'));
 
 
 }
+
+
+bool checkPawnPromotion(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	if(board->curPlayer==0){
+		for(int i=0;i<COL;i++){
+			if(board->boardArr[7][i]==BlackPawn){
+				return true;
+			}
+		}
+	}
+	else if(board->curPlayer==1){
+		for(int j=0;j<COL;j++){
+			if(board->boardArr[0][j]==WhitePawn){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+

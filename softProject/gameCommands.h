@@ -46,6 +46,6 @@ bool isWinner(boardGame* board);
 bool isTie(boardGame* board);
 void moveAIobj(boardGame* board);
 void computerMoveMessage(boardGame* board, int position, int destination);
-
+bool checkPawnPromotion(boardGame* board);
 
 #endif /* GAMECOMMANDS_H_ */

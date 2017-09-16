@@ -23,7 +23,21 @@ void quitGame(Manager* manager){
 }
 
 
+void setBoardDefaultManager(Manager* manager){
+	if(manager==NULL){
+		destroyManager(manager);
+		SDL_Quit();
+		printf("Exiting...");
+		exit(0);
+	}
+	manager->board->curPlayer=1;
+	manager->board->diffLevel=2;
+	manager->board->gameMode=1;
+	manager->board->userCol=1;
+}
 
+
+/*
 
 void gameModeGUI(Manager* manager, int numOfPlayers, int color, int difficulty){
 	assert(manager!=NULL);
@@ -35,3 +49,4 @@ void gameModeGUI(Manager* manager, int numOfPlayers, int color, int difficulty){
 	drawSettingsWindow(manager->sw);
 }
 
+*/

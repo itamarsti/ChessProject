@@ -57,8 +57,17 @@ bool isClickOnHard(int x, int y){
 }
 
 //bool isClickOnExpert(int x, int y){return true;}
-bool isClickOnPlay(int x, int y){return true;}
-bool isClickOnBack(int x, int y){return true;}
+bool isClickOnStart(int x, int y){
+	if((x>=410&& x<=536) && (y>=505 && y<=627)) return true;
+		return false;
+}
+
+
+
+bool isClickOnBack(int x, int y){
+	if((x>=720&& x<=846) && (y>=505 && y<=625)) return true;
+	return false;
+}
 
 
 void destroySettingsWindow(SettingsWindow* sw){
@@ -103,7 +112,8 @@ void destroySettingsRenderer(SettingsWindow* sw){
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
 }
 
-SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi){
+SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi,
+		bool backLightened,bool startLightened){
 	assert(sw!=NULL); assert(sw->window!=NULL);
 	SDL_Surface* surface = NULL;
 	// creating the Settings Window renderer
@@ -349,9 +359,10 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 		}
 		SDL_FreeSurface(surface);
 	*/
-		/*
+
 		//Creating a back texture:
-		surface = SDL_LoadBMP("./utilities/settingsWindow/back.bmp");
+		if(!backLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/back.bmp");
+		else if(backLightened)surface = SDL_LoadBMP("./utilities/settingsWindow/backClicked.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return NULL;
@@ -366,7 +377,8 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 		SDL_FreeSurface(surface);
 
 		//Creating a start texture:
-		surface = SDL_LoadBMP("./utilities/settingsWindow/start.bmp");
+		if(!startLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/start.bmp");
+		else if(startLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/startClicked.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return NULL;
@@ -379,7 +391,7 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 			return NULL ;
 		}
 		SDL_FreeSurface(surface);
-		*/
+
 		return sw;
 }
 
@@ -397,7 +409,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		destroySettingsWindow(sw);
 		return NULL ;
 	}
-	createSR(sw, numPlayers, color, diffi);
+	createSR(sw, numPlayers, color, diffi, false,false);
 	return sw;
 }
 
@@ -447,11 +459,19 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 				return SETTINGS_WINDOW_COL_DIFFICULTY_5;
 			}
 			*/
-			else if(isClickOnPlay(event->button.x, event->button.y)){
-				return SETTINGS_WINDOW_START;
-			}
 			else if(isClickOnBack(event->button.x, event->button.y)){
-				return SETTINGS_WINDOW_BACK;
+				return SETTINGS_WINDOW_PUSH_BACK;
+			}
+			else if(isClickOnStart(event->button.x, event->button.y)){
+				return SETTINGS_WINDOW_PUSH_START;
+			}
+			break;
+		case SDL_MOUSEMOTION:
+			if(isClickOnBack(event->motion.x, event->motion.y)){
+				return SETTINGS_WINDOW_HOVER_BACK;
+			}
+			else if(isClickOnStart(event->button.x, event->button.y)){
+				return SETTINGS_WINDOW_HOVER_START;
 			}
 			break;
 		case SDL_WINDOWEVENT:
@@ -503,6 +523,10 @@ void drawSettingsWindow(SettingsWindow* sw){
 	SDL_RenderCopy(sw->renderer, sw->moderate, NULL, &rec);
 	rec.x = 805; rec.y = 340;rec.w = 126; rec.h = 122;	//hard message
 	SDL_RenderCopy(sw->renderer, sw->hard, NULL, &rec);
+	rec.x = 720; rec.y = 505;rec.w = 126; rec.h = 120;	//back message
+	SDL_RenderCopy(sw->renderer, sw->back, NULL, &rec);
+	rec.x = 410; rec.y = 505;rec.w = 126; rec.h = 122;	//start message
+	SDL_RenderCopy(sw->renderer, sw->start, NULL, &rec);
 	SDL_RenderPresent(sw->renderer);
 }
 

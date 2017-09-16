@@ -20,6 +20,7 @@
 
 void quitGame(Manager* manager);
 void gameModeGUI(Manager* manager, int numOfPlayers, int color, int difficulty);
+void setBoardDefaultManager(Manager* manager);
 
 
 #endif /* GUIMANAGER_H_ */
