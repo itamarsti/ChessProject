@@ -226,8 +226,4 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 		}
 	}
 	fclose(file);
-
-
-
-
 }

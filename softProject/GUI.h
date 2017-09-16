@@ -16,13 +16,15 @@
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
 #include "gameWindowGUI.h"
+#include "loadWindowGUI.h"
 
 
 typedef struct MANAGER{
 	boardGame* board;
 	MainWindow* mw;
 	SettingsWindow* sw;
-	GameWindow* game;
+	GameWindow* gw;
+	LoadWindow* lw;
 } Manager;
 
 Manager* createManager();

@@ -14,6 +14,7 @@
 #include <SDL2/SDL_video.h>
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
+#include "loadWindowGUI.h"
 #include "GUIManager.h"
 #include "gameWindowGUI.h"
 
@@ -32,9 +33,91 @@ void guiMain(boardGame* board){
 			if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
 				quitGame(manager);
 			}
+			else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
+				destroyMainWindow(manager->mw);
+				int dirFiles = numOfFilesInDir();
+				manager->lw = (LoadWindow*) createLW(dirFiles);
+				drawLoadWindow(manager->lw,dirFiles);
+				int fileRemove =0;
+				while(1){
+					SDL_Event event1;
+					SDL_WaitEvent(&event1);
+					if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_EVENT_QUIT){
+							quitGame(manager);
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_PUSH_BACK){
+						destroyLoadWindow(manager->lw);
+						back=true;
+						break;
+					}
+					/*
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_PUSH_LOAD){
+						destroyLoadWindow(manager->lw);
+						back=true;
+						break;
+					}
+					*/
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_HOVER_BACK){
+						destroyLoadWindow(manager->lw);
+
+						createLR(manager->lw,dirFiles,true,fileRemove,false);
+						printf("before draw\n");
+
+						drawLoadWindow(manager->lw,dirFiles);
+						continue;
+					}
+
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_HOVER_LOAD){
+						destroyLoadWindow(manager->lw);
+						printf("before create");
+						createLR(manager->lw,dirFiles,false,0,true);
+						printf("before draw");
+						drawLoadWindow(manager->lw,dirFiles);
+						continue;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT1){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,1,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						fileRemove = 1;
+						continue;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT2){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,2,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						fileRemove = 2;
+						continue;
+					}
+
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT3){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,3,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						fileRemove = 3;
+						continue;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT4){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,4,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						fileRemove = 4;
+						continue;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT5){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,5,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						fileRemove = 5;
+						continue;
+					}
+
+
+				}
+			}
 			else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
 				destroyMainWindow(manager->mw);
-				manager->sw = createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
+				manager->sw = (SettingsWindow*) createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
 				drawSettingsWindow(manager->sw);
 				//bool backLighted = false;
 				while(1){
@@ -183,8 +266,8 @@ Manager* createManager(){
 	setDefault(manager->board);
 	manager->mw = NULL;
 	manager->sw = NULL;
-	manager->game = NULL;
-
+	manager->gw = NULL;
+	manager->lw = NULL;
 	return manager;
 }
 
@@ -195,7 +278,8 @@ void destroyManager(Manager* manager){
 		if(manager->board!=NULL) destroyBoard(manager->board);
 		if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 		if(manager->sw!=NULL) destroySettingsWindow(manager->sw);
-
+		if(manager->gw!=NULL) destroyGameWindow(manager->gw);
+		//if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
 		free(manager);	// gameWindow need to be added
 		return;
 	}
