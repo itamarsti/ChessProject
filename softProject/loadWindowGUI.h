@@ -1,7 +1,7 @@
 /*
  * loadWindowGUI.h
  *
- *  Created on: 16 בספט׳ 2017
+ *  Created on: 17 בספט׳ 2017
  *      Author: Itamar
  */
 
@@ -9,46 +9,47 @@
 #define LOADWINDOWGUI_H_
 
 #include "boardFuncs.h"
-#include <stdbool.h>
-#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <dirent.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
+
+
+typedef enum{
+	LOAD_WINDOW_EVENT_QUIT,
+	LOAD_WINDOW_EVENT_NONE,
+	LOAD_WINDOW_INVALID,
+	LOAD_WINDOW_GAME1SLOT,
+	LOAD_WINDOW_GAME2SLOT,
+	LOAD_WINDOW_GAME3SLOT,
+	LOAD_WINDOW_GAME4SLOT,
+	LOAD_WINDOW_GAME5SLOT,
+	LOAD_WINDOW_PUSH_BACK,
+	LOAD_WINDOW_PUSH_LOAD,
+	LOAD_WINDOW_HOVER_BACK,
+	LOAD_WINDOW_HOVER_LOAD,
+}LOAD_WINDOW_EVENT;
+
 
 typedef struct LOADWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* bg;
-	SDL_Texture* load;
-	SDL_Texture* back; SDL_Texture* slot5;
-	SDL_Texture* slot4;
 	SDL_Texture* slot1;
 	SDL_Texture* slot2;
 	SDL_Texture* slot3;
+	SDL_Texture* slot4;
+	SDL_Texture* slot5;
+	SDL_Texture* back;
+	SDL_Texture* load;
 }LoadWindow;
 
 
-
-typedef enum {
-	LOAD_WINDOW_PUSH_LOAD,
-	LOAD_WINDOW_HOVER_LOAD,
-	LOAD_WINDOW_PUSH_BACK,
-	LOAD_WINDOW_HOVER_BACK,
-	LOAD_WINDOW_SLOT1,
-	LOAD_WINDOW_SLOT2,
-	LOAD_WINDOW_SLOT3,
-	LOAD_WINDOW_SLOT4,
-	LOAD_WINDOW_SLOT5,
-	LOAD_WINDOW_EVENT_QUIT,
-	LOAD_WINDOW_EVENT_NONE,
-	LOAD_WINDOW_INVALID
-}LOAD_WINDOW_EVENT;
-
-
-
 LoadWindow* createLW(int slotsNum);
-LoadWindow* createLR(LoadWindow* lw, int slotsNum, bool backLightened, int slotLight, bool loadLight);
+void createLR(LoadWindow* lw, int slotsNum, bool backLightened, int slotLight, bool loadLight);
 void destroyLoadWindow(LoadWindow* lw);
 void destroyLoadRenderer(LoadWindow* lw);
 int numOfFilesInDir();
@@ -63,7 +64,8 @@ bool isClickOnSlot4(int x, int y);
 bool isClickOnSlot5(int x, int y);
 bool isClickOnBackLW(int x, int y);
 bool isClickOnLoadSlot(int x, int y);
-void loadWindowHide(LoadWindow* lw);
-void loadWindowShow(LoadWindow* lw);
+bool isClickOnLWBack(int x, int y);
+bool isClickOnLWLoad(int x, int y);
+
 
 #endif /* LOADWINDOWGUI_H_ */

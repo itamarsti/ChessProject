@@ -37,15 +37,17 @@ void guiMain(boardGame* board){
 				destroyMainWindow(manager->mw);
 				int dirFiles = numOfFilesInDir();
 				manager->lw = (LoadWindow*) createLW(dirFiles);
+				//printf("got till here");
 				drawLoadWindow(manager->lw,dirFiles);
+				//printf("got till here2");
 				int fileRemove =0;
 				while(1){
-					SDL_Event event1;
-					SDL_WaitEvent(&event1);
-					if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_EVENT_QUIT){
+					SDL_Event event2;
+					SDL_WaitEvent(&event2);
+					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
 							quitGame(manager);
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_PUSH_BACK){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_BACK){
 						destroyLoadWindow(manager->lw);
 						back=true;
 						break;
@@ -57,58 +59,62 @@ void guiMain(boardGame* board){
 						break;
 					}
 					*/
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_HOVER_BACK){
-						destroyLoadWindow(manager->lw);
-
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
+						destroyLoadRenderer(manager->lw);
 						createLR(manager->lw,dirFiles,true,fileRemove,false);
-						printf("before draw\n");
-
+						//printf("before draw\n");
 						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
 
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_HOVER_LOAD){
-						destroyLoadWindow(manager->lw);
-						printf("before create");
-						createLR(manager->lw,dirFiles,false,0,true);
-						printf("before draw");
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT1){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_LOAD){
 						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,1,false);
+						//printf("before create\n");
+						createLR(manager->lw,dirFiles,false,fileRemove,true);
+						//printf("before draw\n");
 						drawLoadWindow(manager->lw,dirFiles);
+						continue;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT){
+						destroyLoadRenderer(manager->lw);
 						fileRemove = 1;
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT2){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT){
 						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,2,false);
-						drawLoadWindow(manager->lw,dirFiles);
 						fileRemove = 2;
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
 
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT3){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT){
 						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,3,false);
-						drawLoadWindow(manager->lw,dirFiles);
 						fileRemove = 3;
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT4){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT){
 						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,4,false);
-						drawLoadWindow(manager->lw,dirFiles);
 						fileRemove = 4;
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_SLOT5){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
 						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,5,false);
-						drawLoadWindow(manager->lw,dirFiles);
 						fileRemove = 5;
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						continue;
+					}
+					else{
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw, dirFiles);
 						continue;
 					}
 
