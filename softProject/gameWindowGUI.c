@@ -19,7 +19,7 @@ GameWindow* createGW(){
 		return NULL ;
 	}
 	// creating the Main Window Object
-	gw->window = SDL_CreateWindow("Chess Game", SDL_WINDOWPOS_CENTERED,
+	gw->window = (SDL_Window*) SDL_CreateWindow("Chess Game", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, 1000, 650, SDL_WINDOW_OPENGL);
 	if (gw->window==NULL){
 		printf("Could not create window: %s\n", SDL_GetError());

@@ -76,8 +76,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	SDL_FreeSurface(surface);
 
 	//Creating a load texture:
-	if(loadLight) surface = SDL_LoadBMP("./utilities/loadWindow/loadClicked.bmp");
-	else if(!loadLight) surface = SDL_LoadBMP("./utilities/loadWindow/load.bmp");
+	if((loadLight)&& (slotLight!=0)) surface = SDL_LoadBMP("./utilities/loadWindow/loadClicked.bmp");
+	else surface = SDL_LoadBMP("./utilities/loadWindow/load.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -185,22 +185,7 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 		}
 		SDL_FreeSurface(surface);
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void destroyLoadWindow(LoadWindow* lw){
