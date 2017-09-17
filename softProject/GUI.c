@@ -137,17 +137,47 @@ void guiMain(boardGame* board){
 						destroySettingsWindow(manager->sw);
 						back = true;
 						break;
-					}/*
+					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
 						destroySettingsWindow(manager->sw);
-						manager->game = (GameWindow*) createGW();
+						manager->gw = (GameWindow*) createGW();
 						drawGameWindow(manager->gw);
 						while(1){
-						SDL_Event event1;
-						SDL_WaitEvent(&event1);
+							SDL_Event event3;
+							SDL_WaitEvent(&event3);
+							if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_EVENT_QUIT){
+								quitGame(manager);
+							}
+
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_SAVE_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,false,false,false,false,true);
+								drawGameWindow(manager->gw);
+								continue;
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
+							}
+							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
+							}
+
 						}
 					}
-*/
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_BACK){
 						destroySettingsRenderer(manager->sw);
 						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,true,false);
@@ -279,13 +309,19 @@ Manager* createManager(){
 
 
 void destroyManager(Manager* manager){
+	printf("in destroy manager");
 	if(manager==NULL) return;
 	else{
 		if(manager->board!=NULL) destroyBoard(manager->board);
+		printf("destroy board works fine\n");
 		if(manager->mw!=NULL) destroyMainWindow(manager->mw);
+		printf("destroy mainWindow works fine\n");
 		if(manager->sw!=NULL) destroySettingsWindow(manager->sw);
+		printf("destroy settingsWindow works fine\n");
 		if(manager->gw!=NULL) destroyGameWindow(manager->gw);
-		//if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
+		printf("destroy gamwWindow works fine\n");
+		if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
+		printf("destroy loadWindow works fine\n");
 		free(manager);	// gameWindow need to be added
 		return;
 	}

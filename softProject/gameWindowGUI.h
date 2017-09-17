@@ -13,6 +13,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "boardFuncs.h"
+#include "gameCommands.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
@@ -21,6 +23,7 @@ typedef struct GAMEWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* bg;
+	SDL_Texture* cb;
 	SDL_Texture* restart;
 	SDL_Texture* saveGame;
 	SDL_Texture* loadGame;
@@ -31,30 +34,37 @@ typedef struct GAMEWINDOW{
 
 
 typedef enum {
-	GAME_WINDOW_LOAD_GAME,
-	GAME_WINDOW_SAVE_GAME,
-	GAME_WINDOW_RESTART_GAME,
-	GAME_WINDOW_UNDO,
-	GAME_WINDOW_MAIN_MENU,
-	GAME_WINDOW_EVENT_QUIT,
+	GAME_WINDOW_PUSH_LOAD_GAME,
+	GAME_WINDOW_PUSH_SAVE_GAME,
+	GAME_WINDOW_PUSH_RESTART_GAME,
+	GAME_WINDOW_PUSH_UNDO,
+	GAME_WINDOW_PUSH_MAIN_MENU,
+	GAME_WINDOW_PUSH_EVENT_QUIT,
+	GAME_WINDOW_HOVER_LOAD_GAME,
+	GAME_WINDOW_HOVER_SAVE_GAME,
+	GAME_WINDOW_HOVER_RESTART_GAME,
+	GAME_WINDOW_HOVER_UNDO,
+	GAME_WINDOW_HOVER_MAIN_MENU,
+	GAME_WINDOW_HOVER_EVENT_QUIT,
 	GAME_WINDOW_EVENT_NONE,
 	GAME_WINDOW_INVALID
 } GAME_WINDOW_EVENT;
 
 
-
+void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
+		, bool loadBool, bool mmBool, bool quitBool);
 GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
+void destroyGameRenderer(GameWindow* gw);
 void drawGameWindow(GameWindow* gw);
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* mw, SDL_Event* event);
-
+void saveGameFromGUI(boardGame* game, int numOfFiles);
 bool isClickOnSaveGame(int x, int y);
 bool isClickOnLoadGameWindow(int x, int y);
 bool isClickOnQuitGameWindow(int x, int y);
 bool isClickOnRestart(int x, int y);
 bool isClickOnUndo(int x, int y);
 bool isClickOnMainMenu(int x, int y);
-
 void gameWindowHide(GameWindow* gw);
 void gameWindowShow(GameWindow* gw);
 
