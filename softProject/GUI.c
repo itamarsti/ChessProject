@@ -26,9 +26,9 @@ void guiMain(boardGame* board){
 		setDefault(manager->board);
 		manager->mw = (MainWindow*) createMW();
 		drawMainWindow(manager->mw);
-		SDL_Event event;
 		back = false;
 		while(!back){
+			SDL_Event event;
 			SDL_WaitEvent(&event);
 			if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
 				quitGame(manager);
@@ -41,7 +41,8 @@ void guiMain(boardGame* board){
 				drawLoadWindow(manager->lw,dirFiles);
 				//printf("got till here2");
 				int fileRemove =0;
-				while(1){
+				bool mainBool = false;
+				while(!mainBool){
 					SDL_Event event2;
 					SDL_WaitEvent(&event2);
 					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
@@ -52,13 +53,121 @@ void guiMain(boardGame* board){
 						back=true;
 						break;
 					}
-					/*
-					else if (loadWindowHandleEvent(manager->lw, &event1) == LOAD_WINDOW_PUSH_LOAD){
-						destroyLoadWindow(manager->lw);
-						back=true;
-						break;
+
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
+						if(dirFiles>0 && dirFiles<=5 && fileRemove>0 && fileRemove<=5 ){
+							loadRemoveChangeFile(dirFiles, fileRemove,manager->board);
+							destroyLoadWindow(manager->lw);
+							manager->gw = (GameWindow*) createGW();
+							drawGameWindow(manager->gw);
+							bool gameSaved = false;
+							while(1){
+								SDL_Event event3;
+								SDL_WaitEvent(&event3);
+								if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_EVENT_QUIT){
+									if(!gameSaved){
+										int save = saveGameMessageBox();
+										if(save ==2) continue;	//cancel
+										else if(save==-1){		//error
+											printf("Error in Save MessagBox");
+											continue;
+										}
+										else if (save==1){		//yes
+											int files = numOfFilesInDir();
+											saveGameFromGUI(manager->board,files);
+										}
+										else if(save==0){		//no
+										}
+									}
+									quitGame(manager);
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
+									initBoard(manager->board,false);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_SAVE_GAME){
+									int files = numOfFilesInDir();
+									saveGameFromGUI(manager->board,files);
+									gameSaved = true;
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
+									dirFiles = numOfFilesInDir();
+									destroyGameWindow(manager->gw);
+									manager->lw = (LoadWindow*) createLW(dirFiles);
+									drawLoadWindow(manager->lw,dirFiles);
+									fileRemove =0;
+									mainBool = false;
+									break;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
+									if(!gameSaved){
+										int save = saveGameMessageBox();
+										if(save ==2) continue;	//cancel
+										else if(save==-1){		//error
+											printf("Error in Save MessagBox");
+											continue;
+										}
+										else if (save==1){		//yes
+											int files = numOfFilesInDir();
+											saveGameFromGUI(manager->board,files);
+										}
+										else if(save==0){		//no
+										}
+									}
+									gameSaved = true;
+									destroyGameWindow(manager->gw);
+									mainBool = true;
+									back = true;
+									break;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,false,false,false,true);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,true,false,false,false,false,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,true,false,false,false,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,true,false,false,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,false,true,false,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,false,false,true,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+								else{
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,false,false,false,false);
+									drawGameWindow(manager->gw);
+									continue;
+								}
+							}
+						}
 					}
-					*/
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
 						destroyLoadRenderer(manager->lw);
 						createLR(manager->lw,dirFiles,true,fileRemove,false);
@@ -126,7 +235,8 @@ void guiMain(boardGame* board){
 				manager->sw = (SettingsWindow*) createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
 				drawSettingsWindow(manager->sw);
 				//bool backLighted = false;
-				while(1){
+				bool mainBool = false;
+				while(!mainBool){
 					SDL_Event event1;
 					SDL_WaitEvent(&event1);
 					if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
@@ -142,22 +252,61 @@ void guiMain(boardGame* board){
 						destroySettingsWindow(manager->sw);
 						manager->gw = (GameWindow*) createGW();
 						drawGameWindow(manager->gw);
+						bool gameSaved = false;
 						while(1){
 							SDL_Event event3;
 							SDL_WaitEvent(&event3);
 							if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_EVENT_QUIT){
+								if(!gameSaved){
+									int save = saveGameMessageBox();
+									if(save ==2) continue;	//cancel
+									else if(save==-1){		//error
+										printf("Error in Save MessagBox");
+										continue;
+									}
+									else if (save==1){		//yes
+										int files = numOfFilesInDir();
+										saveGameFromGUI(manager->board,files);
+									}
+									else if(save==0){		//no
+									}
+								}
 								quitGame(manager);
 							}
-
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
+								initBoard(manager->board,false);
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_SAVE_GAME){
+								int files = numOfFilesInDir();
+								saveGameFromGUI(manager->board,files);
+								gameSaved = true;
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
+								if(!gameSaved){
+									int save = saveGameMessageBox();
+									if(save ==2) continue;	//cancel
+									else if(save==-1){		//error
+										printf("Error in Save MessagBox");
+										continue;
+									}
+									else if (save==1){		//yes
+										int files = numOfFilesInDir();
+										saveGameFromGUI(manager->board,files);
+									}
+									else if(save==0){		//no
+									}
+								}
+								gameSaved = true;
+								destroyGameWindow(manager->gw);
+								mainBool = true;
+								back = true;
+								break;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
 								destroyGameRenderer(manager->gw);
@@ -166,14 +315,40 @@ void guiMain(boardGame* board){
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,true,false,false,false,false,false);
+								drawGameWindow(manager->gw);
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,true,false,false,false,false);
+								drawGameWindow(manager->gw);
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,false,true,false,false,false);
+								drawGameWindow(manager->gw);
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,false,false,true,false,false);
+								drawGameWindow(manager->gw);
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,false,false,false,true,false);
+								drawGameWindow(manager->gw);
+								continue;
+							}
+							else{
+								destroyGameRenderer(manager->gw);
+								createGR(manager->gw,false,false,false,false,false,false);
+								drawGameWindow(manager->gw);
+								continue;
 							}
 
 						}
@@ -298,7 +473,7 @@ Manager* createManager(){
 		destroyManager(manager);
 		return NULL;
 	}
-	initBoard(manager->board);
+	initBoard(manager->board, true);
 	setDefault(manager->board);
 	manager->mw = NULL;
 	manager->sw = NULL;

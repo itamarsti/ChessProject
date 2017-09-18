@@ -26,13 +26,13 @@ int main(int argc, char* argv[]) {
 	bool consoleBool = false;
 	if(!consoleBool){
 		boardGame* mainBoard = createBoard();
-		initBoard(mainBoard);
+		initBoard(mainBoard, true);
 		guiMain(mainBoard);
 	}
 	else if(consoleBool){
 		while(1){
 			boardGame* mainBoard = createBoard();
-			initBoard(mainBoard);
+			initBoard(mainBoard, true);
 			mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 			while(!resetBool){
 				printBoard(mainBoard);

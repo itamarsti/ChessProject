@@ -346,7 +346,7 @@ void loadFilePath(boardGame*board, char* path){
 
 void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game){
 	assert(game!=NULL); assert(game->boardArr!=NULL);
-	if(numOfFiles==0) return;
+	if(numOfFiles==0||fileDeleted==0) return;
 	if(fileDeleted==1){
 		loadFilePath(game,"./utilities/loadedGames/game1.xml");
 		remove("./utilities/loadedGames/game1.xml");
@@ -369,19 +369,19 @@ void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game){
 	}
 
 	if(numOfFiles==5){
-		if (fileDeleted<=4) rename("./utilities/loadedGames/game5.xml","./utilities/loadedGames/game4.xml");
-		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
-		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
+		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
+		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
+		if (fileDeleted<=4) rename("./utilities/loadedGames/game5.xml","./utilities/loadedGames/game4.xml");
 	}
 	else if (numOfFiles==4){
-		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
-		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
+		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
+		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
 	}
 	else if (numOfFiles==3){
-		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
+		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 	}
 	else if (numOfFiles==2){
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");

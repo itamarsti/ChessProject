@@ -40,7 +40,7 @@ typedef struct boardGame{
 
 
 boardGame* createBoard();
-void initBoard(boardGame* board);
+void initBoard(boardGame* board, bool initSettings);
 void printBoard(boardGame* board);
 void destroyBoard(boardGame* board);
 void setDifficult(boardGame* board, int num);

@@ -53,7 +53,7 @@ boardGame* createBoard(){
 	return board;
 }
 
-void initBoard(boardGame* board){
+void initBoard(boardGame* board, bool initSettings){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	for(int i=0;i<8;i++){
@@ -68,10 +68,12 @@ void initBoard(boardGame* board){
 	board->boardArr[0][2] = BlackBishop; board->boardArr[0][5] = BlackBishop;
 	board->boardArr[7][3] = WhiteQueen; board->boardArr[7][4] = WhiteKing;
 	board->boardArr[0][3] = BlackQueen; board->boardArr[0][4] = BlackKing;
-	board->gameMode = 1;			//1- 1 player; 2- 2 players
-	board->diffLevel = 2;			//difficult level
-	board->userCol = 1;				//1 - white; 0 - black;
-	board->curPlayer = 1;			//1 = white player, 0 = black player
+	if(initSettings){
+		board->gameMode = 1;			//1- 1 player; 2- 2 players
+		board->diffLevel = 2;			//difficult level
+		board->userCol = 1;				//1 - white; 0 - black;
+		board->curPlayer = 1;			//1 = white player, 0 = black player
+	}
 }
 
 void printBoard(boardGame* board){

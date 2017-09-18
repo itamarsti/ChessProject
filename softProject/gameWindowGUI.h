@@ -67,6 +67,7 @@ bool isClickOnUndo(int x, int y);
 bool isClickOnMainMenu(int x, int y);
 void gameWindowHide(GameWindow* gw);
 void gameWindowShow(GameWindow* gw);
+int saveGameMessageBox();
 
 
 #endif /* GAMEWINDOWGUI_H_ */

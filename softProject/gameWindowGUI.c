@@ -17,12 +17,16 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	SDL_Surface* surface = NULL;
 
 	// creating the game Window renderer
+	if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	gw->renderer = SDL_CreateRenderer(gw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (gw->renderer==NULL) {
 		printf("Could not create a renderer: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
+	//printf("creating game renderer\n");
+
+
 	//Creating a background texture:
 	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackground2.bmp");
 	if (surface==NULL){
@@ -37,6 +41,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		return;
 	}
 	SDL_FreeSurface(surface);
+	//printf("creating game bg\n");
 
 	//Creating a chessBoard texture:
 	surface= SDL_LoadBMP("./utilities/gameWindow/chessBoard2.bmp");
@@ -52,6 +57,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		return;
 	}
 	SDL_FreeSurface(surface);
+	//printf("creating game cb\n");
 
 	//Creating a undo texture:
 
@@ -69,10 +75,11 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		return;
 	}
 	SDL_FreeSurface(surface);
+	//printf("creating game undo\n");
 
 	//Creating a restart texture:
 	if(!restartBool)surface = SDL_LoadBMP("./utilities/gameWindow/restart.bmp");
-	else if(!restartBool)surface = SDL_LoadBMP("./utilities/gameWindow/restartClicked.bmp");
+	else if(restartBool)surface = SDL_LoadBMP("./utilities/gameWindow/restartClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -86,11 +93,12 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 
+	//printf("creating game restart\n");
 
 	//Creating a saveGame texture:
 
 	if(!saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/save.bmp");
-	else if(!saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/saveClicked.bmp");
+	else if(saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/saveClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -104,11 +112,12 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 
+	//printf("creating game save\n");
 
 	//Creating a Load Game texture:
 
 	if(!loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/load.bmp");
-	else if(!loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/loadClicked.bmp");
+	else if(loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/loadClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -122,10 +131,11 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 
+	//printf("creating game load\n");
 
 	//Creating a mainMenu texture:
 	if(!mmBool) surface = SDL_LoadBMP("./utilities/gameWindow/mainMenu.bmp");
-	else if(!mmBool) surface = SDL_LoadBMP("./utilities/gameWindow/mainMenuClicked.bmp");
+	else if(mmBool) surface = SDL_LoadBMP("./utilities/gameWindow/mainMenuClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -138,11 +148,12 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		return;
 	}
 	SDL_FreeSurface(surface);
+	//printf("creating game mainmenu\n");
 
 	//Creating a Quit texture:
 
 	if(!quitBool) surface = SDL_LoadBMP("./utilities/gameWindow/quit.bmp");
-	else if(!quitBool) surface = SDL_LoadBMP("./utilities/gameWindow/quitClicked.bmp");
+	else if(quitBool) surface = SDL_LoadBMP("./utilities/gameWindow/quitClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -155,7 +166,8 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		return;
 	}
 	SDL_FreeSurface(surface);
-
+	//printf("creating game renderer\n");
+	//printf("got till end GR\n");
 }
 
 GameWindow* createGW(){
@@ -177,6 +189,8 @@ GameWindow* createGW(){
 }
 
 void drawGameWindow(GameWindow* gw){
+	printf("inside draw\n");
+
 	if(gw==NULL){
 		printf("gw is NULL");
 		return;
@@ -208,6 +222,7 @@ void drawGameWindow(GameWindow* gw){
 	SDL_RenderCopy(gw->renderer,gw->quit,NULL,&rec);
 
 	SDL_RenderPresent(gw->renderer);
+	printf("got till end of draw\n");
 }
 
 
@@ -376,4 +391,47 @@ void gameWindowHide(GameWindow* gw){
 
 void gameWindowShow(GameWindow* gw){
 	SDL_ShowWindow(gw->window);
+}
+
+
+int saveGameMessageBox(){
+	const SDL_MessageBoxButtonData buttons[] = {
+		{ /* .flags, .buttonid, .text */        0, 0, "no" },
+		{ 1, 1, "yes" },
+		{ 2, 2, "cancel" },
+	};
+	const SDL_MessageBoxColorScheme colorScheme = {
+		{ /* .colors (.r, .g, .b) */
+			/* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+			{ 255,   0,   0 },
+			/* [SDL_MESSAGEBOX_COLOR_TEXT] */
+			{   0, 255,   0 },
+			/* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+			{ 255, 255,   0 },
+			/* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+			{   0,   0, 255 },
+			/* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+			{ 255,   0, 255 }
+		}
+	};
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_INFORMATION, /* .flags */
+		NULL, /* .window */
+		"Save Messagebox", /* .title */
+		"Do you want to save the current Game?", /* .message */
+		SDL_arraysize(buttons), /* .numbuttons */
+		buttons, /* .buttons */
+		&colorScheme /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		SDL_Log("error displaying message box");
+		return -1;
+	}
+	if (buttonid == -1) {
+		SDL_Log("no selection");
+	} else {
+		SDL_Log("selection was %s", buttons[buttonid].text);
+	    }
+	return buttonid;
 }
