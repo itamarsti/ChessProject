@@ -16,16 +16,16 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	assert(gw!=NULL); assert(gw->window!=NULL);
 	SDL_Surface* surface = NULL;
 
+
+	//printf("creating game renderer\n");
 	// creating the game Window renderer
 	if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	gw->renderer = SDL_CreateRenderer(gw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (gw->renderer==NULL) {
 		printf("Could not create a renderer: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
-		return;
+		return ;
 	}
-	//printf("creating game renderer\n");
-
 
 	//Creating a background texture:
 	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackground4.bmp");
@@ -36,7 +36,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	gw->bg = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->bg==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a backGrouns: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -380,20 +380,22 @@ GameWindow* createGW(){
 		destroyGameWindow(gw);
 		return NULL ;
 	}
+
+
 	createGR(gw,false,false,false,false,false,false);
 	return gw;
 }
 
-void drawGameWindow(GameWindow* gw, boardGame* board){
+void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xGap, int yGap){
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	printf("inside draw\n");
+	//printf("inside draw\n");
 
 	if(gw==NULL){
 		printf("gw is NULL");
 		return;
 	}
-	assert(gw->window!=NULL); assert(gw->bg!=NULL);
+	assert(gw->window!=NULL); assert(gw->renderer!=NULL);
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_SetRenderDrawColor(gw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(gw->renderer);
@@ -422,51 +424,87 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			if(board->boardArr[i][j]==BlackPawn){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackPawn){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackRook){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackRook
 				SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackBishop){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackBishop
 				SDL_RenderCopy(gw->renderer,gw->blackBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackKnight){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKnight
 				SDL_RenderCopy(gw->renderer,gw->blackKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackKing){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKing
 				SDL_RenderCopy(gw->renderer,gw->blackKing,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==BlackQueen){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhitePawn){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhitePawn){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whitePawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhiteRook){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhiteBishop){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhiteKnight){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhiteQueen){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				if (objPos==WhiteKing){
+					rec.x = (390 + j*69+xGap); rec.y = (52 + i*69+yGap); rec.w = 60 ;rec.h = 60;	//black pawn
+				}
+				else rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKing,NULL,&rec);
 			}
 		}
@@ -474,7 +512,7 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 
 
 	SDL_RenderPresent(gw->renderer);
-	printf("got till end of draw\n");
+	//printf("got till end of draw\n");
 }
 
 
@@ -535,13 +573,25 @@ void destroyGameRenderer(GameWindow* gw){
 
 
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
+	int pos = 0;
 	if (event == NULL || gw == NULL ) {
 		return GAME_WINDOW_INVALID;
 	}
 	switch (event->type) {
+		case SDL_MOUSEBUTTONDOWN:
+			if(event->button.button ==SDL_BUTTON_LEFT){
+				pos = fromPixToPos(event->button.x, event->button.y);
+				if(pos!=-1){
+					return GAME_WINDOW_DRAG_OBJ;
+				}
+			}
+			break;
 		case SDL_MOUSEBUTTONUP:
-			 if(isClickOnSaveGame(event->button.x, event->button.y)){
-				return GAME_WINDOW_PUSH_SAVE_GAME;
+			if(fromPixToPos(event->button.x, event->button.y)!=-1){
+				return GAME_WINDOW_PUSH_OBJ;
+			 }
+			 else if(isClickOnSaveGame(event->button.x, event->button.y)){
+				 return GAME_WINDOW_PUSH_SAVE_GAME;
 			 }
 			 else if(isClickOnLoadGameWindow(event->button.x, event->button.y)){
 				 return GAME_WINDOW_PUSH_LOAD_GAME;
@@ -558,6 +608,11 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			 else if(isClickOnMainMenu(event->button.x, event->button.y)){
 				 return  GAME_WINDOW_PUSH_MAIN_MENU;
 			 }
+			 else if(event->button.button ==SDL_BUTTON_LEFT){
+				if(isPixToPos(event->button.x, event->button.y)){
+					return GAME_WINDOW_PUSH_OBJ;
+				}
+			}
 			 break;
 		case SDL_MOUSEMOTION:
 			if(isClickOnSaveGame(event->motion.x, event->motion.y)){
@@ -577,6 +632,9 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			 }
 			 else if(isClickOnMainMenu(event->motion.x, event->motion.y)){
 				 return  GAME_WINDOW_HOVER_MAIN_MENU;
+			 }
+			 else if(isPixToPos(event->motion.x, event->motion.y)){
+				 return GAME_WINDOW_HOVER_OBJ;
 			 }
 			 break;
 		case SDL_WINDOWEVENT:
@@ -657,6 +715,7 @@ void saveGameFromGUI(boardGame* game, int numOfFiles){
 	else if (numOfFiles==0){
 		saveFile(game, savePath);
 	}
+	printf("saved the file\n");
 	return;
 }
 
@@ -710,4 +769,19 @@ int saveGameMessageBox(){
 		SDL_Log("selection was %s", buttons[buttonid].text);
 	    }
 	return buttonid;
+}
+
+int fromPixToPos(int x, int y){
+	if((x>=386 && x<930) && (y>=50 && y<594)){
+		int col = (x-386)/68;
+		int row = (y-50)/68;
+		int pos = RowColToNum(row,col);
+		return pos;
+	}
+	return -1;
+}
+
+bool isPixToPos(int x, int y){
+	if((x>=386 && x<930) && (y>=50 && y<594))return true;
+	return false;
 }

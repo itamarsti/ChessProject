@@ -116,14 +116,13 @@ MainWindow* createMW(){
 
 
 void destroyMainWindow(MainWindow* mw){
+	printf("inside destroy MainWindow\n");
 	if (mw==NULL) return;
 	if (mw->window != NULL) SDL_DestroyWindow(mw->window);
-	if (mw->renderer!=NULL) SDL_DestroyRenderer(mw->renderer);
-	if (mw->loadGame!=NULL) SDL_DestroyTexture(mw->loadGame);
-	if (mw->newGame!=NULL) SDL_DestroyTexture(mw->newGame);
-	if (mw->welcome!=NULL) SDL_DestroyTexture(mw->welcome);
-	if (mw->quit!=NULL)	SDL_DestroyTexture(mw->quit);
-	if (mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
+	//if(mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
+
+	printf("the end of destroy main\n");
+
 	free(mw);
 }
 

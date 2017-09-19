@@ -30,5 +30,6 @@ typedef struct MANAGER{
 Manager* createManager();
 void destroyManager(Manager* manager);
 void guiMain(boardGame* board);
+bool loadSection(Manager* manager, SDL_Event* event, int numOfFiles, int fileRemove);
 
 #endif /* GUI_H_ */

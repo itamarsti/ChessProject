@@ -397,21 +397,21 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 }
 
 
-			SettingsWindow* createSW(int numPlayers, int color, int diffi){
-			SettingsWindow* sw = (SettingsWindow*) malloc(sizeof(SettingsWindow));
-			if(sw==NULL){
-				printf("Couldn't create SettingsWindow struct\n");
-				return NULL ;
-			}
-			sw->window = SDL_CreateWindow("Chess Game", SDL_WINDOWPOS_CENTERED,
-				SDL_WINDOWPOS_CENTERED, 1000, 650, SDL_WINDOW_OPENGL);
-			if (sw->window==NULL){
-				printf("Could not create window: %s\n", SDL_GetError());
-				destroySettingsWindow(sw);
-				return NULL ;
-			}
-			createSR(sw, numPlayers, color, diffi, false,false);
-			return sw;
+SettingsWindow* createSW(int numPlayers, int color, int diffi){
+	SettingsWindow* sw = (SettingsWindow*) malloc(sizeof(SettingsWindow));
+	if(sw==NULL){
+		printf("Couldn't create SettingsWindow struct\n");
+		return NULL ;
+	}
+	sw->window = SDL_CreateWindow("Chess Game", SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED, 1000, 650, SDL_WINDOW_OPENGL);
+	if (sw->window==NULL){
+		printf("Could not create window: %s\n", SDL_GetError());
+		destroySettingsWindow(sw);
+		return NULL ;
+	}
+	createSR(sw, numPlayers, color, diffi, false,false);
+	return sw;
 }
 
 

@@ -54,7 +54,7 @@ void destroyLoadWindow(LoadWindow* lw);
 void destroyLoadRenderer(LoadWindow* lw);
 int numOfFilesInDir();
 void loadFilePath(boardGame*board, char* path);
-void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game);
+void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game, LoadWindow* lw);
 void drawLoadWindow(LoadWindow* lw, int slotsNum);
 LOAD_WINDOW_EVENT loadWindowHandleEvent(LoadWindow* lw, SDL_Event* event);
 bool isClickOnSlot1(int x, int y);

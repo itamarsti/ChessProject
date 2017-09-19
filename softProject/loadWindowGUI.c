@@ -50,6 +50,7 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 		destroyLoadWindow(lw);
 		return;
 	}
+	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
 		printf("Could not create a bg texture: %s\n", SDL_GetError());
@@ -344,8 +345,9 @@ void loadFilePath(boardGame*board, char* path){
 	fclose(file);
 }
 
-void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game){
+void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game, LoadWindow* lw){
 	assert(game!=NULL); assert(game->boardArr!=NULL);
+	assert(lw!=NULL); assert(lw->window!=NULL);
 	if(numOfFiles==0||fileDeleted==0) return;
 	if(fileDeleted==1){
 		loadFilePath(game,"./utilities/loadedGames/game1.xml");
@@ -373,18 +375,25 @@ void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game){
 		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
 		if (fileDeleted<=4) rename("./utilities/loadedGames/game5.xml","./utilities/loadedGames/game4.xml");
+		if(lw->slot5!=NULL) SDL_DestroyTexture(lw->slot5);
 	}
 	else if (numOfFiles==4){
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
 		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
 		if (fileDeleted<=3)	rename("./utilities/loadedGames/game4.xml","./utilities/loadedGames/game3.xml");
+		if(lw->slot4!=NULL) SDL_DestroyTexture(lw->slot4);
 	}
 	else if (numOfFiles==3){
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
 		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
+		if(lw->slot3!=NULL) SDL_DestroyTexture(lw->slot3);
 	}
 	else if (numOfFiles==2){
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
+		if(lw->slot2!=NULL) SDL_DestroyTexture(lw->slot2);
+	}
+	else if (numOfFiles==1){
+		if(lw->slot1!=NULL) SDL_DestroyTexture(lw->slot1);
 	}
 	return;
 }

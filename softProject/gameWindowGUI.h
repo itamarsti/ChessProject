@@ -46,6 +46,8 @@ typedef struct GAMEWINDOW{
 
 
 typedef enum {
+	GAME_WINDOW_DRAG_OBJ,
+	GAME_WINDOW_PUSH_OBJ,
 	GAME_WINDOW_PUSH_LOAD_GAME,
 	GAME_WINDOW_PUSH_SAVE_GAME,
 	GAME_WINDOW_PUSH_RESTART_GAME,
@@ -58,17 +60,17 @@ typedef enum {
 	GAME_WINDOW_HOVER_UNDO,
 	GAME_WINDOW_HOVER_MAIN_MENU,
 	GAME_WINDOW_HOVER_EVENT_QUIT,
+	GAME_WINDOW_HOVER_OBJ,
 	GAME_WINDOW_EVENT_NONE,
 	GAME_WINDOW_INVALID
 } GAME_WINDOW_EVENT;
-
 
 void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		, bool loadBool, bool mmBool, bool quitBool);
 GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
 void destroyGameRenderer(GameWindow* gw);
-void drawGameWindow(GameWindow* gw, boardGame* board);
+void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xDest, int yDest);
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* mw, SDL_Event* event);
 void saveGameFromGUI(boardGame* game, int numOfFiles);
 bool isClickOnSaveGame(int x, int y);
@@ -80,6 +82,8 @@ bool isClickOnMainMenu(int x, int y);
 void gameWindowHide(GameWindow* gw);
 void gameWindowShow(GameWindow* gw);
 int saveGameMessageBox();
+int fromPixToPos(int x, int y);
+bool isPixToPos(int x, int y);
 
 
 #endif /* GAMEWINDOWGUI_H_ */

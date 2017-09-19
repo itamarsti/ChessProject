@@ -21,9 +21,10 @@
 
 void guiMain(boardGame* board){
 	bool back = false;
-	Manager* manager = createManager();
-	while(1){
+	Manager* manager =(Manager*) createManager();
+	while(1){if(manager->mw==NULL) printf("main window is null");
 		setDefault(manager->board);
+		if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 		manager->mw = (MainWindow*) createMW();
 		drawMainWindow(manager->mw);
 		back = false;
@@ -36,6 +37,7 @@ void guiMain(boardGame* board){
 			else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
 				destroyMainWindow(manager->mw);
 				int dirFiles = numOfFilesInDir();
+				if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
 				manager->lw = (LoadWindow*) createLW(dirFiles);
 				//printf("got till here");
 				drawLoadWindow(manager->lw,dirFiles);
@@ -56,10 +58,10 @@ void guiMain(boardGame* board){
 
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
 						if(dirFiles>0 && dirFiles<=5 && fileRemove>0 && fileRemove<=5 ){
-							loadRemoveChangeFile(dirFiles, fileRemove,manager->board);
+							loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
 							destroyLoadWindow(manager->lw);
 							manager->gw = (GameWindow*) createGW();
-							drawGameWindow(manager->gw, manager->board);
+							drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
 							bool gameSaved = false;
 							while(1){
 								SDL_Event event3;
@@ -88,9 +90,11 @@ void guiMain(boardGame* board){
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_SAVE_GAME){
-									int files = numOfFilesInDir();
-									saveGameFromGUI(manager->board,files);
-									gameSaved = true;
+									if(!gameSaved){
+										int files = numOfFilesInDir();
+										saveGameFromGUI(manager->board,files);
+										gameSaved = true;
+									}
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
@@ -126,43 +130,69 @@ void guiMain(boardGame* board){
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,false,true);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,true,false,false,false,false,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,true,false,false,false,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,true,false,false,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,true,false,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,true,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,0,0);
 									continue;
+								}
+								else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_OBJ){
+									//SDL_Point point = {.x = event3.button.x, .y = event3.button.y};
+									int xPos= event3.button.x;
+									int yPos = event3.button.y;
+									char obj = manager->board->boardArr[xPos][yPos];
+									printf("xPos is :%d, yPos is:%d\n",xPos,yPos);
+									bool done = false;
+									while(!done){
+										SDL_Event event8;
+										while(SDL_PollEvent(&event8)!=0){
+											int xDest = event8.button.x;
+											int yDest = event8.button.y;
+											printf("xDest is :%d, yDest is:%d\n",xDest,yDest);
+											if(gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_HOVER_OBJ){
+												destroyGameRenderer(manager->gw);
+												createGR(manager->gw,false,false,false,false,false,false);
+												drawGameWindow(manager->gw, manager->board,obj,xDest-xPos,yDest-yPos);
+											}
+											else if (gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_PUSH_OBJ){
+												done = true;
+												break;
+											}
+										}
+									}
+
 								}
 								else{
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,false,false);
-									drawGameWindow(manager->gw, manager->board);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
 							}
@@ -184,42 +214,21 @@ void guiMain(boardGame* board){
 						drawLoadWindow(manager->lw,dirFiles);
 						continue;
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT){
-						destroyLoadRenderer(manager->lw);
-						fileRemove = 1;
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT){
-						destroyLoadRenderer(manager->lw);
-						fileRemove = 2;
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
-
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT){
-						destroyLoadRenderer(manager->lw);
-						fileRemove = 3;
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT){
-						destroyLoadRenderer(manager->lw);
-						fileRemove = 4;
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
-						destroyLoadRenderer(manager->lw);
-						fileRemove = 5;
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
-						drawLoadWindow(manager->lw,dirFiles);
-						continue;
-					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
+					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
+					destroyLoadRenderer(manager->lw);
+					createLR(manager->lw,dirFiles,false,fileRemove,false);
+					drawLoadWindow(manager->lw,dirFiles);
+					continue;
+				}
 					else{
 						destroyLoadRenderer(manager->lw);
 						createLR(manager->lw,dirFiles,false,fileRemove,false);
@@ -251,7 +260,7 @@ void guiMain(boardGame* board){
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
 						destroySettingsWindow(manager->sw);
 						manager->gw = (GameWindow*) createGW();
-						drawGameWindow(manager->gw, manager->board);
+						drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 						bool gameSaved = false;
 						while(1){
 							SDL_Event event3;
@@ -286,6 +295,77 @@ void guiMain(boardGame* board){
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
+								int dirFiles = numOfFilesInDir();
+								int fileRemove = 0;
+								destroyGameWindow(manager->gw);
+								if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
+								manager->lw = (LoadWindow*) createLW(dirFiles);
+								drawLoadWindow(manager->lw,dirFiles);
+								while(!gameSaved){
+									SDL_Event event6;
+									SDL_WaitEvent(&event6);
+									//gameSaved = loadSection(manager, &event6 ,dirFiles, fileRemove);
+
+									if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_EVENT_QUIT){
+										quitGame(manager);
+									}
+									else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_PUSH_BACK){
+										destroyLoadWindow(manager->lw);
+										manager->gw = (GameWindow*) createGW();
+										drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
+										gameSaved = false;
+										break;
+									}
+									else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_PUSH_LOAD){
+										if(dirFiles>0 && dirFiles<=5 && fileRemove>0 && fileRemove<=5 ){
+											loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
+											destroyLoadWindow(manager->lw);
+											manager->gw = (GameWindow*) createGW();
+											drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
+											gameSaved = false;
+											break;
+										}
+									}
+									else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_HOVER_BACK){
+										destroyLoadRenderer(manager->lw);
+										createLR(manager->lw,dirFiles,true,fileRemove,false);
+										printf("before draw\n");
+										drawLoadWindow(manager->lw,dirFiles);
+										continue;
+									}
+
+									else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_HOVER_LOAD){
+										destroyLoadRenderer(manager->lw);
+										//printf("before create\n");
+										createLR(manager->lw,dirFiles,false,fileRemove,true);
+										//printf("before draw\n");
+										drawLoadWindow(manager->lw,dirFiles);
+										continue;
+									}
+									else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME1SLOT
+											||loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME2SLOT
+											||loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME3SLOT
+											||loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME4SLOT
+											||loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME5SLOT){
+										if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
+										else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
+										else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
+										else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
+										else if (loadWindowHandleEvent(manager->lw, &event6) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
+										destroyLoadRenderer(manager->lw);
+										createLR(manager->lw,dirFiles,false,fileRemove,false);
+										drawLoadWindow(manager->lw,dirFiles);
+										continue;
+									}
+									else{
+										destroyLoadRenderer(manager->lw);
+										createLR(manager->lw,dirFiles,false,fileRemove,false);
+										drawLoadWindow(manager->lw, dirFiles);
+										continue;
+									}
+
+								}
+
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
 								if(!gameSaved){
@@ -311,43 +391,43 @@ void guiMain(boardGame* board){
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,false,true);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,true,false,false,false,false,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,true,false,false,false,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,true,false,false,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,true,false,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,true,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
 								continue;
 							}
 							else{
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,false,false);
-								drawGameWindow(manager->gw, manager->board);
+								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 								continue;
 							}
 
@@ -484,7 +564,7 @@ Manager* createManager(){
 
 
 void destroyManager(Manager* manager){
-	printf("in destroy manager");
+	printf("in destroy manager\n");
 	if(manager==NULL) return;
 	else{
 		if(manager->board!=NULL) destroyBoard(manager->board);
@@ -499,6 +579,66 @@ void destroyManager(Manager* manager){
 		printf("destroy loadWindow works fine\n");
 		free(manager);
 		return;
+	}
+}
+
+bool loadSection(Manager* manager, SDL_Event* event, int numOfFiles, int fileRemove){
+	while(1){
+		assert(manager!=NULL);
+		if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_EVENT_QUIT){
+				quitGame(manager);
+		}
+		else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_PUSH_BACK){
+			destroyLoadWindow(manager->lw);
+			manager->gw = (GameWindow*) createGW();
+			drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
+			return false;
+		}
+		else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_PUSH_LOAD){
+			if(numOfFiles>0 && numOfFiles<=5 && fileRemove>0 && fileRemove<=5 ){
+				loadRemoveChangeFile(numOfFiles, fileRemove,manager->board,manager->lw);
+				destroyLoadWindow(manager->lw);
+				manager->gw = (GameWindow*) createGW();
+				drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
+				return false;
+			}
+		}
+		else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_HOVER_BACK){
+			destroyLoadRenderer(manager->lw);
+			createLR(manager->lw,numOfFiles,true,fileRemove,false);
+			//printf("before draw\n");
+			drawLoadWindow(manager->lw,numOfFiles);
+			continue;
+		}
+		else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_HOVER_LOAD){
+			destroyLoadRenderer(manager->lw);
+			//printf("before create\n");
+			createLR(manager->lw,numOfFiles,false,fileRemove,true);
+			//printf("before draw\n");
+			drawLoadWindow(manager->lw,numOfFiles);
+			continue;
+		}
+		else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME1SLOT
+				||loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME2SLOT
+				||loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME3SLOT
+				||loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME4SLOT
+				||loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME5SLOT){
+			if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
+			else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
+			else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
+			else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
+			else if (loadWindowHandleEvent(manager->lw, event) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
+			destroyLoadRenderer(manager->lw);
+			createLR(manager->lw,numOfFiles,false,fileRemove,false);
+			drawLoadWindow(manager->lw,numOfFiles);
+			continue;
+		}
+		else{
+			destroyLoadRenderer(manager->lw);
+			createLR(manager->lw,numOfFiles,false,fileRemove,false);
+			drawLoadWindow(manager->lw, numOfFiles);
+			continue;
+		}
 	}
 }
 
