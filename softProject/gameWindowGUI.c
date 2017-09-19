@@ -28,7 +28,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 
 	//Creating a background texture:
-	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackground2.bmp");
+	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackground4.bmp");
 	if (surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
@@ -42,7 +42,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 	//printf("creating game bg\n");
-
+/*
 	//Creating a chessBoard texture:
 	surface= SDL_LoadBMP("./utilities/gameWindow/chessBoard2.bmp");
 	if (surface==NULL){
@@ -58,7 +58,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 	//printf("creating game cb\n");
-
+*/
 	//Creating a undo texture:
 
 	if(!undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undo.bmp");
@@ -168,6 +168,202 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	SDL_FreeSurface(surface);
 	//printf("creating game renderer\n");
 	//printf("got till end GR\n");
+
+	//Creating a blackKnight texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackKnight60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackKnight = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackKnight==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+
+	//Creating a blackPawn texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackPawn60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackPawn = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackPawn==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+	//Creating a blackBishop texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackBishop60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackBishop = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackBishop==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+
+	//Creating a blackRook texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackRook60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackRook = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackRook==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+	//Creating a blackKing texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackKing60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackKing = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackKing==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+	//Creating a blackQueen texture:
+
+	surface = SDL_LoadBMP("./utilities/gameWindow/blackQueen60.bmp");
+	if(surface==NULL){
+		printf("Could not create a surface: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->blackQueen = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->blackQueen==NULL){
+		printf("Could not create a texture: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+	//Creating a whiteKnight texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whiteKnight60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whiteKnight = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whiteKnight==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+
+		//Creating a whitePawn texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whitePawn60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whitePawn = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whitePawn==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+		//Creating a whiteBishop texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whiteBishop60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whiteBishop = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whiteBishop==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+
+		//Creating a whiteRook texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whiteRook60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whiteRook = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whiteRook==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+		//Creating whiteKing texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whiteKing60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whiteKing = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whiteKing==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+		//Creating a whiteQueen texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/whiteQueen60.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->whiteQueen = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->whiteQueen==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
 }
 
 GameWindow* createGW(){
@@ -188,7 +384,9 @@ GameWindow* createGW(){
 	return gw;
 }
 
-void drawGameWindow(GameWindow* gw){
+void drawGameWindow(GameWindow* gw, boardGame* board){
+	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
 	printf("inside draw\n");
 
 	if(gw==NULL){
@@ -196,12 +394,12 @@ void drawGameWindow(GameWindow* gw){
 		return;
 	}
 	assert(gw->window!=NULL); assert(gw->bg!=NULL);
-	SDL_Rect rec = { .x = 0, .y = 0, .w = 1300, .h = 650 };
+	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_SetRenderDrawColor(gw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(gw->renderer);
 	SDL_RenderCopy(gw->renderer, gw->bg, NULL, &rec);
-	rec.x = 350; rec.y = 25; rec.w = 600;rec.h = 600;	//chessBoard message
-	SDL_RenderCopy(gw->renderer,gw->cb,NULL,&rec);
+	//rec.x = 350; rec.y = 25; rec.w = 600;rec.h = 600;	//chessBoard message
+	//SDL_RenderCopy(gw->renderer,gw->cb,NULL,&rec);
 
 	rec.x = 60; rec.y = 60; rec.w = 200;rec.h = 60;	//undo message
 	SDL_RenderCopy(gw->renderer,gw->undo,NULL,&rec);
@@ -221,6 +419,60 @@ void drawGameWindow(GameWindow* gw){
 	rec.x = 60; rec.y = 510; rec.w = 200;rec.h = 60;	//quit message
 	SDL_RenderCopy(gw->renderer,gw->quit,NULL,&rec);
 
+	for(int i=0;i<ROW;i++){
+		for(int j=0;j<COL;j++){
+			if(board->boardArr[i][j]==BlackPawn){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==BlackRook){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==BlackBishop){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackBishop,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==BlackKnight){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackKnight,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==BlackKing){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackKing,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==BlackQueen){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->blackQueen,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhitePawn){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whitePawn,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhiteRook){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whiteRook,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhiteBishop){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whiteBishop,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhiteKnight){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whiteKnight,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhiteQueen){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whiteQueen,NULL,&rec);
+			}
+			else if(board->boardArr[i][j]==WhiteKing){
+				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				SDL_RenderCopy(gw->renderer,gw->whiteKing,NULL,&rec);
+			}
+		}
+	}
+
+
 	SDL_RenderPresent(gw->renderer);
 	printf("got till end of draw\n");
 }
@@ -238,6 +490,18 @@ void destroyGameWindow(GameWindow* gw){
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->cb!=NULL) SDL_DestroyTexture(gw->cb);
+	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
+	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
+	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
+	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
+	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
+	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
+	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
+	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
+	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
+	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
+	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
+	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 	free(gw);
 }
 
@@ -253,6 +517,18 @@ void destroyGameRenderer(GameWindow* gw){
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->cb!=NULL) SDL_DestroyTexture(gw->cb);
+	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
+	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
+	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
+	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
+	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
+	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
+	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
+	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
+	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
+	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
+	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
+	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 }
 
 

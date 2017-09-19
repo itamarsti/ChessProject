@@ -59,7 +59,7 @@ void guiMain(boardGame* board){
 							loadRemoveChangeFile(dirFiles, fileRemove,manager->board);
 							destroyLoadWindow(manager->lw);
 							manager->gw = (GameWindow*) createGW();
-							drawGameWindow(manager->gw);
+							drawGameWindow(manager->gw, manager->board);
 							bool gameSaved = false;
 							while(1){
 								SDL_Event event3;
@@ -126,43 +126,43 @@ void guiMain(boardGame* board){
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,false,true);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,true,false,false,false,false,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,true,false,false,false,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,true,false,false,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,true,false,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,true,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 								else{
 									destroyGameRenderer(manager->gw);
 									createGR(manager->gw,false,false,false,false,false,false);
-									drawGameWindow(manager->gw);
+									drawGameWindow(manager->gw, manager->board);
 									continue;
 								}
 							}
@@ -251,7 +251,7 @@ void guiMain(boardGame* board){
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
 						destroySettingsWindow(manager->sw);
 						manager->gw = (GameWindow*) createGW();
-						drawGameWindow(manager->gw);
+						drawGameWindow(manager->gw, manager->board);
 						bool gameSaved = false;
 						while(1){
 							SDL_Event event3;
@@ -311,43 +311,43 @@ void guiMain(boardGame* board){
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,false,true);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,true,false,false,false,false,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,true,false,false,false,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,true,false,false,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,true,false,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,true,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 							else{
 								destroyGameRenderer(manager->gw);
 								createGR(manager->gw,false,false,false,false,false,false);
-								drawGameWindow(manager->gw);
+								drawGameWindow(manager->gw, manager->board);
 								continue;
 							}
 
@@ -497,7 +497,7 @@ void destroyManager(Manager* manager){
 		printf("destroy gamwWindow works fine\n");
 		if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
 		printf("destroy loadWindow works fine\n");
-		free(manager);	// gameWindow need to be added
+		free(manager);
 		return;
 	}
 }

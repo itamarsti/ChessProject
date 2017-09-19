@@ -71,6 +71,7 @@ bool isClickOnBack(int x, int y){
 
 
 void destroySettingsWindow(SettingsWindow* sw){
+	printf("insode destroy settings\n");
 	if (sw==NULL) return;
 	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
 	if (sw->renderer!=NULL) SDL_DestroyRenderer(sw->renderer);

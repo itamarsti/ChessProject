@@ -30,6 +30,18 @@ typedef struct GAMEWINDOW{
 	SDL_Texture* undo;
 	SDL_Texture* mainMenu;
 	SDL_Texture* quit;
+	SDL_Texture* blackPawn;
+	SDL_Texture* blackRook;
+	SDL_Texture* blackBishop;
+	SDL_Texture* blackKnight;
+	SDL_Texture* blackQueen;
+	SDL_Texture* blackKing;
+	SDL_Texture* whitePawn;
+	SDL_Texture* whiteRook;
+	SDL_Texture* whiteBishop;
+	SDL_Texture* whiteKnight;
+	SDL_Texture* whiteQueen;
+	SDL_Texture* whiteKing;
 }GameWindow;
 
 
@@ -56,7 +68,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
 void destroyGameRenderer(GameWindow* gw);
-void drawGameWindow(GameWindow* gw);
+void drawGameWindow(GameWindow* gw, boardGame* board);
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* mw, SDL_Event* event);
 void saveGameFromGUI(boardGame* game, int numOfFiles);
 bool isClickOnSaveGame(int x, int y);
