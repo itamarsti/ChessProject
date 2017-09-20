@@ -84,6 +84,7 @@ void gameWindowShow(GameWindow* gw);
 int saveGameMessageBox();
 int fromPixToPos(int x, int y);
 bool isPixToPos(int x, int y);
+void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL_Point* p2);
 
 
 #endif /* GAMEWINDOWGUI_H_ */

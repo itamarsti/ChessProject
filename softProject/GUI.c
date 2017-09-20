@@ -7,6 +7,8 @@
 
 #include "GUI.h"
 #include "boardFuncs.h"
+#include "gameCommands.h"
+#include "moveOps.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -164,24 +166,31 @@ void guiMain(boardGame* board){
 									continue;
 								}
 								else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_OBJ){
-									//SDL_Point point = {.x = event3.button.x, .y = event3.button.y};
-									int xPos= event3.button.x;
-									int yPos = event3.button.y;
-									char obj = manager->board->boardArr[xPos][yPos];
-									printf("xPos is :%d, yPos is:%d\n",xPos,yPos);
+									SDL_Point p1 = {.x = event3.button.x, .y = event3.button.y};
+									printf("xPos is :%d, yPos is:%d\n",p1.x,p1.y);
 									bool done = false;
 									while(!done){
 										SDL_Event event8;
 										while(SDL_PollEvent(&event8)!=0){
-											int xDest = event8.button.x;
-											int yDest = event8.button.y;
-											printf("xDest is :%d, yDest is:%d\n",xDest,yDest);
+											SDL_Point p2 = {.x = event8.button.x, .y = event8.button.y};
+											printf("xDest is :%d, yDest is:%d\n",p2.x,p2.y);
 											if(gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_HOVER_OBJ){
+												SDL_RenderClear(manager->gw->renderer);
 												destroyGameRenderer(manager->gw);
 												createGR(manager->gw,false,false,false,false,false,false);
-												drawGameWindow(manager->gw, manager->board,obj,xDest-xPos,yDest-yPos);
+												drawGameWindowImproved(manager->gw, manager->board,&p1,&p2);
 											}
 											else if (gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_PUSH_OBJ){
+												SDL_Point p3 = {.x = event8.button.x, .y = event8.button.y};
+												int pos = fromPixToPos(p1.x, p1.y);
+												int dest = fromPixToPos(p3.x, p3.y);
+												printf("the position is:%d, the destination is: %d\n", pos, dest);
+												if(moveObj(manager->board, pos, dest, false)){
+													SDL_RenderClear(manager->gw->renderer);
+													destroyGameRenderer(manager->gw);
+													createGR(manager->gw,false,false,false,false,false,false);
+													drawGameWindow(manager->gw, manager->board,UNDERSCORE,0,0);
+												}
 												done = true;
 												break;
 											}
@@ -195,6 +204,7 @@ void guiMain(boardGame* board){
 									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
 									continue;
 								}
+
 							}
 						}
 					}
