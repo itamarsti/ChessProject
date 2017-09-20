@@ -86,6 +86,13 @@ void guiMain(boardGame* board){
 									quitGame(manager);
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
+									if(manager->board->history->actualSize!=0){
+										undo(manager->board, false, true);
+										destroyGameRenderer(manager->gw);
+										createGR(manager->gw,true,false,false,false,false,false);
+										drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+									}
+									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
 									initBoard(manager->board,false);
@@ -136,9 +143,11 @@ void guiMain(boardGame* board){
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
-									destroyGameRenderer(manager->gw);
-									createGR(manager->gw,true,false,false,false,false,false);
-									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+									if(manager->board->history->actualSize!=0){
+										destroyGameRenderer(manager->gw);
+										createGR(manager->gw,true,false,false,false,false,false);
+										drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+									}
 									continue;
 								}
 								else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
@@ -293,6 +302,13 @@ void guiMain(boardGame* board){
 								quitGame(manager);
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
+								if(manager->board->history->actualSize!=0){
+									undo(manager->board, false, true);
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,true,false,false,false,false,false);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+								}
+								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
 								initBoard(manager->board,false);
@@ -405,9 +421,11 @@ void guiMain(boardGame* board){
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
-								destroyGameRenderer(manager->gw);
-								createGR(manager->gw,true,false,false,false,false,false);
-								drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+								if(manager->board->history->actualSize!=0){
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,true,false,false,false,false,false);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,  0,0);
+								}
 								continue;
 							}
 							else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
