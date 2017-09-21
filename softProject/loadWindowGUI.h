@@ -45,6 +45,7 @@ typedef struct LOADWINDOW{
 	SDL_Texture* slot5;
 	SDL_Texture* back;
 	SDL_Texture* load;
+
 }LoadWindow;
 
 

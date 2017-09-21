@@ -50,7 +50,7 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 		destroyLoadWindow(lw);
 		return;
 	}
-	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
+	//if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
 		printf("Could not create a bg texture: %s\n", SDL_GetError());
@@ -498,3 +498,5 @@ void loadWindowShow(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_ShowWindow(lw->window);
 }
+
+

@@ -231,7 +231,7 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 			}
 		}
 		else if(colDest<colPos){
-			for(int i=colPos-1;i>colPos;i--){
+			for(int i=colPos-1;i>colDest;i--){
 				if(board->boardArr[rowPos][i]!=UNDERSCORE){
 					return valid;
 				}
@@ -513,7 +513,8 @@ bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol){
 		for(int i=0;i<ROW;i++){
 			for(int j=0;j<COL;j++){
 				if(board->boardArr[i][j]==BlackKing){
-					if (abs(i-row)==1 && abs(j-col)==1) return false;
+					if ((abs(i-row)==1 && abs(j-col)==1)|| (abs(i-row)==1 && abs(j-col)==0)
+						||(abs(i-row)==0 && abs(j-col)==1))return false;
 				}
 				if(board->boardArr[i][j]==BlackKnight){
 					if ((abs(i-row)==2 && abs(j-col)==1)||(abs(i-row)==1 && abs(j-col)==2))
@@ -526,7 +527,8 @@ bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol){
 		for(int i=0;i<ROW;i++){
 			for(int j=0;j<COL;j++){
 				if(board->boardArr[i][j]==WhiteKing){
-					if (abs(i-row)==1 && abs(j-col)==1) return false;
+					if ((abs(i-row)==1 && abs(j-col)==1)|| (abs(i-row)==1 && abs(j-col)==0)
+						||(abs(i-row)==0 && abs(j-col)==1))return false;
 				}
 				if(board->boardArr[i][j]==WhiteKnight){
 					if ((abs(i-row)==2 && abs(j-col)==1)||(abs(i-row)==1 && abs(j-col)==2))

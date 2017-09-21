@@ -515,8 +515,8 @@ void drawSettingsWindow(SettingsWindow* sw){
 	assert(sw->colBlack!=NULL);	assert(sw->colWhite!=NULL); assert(sw->noob!=NULL);
 	assert(sw->hard!=NULL); assert(sw->moderate!=NULL);
 
-	SDL_SetRenderDrawColor(sw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(sw->renderer);
+	SDL_SetRenderDrawColor(sw->renderer, 255, 255, 255, 255);
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_RenderCopy(sw->renderer, sw->bg, NULL, &rec);
 	rec.x = 300; rec.y = 30;rec.w = 162; rec.h = 72;	//mode message

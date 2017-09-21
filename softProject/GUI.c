@@ -25,10 +25,12 @@ void guiMain(boardGame* board){
 	Manager* manager =(Manager*) createManager();
 	if(manager->mw==NULL) printf("main window is null");
 	setDefault(manager->board);
+	initBoard(manager->board,true);
 	bool loadBool, settingsBool, gameBool, backMainBool, backGameBool = false;
 	bool mainBool = true;
 	while(1){
 		if(mainBool){			//~~~~~~~~~Beginning of main window~~~~~~~~
+			initBoard(manager->board,true);
 			if(manager->mw==NULL) printf("main window is null");
 			setDefault(manager->board);
 			if(manager->mw!=NULL) destroyMainWindow(manager->mw);
@@ -208,6 +210,7 @@ void guiMain(boardGame* board){
 				}
 				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
 					if(dirFiles>0 && dirFiles<=5 && fileRemove>0 && fileRemove<=5 ){
+						initBoard(manager->board,true);
 						loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
 						destroyLoadWindow(manager->lw);
 						gameBool = true;
