@@ -50,11 +50,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			resetBool = false;
-
 		}
-
 	}
-
-
 	return 0;
 }

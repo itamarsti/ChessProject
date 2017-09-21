@@ -190,14 +190,20 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 
 
 void destroyLoadWindow(LoadWindow* lw){
-	//printf("in destroy load window\n");
+	printf("in destroy load window\n");
 	int filesNum = numOfFilesInDir();
 	if(lw==NULL) return;
 	if(lw->window!=NULL) SDL_DestroyWindow(lw->window);
+	printf("after destroying the window\n");
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
-	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
-	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
+	printf("after destroying the renderer\n");
 	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
+	printf("after destroying the load\n");
+	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
+	printf("after destroying the back\n");
+	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
+	printf("after destroying the bg\n");
+
 	if(filesNum>=1){
 		if(lw->slot1!=NULL) SDL_DestroyTexture(lw->slot1);
 	}

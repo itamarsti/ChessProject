@@ -482,6 +482,7 @@ void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xGap, int
 
 
 void destroyGameWindow(GameWindow* gw){
+	printf("insdie destroy game window\n");
 	if (gw==NULL) return;
 	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
@@ -506,6 +507,8 @@ void destroyGameWindow(GameWindow* gw){
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 	free(gw);
+	printf("the end of game window\n");
+
 }
 
 void destroyGameRenderer(GameWindow* gw){

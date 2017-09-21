@@ -71,24 +71,41 @@ bool isClickOnBack(int x, int y){
 
 
 void destroySettingsWindow(SettingsWindow* sw){
-	printf("insode destroy settings\n");
+	printf("inside destroy settings\n");
 	if (sw==NULL) return;
-	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
-	if (sw->renderer!=NULL) SDL_DestroyRenderer(sw->renderer);
-	if (sw->bg!=NULL) SDL_DestroyTexture(sw->bg);
-	if (sw->color!=NULL) SDL_DestroyTexture(sw->color);
-	if (sw->mode!=NULL) SDL_DestroyTexture(sw->mode);
 	if (sw->gameMode1!=NULL) SDL_DestroyTexture(sw->gameMode1);
-	if (sw->gameMode2!=NULL) SDL_DestroyTexture(sw->gameMode2);
+	printf("destroying mode1\n");
+	//if(sw->gameMode2!=NULL) SDL_DestroyTexture(sw->gameMode2);
+	printf("destroying mode2\n");
+	if (sw->bg!=NULL) SDL_DestroyTexture(sw->bg);
+	printf("destroying bg\n");
+	if (sw->color!=NULL) SDL_DestroyTexture(sw->color);
+	printf("destroying color\n");
+	if (sw->mode!=NULL) SDL_DestroyTexture(sw->mode);
+	printf("destroying mode\n");
 	if (sw->colWhite!=NULL) SDL_DestroyTexture(sw->colWhite);
+	printf("destroying white\n");
 	if (sw->colBlack!=NULL) SDL_DestroyTexture(sw->colBlack);
+	printf("destroying black\n");
 	if (sw->difficulty!=NULL) SDL_DestroyTexture(sw->difficulty);
+	printf("destroying diffi\n");
 	if (sw->noob!=NULL) SDL_DestroyTexture(sw->noob);
+	printf("destroying noob\n");
 	if (sw->easy!=NULL) SDL_DestroyTexture(sw->easy);
+	printf("destroying easy\n");
 	if (sw->moderate!=NULL) SDL_DestroyTexture(sw->moderate);
+	printf("destroying moderate\n");
 	if (sw->hard!=NULL) SDL_DestroyTexture(sw->hard);
+	printf("destroying hard\n");
 	if (sw->back!=NULL) SDL_DestroyTexture(sw->back);
+	printf("destroying back\n");
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
+	printf("destroying start\n");
+	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
+	printf("destroying window\n");
+	if (sw->renderer!=NULL) SDL_DestroyRenderer(sw->renderer);
+	printf("destroying renderer\n");
+	printf("the end of destroy settings window\n");
 	free(sw);
 }
 

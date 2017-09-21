@@ -14,3 +14,4 @@
 12. to ask if every time we are moving to 2-players state - everything need to be defaulted.
 13. to fix the numbers order in the background
 14. to fix the problem of memory!
+15. undo with 2 players in gui mode

@@ -56,6 +56,11 @@ boardGame* createBoard(){
 void initBoard(boardGame* board, bool initSettings){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
+	for(int k=0;k<ROW;k++){
+		for(int l=0;l<COL;l++){
+			board->boardArr[k][l]=UNDERSCORE;
+		}
+	}
 	for(int i=0;i<8;i++){
 		board->boardArr[1][i] = BlackPawn;
 		board->boardArr[6][i] = WhitePawn;
@@ -73,6 +78,10 @@ void initBoard(boardGame* board, bool initSettings){
 		board->diffLevel = 2;			//difficult level
 		board->userCol = 1;				//1 - white; 0 - black;
 		board->curPlayer = 1;			//1 = white player, 0 = black player
+	}
+	int j = board->history->actualSize-1;
+	for(int i=j;i>=0;i--){
+		spArrayListRemoveLast(board->history);
 	}
 }
 
