@@ -77,8 +77,9 @@ void initBoard(boardGame* board, bool initSettings){
 		board->gameMode = 1;			//1- 1 player; 2- 2 players
 		board->diffLevel = 2;			//difficult level
 		board->userCol = 1;				//1 - white; 0 - black;
-		board->curPlayer = 1;			//1 = white player, 0 = black player
+					//1 = white player, 0 = black player
 	}
+	board->curPlayer = 1;
 	int j = board->history->actualSize-1;
 	for(int i=j;i>=0;i--){
 		spArrayListRemoveLast(board->history);

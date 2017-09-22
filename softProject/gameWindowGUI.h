@@ -23,7 +23,6 @@ typedef struct GAMEWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* bg;
-	SDL_Texture* cb;
 	SDL_Texture* restart;
 	SDL_Texture* saveGame;
 	SDL_Texture* loadGame;

@@ -117,7 +117,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	//Creating a Load Game texture:
 
 	if(!loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/load.bmp");
-	else if(loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/loadClicked.bmp");
+	else if(loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/loadclicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -485,27 +485,47 @@ void destroyGameWindow(GameWindow* gw){
 	printf("insdie destroy game window\n");
 	if (gw==NULL) return;
 	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
+	printf("after destroy windo\nw");
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
-	if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
+	printf("after destroy renderer\n");
 	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
+	printf("after destroy saveGame\n");
+	//if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
+	printf("after destroy loadGame\n");
 	if (gw->restart!=NULL) SDL_DestroyTexture(gw->restart);
+	printf("after destroy restart\n");
 	if (gw->undo!=NULL) SDL_DestroyTexture(gw->undo);
+	printf("after destroy undo\n");
 	if (gw->mainMenu!=NULL) SDL_DestroyTexture(gw->mainMenu);
+	printf("after destroy mainMenu\n");
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
+	printf("after destroy quit\n");
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
-	if (gw->cb!=NULL) SDL_DestroyTexture(gw->cb);
+	printf("after destroy bg\n");
 	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
+	printf("after destroy blackPawn\n");
 	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
+	printf("after destroy blackRook\n");
 	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
+	printf("after destroy blackKnight\n");
 	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
+	printf("after destroy blackBishop\n");
 	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
+	printf("after destroy blackQueen\n");
 	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
+	printf("after destroy blackKing\n");
 	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
+	printf("after destroy whitePawn\n");
 	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
+	printf("after destroy whiteRook\n");
 	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
+	printf("after destroy whiteBishop\n");
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
+	printf("after destroy whiteKnight\n");
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
+	printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
+	printf("after destroy whiteKing\n");
 	free(gw);
 	printf("the end of game window\n");
 

@@ -44,13 +44,13 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	}
 
 	//Creating a background texture:
-	surface= SDL_LoadBMP("./utilities/loadWindow/loadBackground.bmp");
+	surface= SDL_LoadBMP("./utilities/loadWindow/anotherBackground.bmp");
 	if (surface==NULL){
 		printf("Could not create a bg surface: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
 		return;
 	}
-	//if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
+	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
 		printf("Could not create a bg texture: %s\n", SDL_GetError());
@@ -61,8 +61,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 
 
 	//Creating a back texture:
-	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backClicked.bmp");
-	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/back.bmp");
+	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
+	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNew.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -77,8 +77,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	SDL_FreeSurface(surface);
 
 	//Creating a load texture:
-	if((loadLight)&& (slotLight!=0)) surface = SDL_LoadBMP("./utilities/loadWindow/loadClicked.bmp");
-	else surface = SDL_LoadBMP("./utilities/loadWindow/load.bmp");
+	if((loadLight)&& (slotLight!=0)) surface = SDL_LoadBMP("./utilities/loadWindow/loadNewClicked.bmp");
+	else surface = SDL_LoadBMP("./utilities/loadWindow/loadNew.bmp");
 	if(surface==NULL){
 		printf("Could not create a surface: %s\n", SDL_GetError());
 		return;
@@ -94,8 +94,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 
 	//Creating slot1 texture:
 	if(slotsNum>=1){
-		if(slotLight==1) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot1Clicked.bmp");
-		else if(slotLight!=1) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot1.bmp");
+		if(slotLight==1) surface = SDL_LoadBMP("./utilities/loadWindow/slot1Clicked.bmp");
+		else if(slotLight!=1) surface = SDL_LoadBMP("./utilities/loadWindow/slot1.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return;
@@ -114,8 +114,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	//Creating slot2 texture:
 
 	if(slotsNum>=2){
-		if(slotLight==2) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot2Clicked.bmp");
-		else if(slotLight!=2) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot2.bmp");
+		if(slotLight==2) surface = SDL_LoadBMP("./utilities/loadWindow/slot2Clicked.bmp");
+		else if(slotLight!=2) surface = SDL_LoadBMP("./utilities/loadWindow/slot2.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return;
@@ -133,8 +133,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	//Creating slot3 texture:
 
 	if(slotsNum>=3){
-		if(slotLight==3) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot3Clicked.bmp");
-		else if(slotLight!=3) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot3.bmp");
+		if(slotLight==3) surface = SDL_LoadBMP("./utilities/loadWindow/slot3Clicked.bmp");
+		else if(slotLight!=3) surface = SDL_LoadBMP("./utilities/loadWindow/slot3.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return;
@@ -152,8 +152,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	//Creating slot4 texture:
 
 	if(slotsNum>=4){
-		if(slotLight==4) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot4Clicked.bmp");
-		else if(slotLight!=4) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot4.bmp");
+		if(slotLight==4) surface = SDL_LoadBMP("./utilities/loadWindow/slot4Clicked.bmp");
+		else if(slotLight!=4) surface = SDL_LoadBMP("./utilities/loadWindow/slot4.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return;
@@ -171,8 +171,8 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	//Creating slot5 texture:
 
 	if(slotsNum>=5){
-		if(slotLight==5) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot5Clicked.bmp");
-		else if(slotLight!=5) surface = SDL_LoadBMP("./utilities/loadWindow/gameSlot5.bmp");
+		if(slotLight==5) surface = SDL_LoadBMP("./utilities/loadWindow/slot5Clicked.bmp");
+		else if(slotLight!=5) surface = SDL_LoadBMP("./utilities/loadWindow/slot5.bmp");
 		if(surface==NULL){
 			printf("Could not create a surface: %s\n", SDL_GetError());
 			return;
@@ -199,10 +199,10 @@ void destroyLoadWindow(LoadWindow* lw){
 	printf("after destroying the renderer\n");
 	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
 	printf("after destroying the load\n");
-	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
-	printf("after destroying the back\n");
 	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	printf("after destroying the bg\n");
+	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
+	printf("after destroying the back\n");
 
 	if(filesNum>=1){
 		if(lw->slot1!=NULL) SDL_DestroyTexture(lw->slot1);
