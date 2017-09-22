@@ -11,6 +11,7 @@
 
 
 LoadWindow* createLW(int slotsNum){
+	printf("inside create LW\n");
 	LoadWindow* lw = (LoadWindow*) malloc(sizeof(LoadWindow));
 	if(lw==NULL){
 		printf("Couldn't create LoadWindow struct\n");
@@ -23,8 +24,12 @@ LoadWindow* createLW(int slotsNum){
 		free(lw);
 		return NULL;
 	}
+
+
 	int numFiles = numOfFilesInDir();
+	printf("before create LR\n");
 	createLR(lw,numFiles,false,0,false);
+	printf("after create LR\n");
 	return lw;
 }
 
@@ -33,24 +38,28 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	assert(slotsNum>=0); assert(slotsNum<=5); assert(slotLight>=0); assert(slotLight<=5);
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_Surface* surface = NULL;
+	printf("inside LW func\n");
+	if(lw->renderer==NULL) printf("renderer is null");
+	SDL_RenderClear(lw->renderer);
+	printf("after clear LW func\n");
 
-	// creating the Settings Window renderer
+	// creating the load Window renderer
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
 	lw->renderer = SDL_CreateRenderer(lw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (lw->renderer==NULL) {
 		printf("Could not create a renderer: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
-		return;
+		return ;
 	}
-
 	//Creating a background texture:
+	//if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
+
 	surface= SDL_LoadBMP("./utilities/loadWindow/anotherBackground.bmp");
 	if (surface==NULL){
 		printf("Could not create a bg surface: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
 		return;
 	}
-	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
 		printf("Could not create a bg texture: %s\n", SDL_GetError());
@@ -58,6 +67,7 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 		return;
 	}
 	SDL_FreeSurface(surface);
+	printf("after creating bg load\n");
 
 
 	//Creating a back texture:
@@ -193,17 +203,6 @@ void destroyLoadWindow(LoadWindow* lw){
 	printf("in destroy load window\n");
 	int filesNum = numOfFilesInDir();
 	if(lw==NULL) return;
-	if(lw->window!=NULL) SDL_DestroyWindow(lw->window);
-	printf("after destroying the window\n");
-	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
-	printf("after destroying the renderer\n");
-	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
-	printf("after destroying the load\n");
-	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
-	printf("after destroying the bg\n");
-	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
-	printf("after destroying the back\n");
-
 	if(filesNum>=1){
 		if(lw->slot1!=NULL) SDL_DestroyTexture(lw->slot1);
 	}
@@ -219,16 +218,25 @@ void destroyLoadWindow(LoadWindow* lw){
 	if(filesNum>=5){
 		if(lw->slot5!=NULL) SDL_DestroyTexture(lw->slot5);
 	}
+	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
+	printf("after destroying the back\n");
+	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
+	printf("after destroying the load\n");
+	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
+	printf("after destroying the bg\n");
+	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
+	printf("after destroying the renderer\n");
+	if(lw->window!=NULL) SDL_DestroyWindow(lw->window);
+	printf("after destroying the window\n");
 	free(lw);
 	printf("ends destroy load window\n");
 	return;
 }
 
 void destroyLoadRenderer(LoadWindow* lw){
-	//printf("in destroy load renderer\n");
+	printf("in destroy load renderer\n");
 	if(lw==NULL) return;
 	if(lw->window!=NULL) return;
-	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
 	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
 	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
@@ -237,6 +245,8 @@ void destroyLoadRenderer(LoadWindow* lw){
 	if(lw->slot3!=NULL) SDL_DestroyTexture(lw->slot3);
 	if(lw->slot4!=NULL) SDL_DestroyTexture(lw->slot4);
 	if(lw->slot5!=NULL) SDL_DestroyTexture(lw->slot5);
+	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
+
 	return;
 }
 void drawLoadWindow(LoadWindow* lw, int slotsNum){
@@ -245,7 +255,7 @@ void drawLoadWindow(LoadWindow* lw, int slotsNum){
 		printf("lw is null in draw");
 		return;
 	}
-	assert(lw->window!=NULL); assert(lw->bg!=NULL);
+	assert(lw->window!=NULL); //assert(lw->bg!=NULL);
 	assert(lw->back!=NULL); assert(lw->renderer!=NULL); assert(lw->load!=NULL);
 	//printf("passed the asserts of lw draw\n");
 	if(slotsNum>=1) assert(lw->slot1!=NULL);
@@ -312,6 +322,7 @@ int numOfFilesInDir(){
 	  perror ("");
 	  return EXIT_FAILURE;
 	}
+	free(ent);
 }
 
 void loadFilePath(boardGame*board, char* path){
@@ -498,5 +509,6 @@ void loadWindowShow(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_ShowWindow(lw->window);
 }
+
 
 

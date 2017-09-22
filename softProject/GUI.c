@@ -33,7 +33,7 @@ void guiMain(boardGame* board){
 			initBoard(manager->board,true);
 			if(manager->mw==NULL) printf("main window is null");
 			setDefault(manager->board);
-			if(manager->mw!=NULL) destroyMainWindow(manager->mw);
+			//if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 			manager->mw = (MainWindow*) createMW();
 			drawMainWindow(manager->mw);
 			while(1){
@@ -179,13 +179,15 @@ void guiMain(boardGame* board){
 		}
 		//----------------------------End of Settings Window--------------------------------
 		else if(loadBool){					//~~~~~~~~~Beginning of load window~~~~~~~~
+			printf("inside load before creating load window\n");
 			int dirFiles = numOfFilesInDir();
 			int fileRemove =0;
-			if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
 			manager->lw = (LoadWindow*) createLW(dirFiles);
 			drawLoadWindow(manager->lw,dirFiles);
+			printf("after creating load window\n");
 			loadBool = false;
 			while(1){
+				printf("inside loop");
 				SDL_Event event2;
 				SDL_WaitEvent(&event2);
 				dirFiles = numOfFilesInDir();
@@ -209,13 +211,14 @@ void guiMain(boardGame* board){
 					break;
 				}
 				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
-					if(dirFiles>0 && dirFiles<=5 && fileRemove>0 && fileRemove<=5 ){
+					if(dirFiles>0 && fileRemove>0){
 						initBoard(manager->board,true);
 						loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
 						destroyLoadWindow(manager->lw);
 						gameBool = true;
 						break;
 					}
+					continue;
 				}
 				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
 					destroyLoadRenderer(manager->lw);
@@ -245,15 +248,20 @@ void guiMain(boardGame* board){
 				continue;
 				}
 				else{
+					printf("in here\n");
 					destroyLoadRenderer(manager->lw);
+					printf("in here2\n");
+
 					createLR(manager->lw,dirFiles,false,fileRemove,false);
 					drawLoadWindow(manager->lw, dirFiles);
 					continue;
 				}
+
 			}
 		}
 		//----------------------------End of Load Window--------------------------------
 		else if(gameBool){ //~~~~~~~~~Beginning of game window~~~~~~~~
+
 			manager->gw = (GameWindow*) createGW();
 			drawGameWindow(manager->gw, manager->board,UNDERSCORE, 0,0);
 			bool gameSaved = false;
@@ -262,7 +270,6 @@ void guiMain(boardGame* board){
 			while(!quit){
 				if(manager->board->gameMode==1 && manager->board->curPlayer!=manager->board->userCol){
 					moveAIobj(manager->board);
-					SDL_RenderClear(manager->gw->renderer);
 					destroyGameRenderer(manager->gw);
 					createGR(manager->gw,false,false,false,false,false,false);
 					drawGameWindow(manager->gw, manager->board,UNDERSCORE,0,0);
@@ -489,20 +496,9 @@ Manager* createManager(){
 void destroyManager(Manager* manager){
 	printf("in destroy manager\n");
 	if(manager==NULL) return;
-	else{
-		if(manager->board!=NULL) destroyBoard(manager->board);
-		printf("destroy board works fine\n");
-		if(manager->mw!=NULL) destroyMainWindow(manager->mw);
-		printf("destroy mainWindow works fine\n");
-		if(manager->sw!=NULL) destroySettingsWindow(manager->sw);
-		printf("destroy settingsWindow works fine\n");
-		if(manager->gw!=NULL) destroyGameWindow(manager->gw);
-		printf("destroy gamwWindow works fine\n");
-		if(manager->lw!=NULL) destroyLoadWindow(manager->lw);
-		printf("destroy loadWindow works fine\n");
-		free(manager);
-		return;
-	}
+	if(manager->board!=NULL) destroyBoard(manager->board);
+	free(manager);
+	return;
 }
 
 

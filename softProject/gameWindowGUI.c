@@ -15,11 +15,9 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		, bool loadBool, bool mmBool, bool quitBool){
 	assert(gw!=NULL); assert(gw->window!=NULL);
 	SDL_Surface* surface = NULL;
-
-
-	//printf("creating game renderer\n");
+	printf("creating game renderer\n");
 	// creating the game Window renderer
-	if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
+	//if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	gw->renderer = SDL_CreateRenderer(gw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (gw->renderer==NULL) {
 		printf("Could not create a renderer: %s\n", SDL_GetError());
@@ -367,6 +365,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 }
 
 GameWindow* createGW(){
+	printf("inside Create GUI Window\n");
 	GameWindow* gw = (GameWindow*) malloc(sizeof(GameWindow));
 	if(gw==NULL){
 		printf("Couldn't create GameMainWindow struct\n");
@@ -380,14 +379,12 @@ GameWindow* createGW(){
 		destroyGameWindow(gw);
 		return NULL ;
 	}
-
-
 	createGR(gw,false,false,false,false,false,false);
 	return gw;
 }
 
 void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xGap, int yGap){
-	printf("the gap in old Draw x is:%d, the gap in y is:%d\n",xGap,yGap);
+	//printf("the gap in old Draw x is:%d, the gap in y is:%d\n",xGap,yGap);
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	//printf("inside draw\n");
@@ -484,13 +481,9 @@ void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xGap, int
 void destroyGameWindow(GameWindow* gw){
 	printf("insdie destroy game window\n");
 	if (gw==NULL) return;
-	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
-	printf("after destroy windo\nw");
-	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
-	printf("after destroy renderer\n");
 	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
 	printf("after destroy saveGame\n");
-	//if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
+	if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
 	printf("after destroy loadGame\n");
 	if (gw->restart!=NULL) SDL_DestroyTexture(gw->restart);
 	printf("after destroy restart\n");
@@ -500,8 +493,6 @@ void destroyGameWindow(GameWindow* gw){
 	printf("after destroy mainMenu\n");
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
 	printf("after destroy quit\n");
-	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
-	printf("after destroy bg\n");
 	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
 	printf("after destroy blackPawn\n");
 	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
@@ -526,6 +517,12 @@ void destroyGameWindow(GameWindow* gw){
 	printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 	printf("after destroy whiteKing\n");
+	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
+	printf("after destroy bg\n");
+	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
+	printf("after destroy renderer\n");
+	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
+	printf("after destroy window\n");
 	free(gw);
 	printf("the end of game window\n");
 
@@ -534,6 +531,26 @@ void destroyGameWindow(GameWindow* gw){
 void destroyGameRenderer(GameWindow* gw){
 	if (gw==NULL) return;
 	if (gw->window == NULL) return;
+	if (gw==NULL) return;
+	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
+	if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
+	if (gw->restart!=NULL) SDL_DestroyTexture(gw->restart);
+	if (gw->undo!=NULL) SDL_DestroyTexture(gw->undo);
+	if (gw->mainMenu!=NULL) SDL_DestroyTexture(gw->mainMenu);
+	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
+	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
+	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
+	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
+	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
+	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
+	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
+	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
+	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
+	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
+	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
+	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
+	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
+	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 }
 

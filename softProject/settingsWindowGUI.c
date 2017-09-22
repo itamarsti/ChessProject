@@ -101,10 +101,10 @@ void destroySettingsWindow(SettingsWindow* sw){
 	printf("destroying back\n");
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
 	printf("destroying start\n");
-	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
-	printf("destroying window\n");
 	if (sw->renderer!=NULL) SDL_DestroyRenderer(sw->renderer);
 	printf("destroying renderer\n");
+	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
+	printf("destroying window\n");
 	printf("the end of destroy settings window\n");
 	free(sw);
 }
