@@ -20,7 +20,8 @@ typedef enum {
 	UNDO,
 	RESET,
 	QUIT2,
-	INVALID_LINE2
+	INVALID_LINE2,
+	INVALID_POSITION
 } GAME_COMMAND;
 
 typedef struct g_command {
@@ -35,7 +36,7 @@ typedef struct g_command {
 char* gameAcceptor();
 GameCommand* gameParser(const char* str);
 bool isFileCreated(const char* path);
-bool isTri(char* str);
+int isTri(char* str);
 void destroyGameStruct(GameCommand* cmd);
 
 

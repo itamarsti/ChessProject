@@ -140,7 +140,7 @@ char* settingAcceptor(){
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
-		printf("fgets has faild");
+		printf("ERROR: fgets function has faild");
 		free(errorDet);
 		free(input);
 	}
@@ -196,7 +196,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 		}
 		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
 		strcpy(command->path,token);
-		int n = strlen(token)-1;
+		//int n = strlen(token)-1;
 		command->cmd = LOAD_FILE;
 	}
 	else{

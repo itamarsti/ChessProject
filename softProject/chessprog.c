@@ -22,6 +22,14 @@
 int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);
+    /*
+    char* str = "<0,G>";
+    int ready = isTri(str);
+    if(ready==1) printf("works well");
+    else if(ready==0) printf("invalid position");
+    else if(ready==-1) printf("invalid command");
+     */
+
 	bool resetBool = false;
 	bool consoleBool = true;
 	if(!consoleBool){
@@ -52,5 +60,6 @@ int main(int argc, char* argv[]) {
 			resetBool = false;
 		}
 	}
+
 	return 0;
 }

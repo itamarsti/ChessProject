@@ -98,7 +98,8 @@ bool mainGameFlow(boardGame* board){
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
-				else if (cmd->cmd==INVALID_LINE2) printf("Illegal Command\n");
+				else if(cmd->cmd==INVALID_POSITION) printf("Invalid position on the board\n");
+				else if (cmd->cmd==INVALID_LINE2) printf("ERROR: Illegal Command\n");
 			}
 			continue;
 		}

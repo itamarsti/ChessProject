@@ -19,12 +19,51 @@
 
 
 
-bool isTri(char* str){
+int isTri(char* str){
 	assert(str!=NULL);
-	if (strlen(str)!=5) return false;
-	if (str[0]!='<'||str[2]!=','||str[4]!='>')return false;
-	if ((int)(str[1]-'0')<0 || (int)(str[1]-'0')>9 || (int)str[3]<'A' || (int)str[3]>'Z') return false;
-	return true;
+	int counter = 0;
+	bool invalidPosition = false;
+	if (str[0]!='<'){
+		//printf("not starts with < char\n");
+		return -1;	//not tight format
+	}
+	//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
+	counter++;
+	while(str[counter]!=','){
+		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
+		if(str[counter]=='\0') return -1;
+		counter++;
+	}
+	if(counter==1) return -1;
+	if(counter>2){
+		//printf("invalidPosition was changed in the first time\n");
+		invalidPosition =true;
+	}
+	int counterComma = counter;
+	while(str[counter]!='>'){
+		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
+		if(str[counter]=='\0') return -1;
+		counter++;
+	}
+	//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
+	if(counter == counterComma+1) return -1;
+	if(counter >counterComma+2) invalidPosition =true;
+	counter++;
+	while(str[counter]!='\0'){
+		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
+		//printf("in while loop\n");
+		if(str[counter]=='\r' || str[counter]=='\t' || str[counter]==' ' || str[counter]=='\n'){
+			counter++;
+			continue;
+		}
+		else{
+			return -1;
+		}
+	}
+	//printf("the row is:%d, the col is:%d \n",(str[1]-'0'),(int)str[3]-'A');
+	if ((int)(str[1]-'0')>=1 && (int)(str[1]-'0')<=8 && (int)str[3]>='A'
+			&& (int)str[3]<='H' && invalidPosition==false) return 1;
+	return 0;
 }
 
 bool isFileCreated(const char* path){
@@ -72,8 +111,7 @@ char* gameAcceptor(){
 
 GameCommand* gameParser(const char* str){
 	GameCommand* command = (GameCommand*)malloc(sizeof(GameCommand));
-	assert(command!=NULL);
-	assert(str!=NULL);
+	assert(command!=NULL); assert(str!=NULL);
 	command->validArg = true;
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
@@ -101,22 +139,39 @@ GameCommand* gameParser(const char* str){
 		command->cmd = SAVE;
 	}
 	else if(strcmp(token, "move")==0){
-		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		token = strtok(NULL, "\t\r\n ");
-		if(token!=NULL && isTri(token)){
-			int row = token[1]-'1';
-			int col = token[3]-'A';
-			command->position = RowColToNum(7-row,col);
-			token = strtok(NULL, "\t\r\n ");
-			if(strcmp(token, "to")==0){
+		if(token!=NULL){
+			int val = isTri(token);
+			if(val==-1) command->cmd = INVALID_LINE2;
+			else if(val==1|| val==0){
+				if(val==0)command->cmd = INVALID_POSITION;
+				int row = (int) token[1]-'1';
+				int col = (int) token[3]-'A';
+				command->position = RowColToNum(7-row,col);
 				token = strtok(NULL, "\t\r\n ");
-				if(token!=NULL && isTri(token)){
-					int row = token[1]-'1';
-					int col = token[3]-'A';
-					command->destination = RowColToNum(7-row,col);
-					command->cmd = MOVE;
-					command->validArg = true;
+				//printf("in here\n");
+				if(strcmp(token, "to")==0){
+					token = strtok(NULL, "\t\r\n ");
+					if(token!=NULL){
+						if(isTri(token)==-1) command->cmd = INVALID_LINE2;
+						else if(isTri(token)==0) command->cmd = INVALID_POSITION;
+						else if(isTri(token)==1){
+							int row = token[1]-'1';
+							int col = token[3]-'A';
+							token = strtok(NULL, "\t\r\n ");
+							if(token==NULL){
+								command->destination = RowColToNum(7-row,col);
+								command->cmd = MOVE;
+								command->validArg = true;
+							}
+							else command->cmd = INVALID_LINE2;
+						}
+					}
+				}
+				else{
+					//printf("in here\n");
+					command->cmd = INVALID_LINE2;
 				}
 			}
 		}

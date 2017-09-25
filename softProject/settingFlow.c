@@ -55,7 +55,7 @@ void mainSettingFlow(boardGame* board){
 			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)
 					|| (cmd->cmd==INVALID_FILE))invalidSettingPrint(cmd->cmd);
 			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
-				printf("Illegal Command\n");
+				printf("ERROR: Invalid Command\n");
 				continue;
 			}
 		}
