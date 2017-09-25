@@ -261,7 +261,7 @@ void getMovesFunc(boardGame* board,int position){
 		printf("Invalid position on the board\n");}
 	//printf("current player is %d, the row is %d, the col is: %d\n",board->curPlayer,row,col);
 	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)){
-		printf("illegal move\n");
+		printf("Illegal move\n");
 		return;
 	}
 	if (board->curPlayer==0 &&

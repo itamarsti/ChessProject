@@ -17,7 +17,6 @@
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
 #include "loadWindowGUI.h"
-#include "GUIManager.h"
 #include "gameWindowGUI.h"
 
 
@@ -546,5 +545,27 @@ void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie){
 void saveMessageDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Save Message",
 		"Game was saved!",NULL);
+}
+void quitGame(Manager* manager){
+	if(manager!=NULL){
+		destroyManager(manager);
+		SDL_Quit();
+		printf("Exiting...");
+		exit(0);
+	}
+}
+
+
+void setBoardDefaultManager(Manager* manager){
+	if(manager==NULL){
+		destroyManager(manager);
+		SDL_Quit();
+		printf("Exiting...");
+		exit(0);
+	}
+	manager->board->curPlayer=1;
+	manager->board->diffLevel=2;
+	manager->board->gameMode=1;
+	manager->board->userCol=1;
 }
 

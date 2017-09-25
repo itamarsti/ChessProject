@@ -193,7 +193,7 @@ void setDefault(boardGame* board){
 	board->diffLevel = 2;			//difficult level
 	board->userCol = 1;				//1 - white; 0 - black;
 	board->curPlayer = 1;
-	printf("setting to default was completed\n");
+	//printf("setting to default was completed\n");
 }
 
 void invalidSettingPrint(SETTING_COMMAND cmd){

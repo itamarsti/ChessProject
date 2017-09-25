@@ -350,7 +350,7 @@ bool isMyKingSafe(boardGame* board){
 		//printf("ismyKingSafe1 Function was activated\n");
 		position = trackKingPosition(board, WhiteKing);
 		if(position==-1){
-			printf("whiteKing wasn't found"); // never suppose to act
+			printf("ERROR: whiteKing wasn't found"); // never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,WhiteKing);
@@ -362,7 +362,7 @@ bool isMyKingSafe(boardGame* board){
 		//printf("ismyKingSafe 0 Function was activated\n");
 		position = trackKingPosition(board, BlackKing);
 		if(position==-1){
-			printf("whiteKing wasn't found");  //never suppose to act
+			printf("ERROR: whiteKing wasn't found");  //never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,BlackKing);

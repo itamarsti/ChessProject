@@ -34,6 +34,7 @@ bool loadSection(Manager* manager, int numOfFiles, int fileRemove);
 void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie);
 void saveGameFromGUI(boardGame* game, int numOfFiles);
 void saveMessageDialog();
+void setBoardDefaultManager(Manager* manager);
 
 
 #endif /* GUI_H_ */

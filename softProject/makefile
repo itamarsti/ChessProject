@@ -1,0 +1,2 @@
+C_FLAGS=  -std=c99 -pedantic-errors -Wall -g -lm `sdl-config --cflags` `sdl-config --libs`
+O_FILES= Chess_Logic.o best.o minimax.o Control_Components.o Chess_Controls.o Chess_Windows.o GUI_Main.o Console_Main.o chessprog.o

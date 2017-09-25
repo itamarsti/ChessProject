@@ -98,7 +98,7 @@ char* gameAcceptor(){
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
-		printf("fgets has faild");
+		printf("ERROR: fgets has faild\n");
 		free(errorDet);
 		free(input);
 	}
@@ -119,7 +119,7 @@ GameCommand* gameParser(const char* str){
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	if(token==NULL) {
-		printf("NULL");
+		//printf("NULL");
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		return command;
@@ -177,18 +177,28 @@ GameCommand* gameParser(const char* str){
 		}
 	}
 	else if((strcmp(token, "get_moves")==0)){
-			command->cmd = INVALID_LINE2;
-			command->validArg = false;
-			token = strtok(NULL, "\t\r\n ");
-			if(token!=NULL && isTri(token)){
-				int row = token[1]-'1';
-				int col = token[3]-'A';
+		command->cmd = INVALID_LINE2;
+		command->validArg = false;
+		token = strtok(NULL, "\t\r\n ");
+		if(token!=NULL){
+			int val = isTri(token);
+			//printf("the return number is:%d\n",val);
+			if(val==-1) command->cmd = INVALID_LINE2;
+			else if(val==1|| val==0){
+				if(val==0)command->cmd = INVALID_POSITION;
+				int row = (int) token[1]-'1';
+				int col = (int) token[3]-'A';
 				command->position = RowColToNum(7-row,col);
-				command->destination = 64;
-				command->cmd = GET_MOVES;
-				command->validArg = true;
+				token = strtok(NULL, "\t\r\n ");
+				if(token==NULL){
+					command->destination = RowColToNum(7-row,col);
+					command->cmd = GET_MOVES;
+					command->validArg = true;
 				}
+				else command->cmd = INVALID_LINE2;
 			}
+		}
+	}
 	else{
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;

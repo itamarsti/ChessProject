@@ -65,13 +65,13 @@ SPArrayList* spArrayListCreate(int maxSize){
 
     SPArrayList *listMovesPointer = (SPArrayList*)malloc(sizeof(SPArrayList));
     if (listMovesPointer==NULL){
-        printf("Error: malloc has failed\n");
+        printf("ERROR: malloc has failed\n");
         free(listMovesPointer);
         return NULL;
     }
     int* arrMoves =(int*) calloc(maxSize,sizeof(int));    //initializing to array with 0's (will later turn to -1)
     if(maxSize<=0 || arrMoves==NULL){
-        printf("Error: malloc has failed\n");
+        printf("ERROR: malloc has failed\n");
         free(arrMoves);
         free(listMovesPointer);
         return NULL;

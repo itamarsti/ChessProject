@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 
-void quitGame(Manager* manager){
+void quitGame1(Manager* manager){
 	if(manager!=NULL){
 		destroyManager(manager);
 		SDL_Quit();
@@ -23,7 +23,7 @@ void quitGame(Manager* manager){
 }
 
 
-void setBoardDefaultManager(Manager* manager){
+void setBoardDefaultManager1(Manager* manager){
 	if(manager==NULL){
 		destroyManager(manager);
 		SDL_Quit();

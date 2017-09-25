@@ -140,7 +140,7 @@ char* settingAcceptor(){
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
-		printf("ERROR: fgets function has faild");
+		printf("ERROR: fgets function has faild\n");
 		free(errorDet);
 		free(input);
 	}

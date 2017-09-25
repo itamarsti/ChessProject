@@ -18,8 +18,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-void quitGame(Manager* manager);
-void gameModeGUI(Manager* manager, int numOfPlayers, int color, int difficulty);
+void quitGame1(Manager* manager);
+void gameModeGUI1(Manager* manager, int numOfPlayers, int color, int difficulty);
 void setBoardDefaultManager(Manager* manager);
 
 
