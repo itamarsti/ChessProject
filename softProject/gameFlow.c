@@ -75,8 +75,8 @@ bool mainGameFlow(boardGame* board){
 	char* input;
 	GameCommand* cmd;
 	bool loopBreaker = false;
-	moveMessage(board);
 	while(!loopBreaker){
+		moveMessage(board);
 		input = gameAcceptor();
 		assert(input!=NULL);
 		cmd = gameParser(input);

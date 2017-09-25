@@ -121,11 +121,11 @@ void exUndo(boardGame* board,bool printActivate){
 		char de = (char) (NumToCol(posDest)+'A');
 		if(board->curPlayer==0){
 			if(printActivate) printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
-			BLACK,8-NumToRow(posSource),po,8-NumToRow(posDest),de);
+			BLACK,8-NumToRow(posDest),de,8-NumToRow(posSource),po);
 		}
 		else if(board->curPlayer==1){
 			if(printActivate)printf("Undo move for player %s : <%d,%c> -> <%d,%c>\n",
-			WHITE,8-NumToRow(posSource),po,8-NumToRow(posDest),de);
+			WHITE,8-NumToRow(posDest),de,8-NumToRow(posSource),po);
 		}
 	}
 	return;

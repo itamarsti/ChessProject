@@ -308,20 +308,22 @@ bool moveObj(boardGame* board,int position, int destination,bool doPrint){
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool validMove = false;
+	//printf("the position is:%d, the destinetion is:%d\n",position,destination);
 	int rowPos = NumToRow(position);
 	int colPos = NumToCol(position);
 	int rowDest = NumToRow(destination);
 	int colDest = NumToCol(destination);
-	if ((rowPos<0|| rowPos>7 || colPos<0|| colPos>7 || rowDest<0|| rowDest>7 || colDest<0|| colDest>7)||
-		(board->boardArr[rowPos][colPos]==UNDERSCORE)){
-			if(doPrint) printf("Invalid position on the board\n");
-			return false;
+	if ((rowPos<0|| rowPos>7 || colPos<0|| colPos>7 || rowDest<0|| rowDest>7 || colDest<0|| colDest>7)){
+		if(doPrint) printf("Invalid position on the board\n");
+		return false;
 	}
-	else if ((board->curPlayer==0) && islower(board->boardArr[rowPos][colPos])){	//black and lower
+	else if ((board->curPlayer==0) && (islower(board->boardArr[rowPos][colPos])
+			|| board->boardArr[rowPos][colPos]==UNDERSCORE)){	//black and lower
 		if(doPrint) printf("The specified position does not contain your piece\n");
 		return false;
 	}
-	else if ((board->curPlayer==1) && isupper(board->boardArr[rowPos][colPos])){	//white and upper
+	else if ((board->curPlayer==1) && (isupper(board->boardArr[rowPos][colPos])
+			|| board->boardArr[rowPos][colPos]==UNDERSCORE)){	//white and upper
 		if(doPrint)printf("The specified position does not contain your piece\n");
 		return false;
 	}

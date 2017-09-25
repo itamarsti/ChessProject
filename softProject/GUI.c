@@ -36,24 +36,28 @@ void guiMain(boardGame* board){
 			//if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 			manager->mw = (MainWindow*) createMW();
 			drawMainWindow(manager->mw);
-			while(1){
+			bool quitMain = false;
+			while(!quitMain){
 				SDL_Event event;
-				SDL_WaitEvent(&event);
 				mainBool = false;
-				if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
-					destroyMainWindow(manager->mw);
-					quitGame(manager);
-				}
-				else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
-					destroyMainWindow(manager->mw);
-					loadBool = true;
-					backMainBool = true;
-					break;
-				}
-				else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
-					destroyMainWindow(manager->mw);
-					settingsBool = true;
-					break;
+				while(SDL_PollEvent(&event)!=0){
+					if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
+						destroyMainWindow(manager->mw);
+						quitGame(manager);
+					}
+					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
+						destroyMainWindow(manager->mw);
+						loadBool = true;
+						backMainBool = true;
+						quitMain = true;
+						break;
+					}
+					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
+						destroyMainWindow(manager->mw);
+						settingsBool = true;
+						quitMain = true;
+						break;
+					}
 				}
 			}
 		}
@@ -62,118 +66,123 @@ void guiMain(boardGame* board){
 			manager->sw = (SettingsWindow*) createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
 			drawSettingsWindow(manager->sw);
 			settingsBool = false;
-			while(1){
+			bool quitSettings = false;
+			while(!quitSettings){
 				SDL_Event event1;
-				SDL_WaitEvent(&event1);
-				if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
-					destroySettingsWindow(manager->sw);
-					quitGame(manager);
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_BACK){
-					destroySettingsWindow(manager->sw);
-					mainBool = true;
-					break;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
-					destroySettingsWindow(manager->sw);
-					gameBool = true;
-					break;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_BACK){
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,true,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_START){
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,true);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
+				quitSettings = false;
+				while(SDL_PollEvent(&event1)!=0){
+					if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
+						destroySettingsWindow(manager->sw);
+						quitGame(manager);
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_BACK){
+						destroySettingsWindow(manager->sw);
+						mainBool = true;
+						quitSettings = true;
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
+						destroySettingsWindow(manager->sw);
+						gameBool = true;
+						quitSettings = true;
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_BACK){
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,true,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_START){
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,true);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
 
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
-					setNumPlayers(manager->board,1);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,1,2,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
-					setNumPlayers(manager->board,2);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,2,1,manager->board->diffLevel,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_WHITE){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->userCol==1) continue;
-					setColor(manager->board,1);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,1,manager->board->diffLevel,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_BLACK){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->userCol==0) continue;
-					setColor(manager->board,0);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,0,manager->board->diffLevel,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->diffLevel==1) continue;
-					setDifficult(manager->board,1);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,manager->board->userCol,1,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->diffLevel==2) continue;
-					setDifficult(manager->board,2);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,manager->board->userCol,2,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->diffLevel==3) continue;
-					setDifficult(manager->board,3);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,manager->board->userCol,3,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->diffLevel==4) continue;
-					setDifficult(manager->board,4);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,manager->board->userCol,4,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
-					if(manager->board->gameMode==2) continue;
-					if(manager->board->diffLevel==5) continue;
-					setDifficult(manager->board,5);
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,1,manager->board->userCol,5,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
-				}
-				else{
-					destroySettingsRenderer(manager->sw);
-					createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,false);
-					drawSettingsWindow(manager->sw);
-					continue;
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
+						setNumPlayers(manager->board,1);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,1,2,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
+						setNumPlayers(manager->board,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,2,1,manager->board->diffLevel,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_WHITE){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->userCol==1) continue;
+						setColor(manager->board,1);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,1,manager->board->diffLevel,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_BLACK){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->userCol==0) continue;
+						setColor(manager->board,0);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,0,manager->board->diffLevel,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->diffLevel==1) continue;
+						setDifficult(manager->board,1);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,manager->board->userCol,1,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->diffLevel==2) continue;
+						setDifficult(manager->board,2);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,manager->board->userCol,2,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->diffLevel==3) continue;
+						setDifficult(manager->board,3);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,manager->board->userCol,3,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->diffLevel==4) continue;
+						setDifficult(manager->board,4);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,manager->board->userCol,4,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
+						if(manager->board->gameMode==2) continue;
+						if(manager->board->diffLevel==5) continue;
+						setDifficult(manager->board,5);
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,1,manager->board->userCol,5,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
+					else{
+						destroySettingsRenderer(manager->sw);
+						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,false);
+						drawSettingsWindow(manager->sw);
+						break;
+					}
 				}
 			}
 		}
@@ -186,77 +195,73 @@ void guiMain(boardGame* board){
 			drawLoadWindow(manager->lw,dirFiles);
 			printf("after creating load window\n");
 			loadBool = false;
-			while(1){
+			bool quitLoad = false;
+			while(!quitLoad){
 				printf("inside loop");
 				SDL_Event event2;
-				SDL_WaitEvent(&event2);
-				dirFiles = numOfFilesInDir();
-				if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
-					destroyLoadWindow(manager->lw);
-					quitGame(manager);
-				}
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_BACK){
-					destroyLoadWindow(manager->lw);
-					if (backGameBool){
-						backGameBool = false;
-						backMainBool = false;
-						gameBool = true;
-					}
-					 else if(backMainBool){
-						backMainBool = false;
-						backGameBool = false;
-						mainBool = true;
-					}
-
-					break;
-				}
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
-					if(dirFiles>0 && fileRemove>0){
-						initBoard(manager->board,true);
-						loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
+				quitLoad = false;
+				while(SDL_WaitEvent(&event2)!=0){
+					dirFiles = numOfFilesInDir();
+					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
 						destroyLoadWindow(manager->lw);
-						gameBool = true;
+						quitGame(manager);
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_BACK){
+						destroyLoadWindow(manager->lw);
+						if (backGameBool)gameBool = true;
+						else if(backMainBool)mainBool = true;
+						backMainBool = false;
+						backGameBool = false;
+						quitLoad = true;
 						break;
 					}
-					continue;
-				}
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
+						if(dirFiles>0 && fileRemove>0){
+							initBoard(manager->board,true);
+							loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
+							destroyLoadWindow(manager->lw);
+							gameBool = true;
+							quitLoad = true;
+							break;
+						}
+						break;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,true,fileRemove,false);
+						drawLoadWindow(manager->lw,dirFiles);
+						break;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_LOAD){
+						destroyLoadRenderer(manager->lw);
+						createLR(manager->lw,dirFiles,false,fileRemove,true);
+						drawLoadWindow(manager->lw,dirFiles);
+						break;
+					}
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT
+						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
+					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
+					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
 					destroyLoadRenderer(manager->lw);
-					createLR(manager->lw,dirFiles,true,fileRemove,false);
-					drawLoadWindow(manager->lw,dirFiles);
-					continue;
-				}
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_LOAD){
-					destroyLoadRenderer(manager->lw);
-					createLR(manager->lw,dirFiles,false,fileRemove,true);
-					drawLoadWindow(manager->lw,dirFiles);
-					continue;
-				}
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT
-					||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT
-					||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT
-					||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT
-					||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
-				if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
-				else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
-				destroyLoadRenderer(manager->lw);
-				createLR(manager->lw,dirFiles,false,fileRemove,false);
-				drawLoadWindow(manager->lw,dirFiles);
-				continue;
-				}
-				else{
-					printf("in here\n");
-					destroyLoadRenderer(manager->lw);
-					printf("in here2\n");
-
 					createLR(manager->lw,dirFiles,false,fileRemove,false);
-					drawLoadWindow(manager->lw, dirFiles);
-					continue;
+					drawLoadWindow(manager->lw,dirFiles);
+					break;
+					}
+					else{
+						printf("in here\n");
+						destroyLoadRenderer(manager->lw);
+						printf("in here2\n");
+						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						drawLoadWindow(manager->lw, dirFiles);
+						break;
+					}
 				}
-
 			}
 		}
 		//----------------------------End of Load Window--------------------------------
@@ -448,6 +453,14 @@ void guiMain(boardGame* board){
 											checkMessageWarning(manager->board->curPlayer, true, false, false);
 										}
 									}
+									done = true;
+									break;
+								}
+								else{
+									SDL_RenderClear(manager->gw->renderer);
+									destroyGameRenderer(manager->gw);
+									createGR(manager->gw,false,false,false,false,false,false);
+									drawGameWindow(manager->gw, manager->board,UNDERSCORE,0,0);
 									done = true;
 									break;
 								}
