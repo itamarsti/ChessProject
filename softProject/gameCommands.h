@@ -20,17 +20,12 @@
 #include <assert.h>
 #include "boardFuncs.h"
 #include "gameParser.h"
-#include "settingParser.h"
 #include "SPArrayList.h"
-#include "alphaBetaMinMax.h"
+
 
 void undo(boardGame* board,bool printActivate, bool playerChangeAcivate);
 void exUndo(boardGame* board,bool printActivate);
 void changePlayer(boardGame* board);
-int NumToRow(int num);
-int NumToCol(int num);
-int RowColToNum(int row, int col);
-void quit(boardGame* board);
 void reset(boardGame* board);
 void saveFile(boardGame* board, const char* path);
 void moveMessage(boardGame* board);
@@ -44,8 +39,26 @@ void getMovesFunc(boardGame* board,int position);
 void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest);
 bool isWinner(boardGame* board);
 bool isTie(boardGame* board);
-void moveAIobj(boardGame* board);
 void computerMoveMessage(boardGame* board, int position, int destination);
 bool checkPawnPromotion(boardGame* board);
+bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint);
+bool moveBishop(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
+bool moveRook(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
+bool moveKnight(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
+bool moveKing(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
+bool moveQueen(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
+bool isValidDiagonal(boardGame* board, int rowPos, int colPos, int rowDest, int colDest);
+bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int colDest);
+bool moveObj(boardGame* board,int position, int destination,bool doPrint);
+void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj,bool changePlayer);
+bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2, bool print);
+void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest);
+int trackKingPosition(boardGame* board, char symbol);
+bool isMyKingSafe(boardGame* board);
+bool safeArea(boardGame* board,int position,char symbol);
+bool isSafeStraight(boardGame* board,int row, int col,char symbol);
+bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol);
+bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol);
+bool isSafeFromPawn(boardGame* board,int row, int col,char symbol);
 
 #endif /* GAMECOMMANDS_H_ */

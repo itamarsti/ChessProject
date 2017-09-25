@@ -9,8 +9,7 @@
 #define GAMEPARSER_H_
 
 #include <stdbool.h>
-#include "gameCommands.h"
-#include "gameParser.h"
+
 
 typedef enum {
 	MOVE,
@@ -38,6 +37,9 @@ GameCommand* gameParser(const char* str);
 bool isFileCreated(const char* path);
 int isTri(char* str);
 void destroyGameStruct(GameCommand* cmd);
+int NumToRow(int num);
+int NumToCol(int num);
+int RowColToNum(int row, int col);
 
 
 

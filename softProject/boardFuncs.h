@@ -51,6 +51,6 @@ boardGame* copyBoard(boardGame*board);
 void setDefault(boardGame* board);
 void invalidSettingPrint(SETTING_COMMAND cmd);
 void loadFile(boardGame*board, ChessCommand* cmd);
-
+void quit(boardGame* board);
 
 #endif /* BOARDFUNCS_H_ */

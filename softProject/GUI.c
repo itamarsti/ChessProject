@@ -8,7 +8,6 @@
 #include "GUI.h"
 #include "boardFuncs.h"
 #include "gameCommands.h"
-#include "moveOps.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -18,6 +17,7 @@
 #include "settingsWindowGUI.h"
 #include "loadWindowGUI.h"
 #include "gameWindowGUI.h"
+#include "alphaBetaMinMax.h"
 
 
 void guiMain(boardGame* board){

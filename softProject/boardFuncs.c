@@ -9,7 +9,6 @@
 #include <assert.h>
 #include "settingParser.h"
 #include "SPArrayList.h"
-#include "SPArrayList.h"
 
 
 typedef struct boardGame{
@@ -238,4 +237,18 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 		}
 	}
 	fclose(file);
+}
+
+
+void quit(boardGame* board){
+	assert(board!=NULL);
+	assert(board->boardArr!=NULL);
+	assert(board->history!=NULL);
+	assert(board->history->elements!=NULL);
+	free(board->history->elements);
+	free(board->history);
+	free(board->boardArr);
+	free(board);
+	printf("Exiting...\n");
+	exit(0);
 }

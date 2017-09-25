@@ -13,7 +13,6 @@
 #include <assert.h>
 #include <stdbool.h>
 #include "settingParser.h"
-#include "boardFuncs.h"
 
 #define BUFFER 1024
 

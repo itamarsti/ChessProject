@@ -16,14 +16,16 @@
  */
 
 
+#include <string.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
 #include "gameCommands.h"
 #include "gameParser.h"
-#include "moveOps.h"
 #include "boardFuncs.h"
+#include "settingParser.h"
 
 
 

@@ -5,15 +5,14 @@
  *      Author: Itamar
  */
 
-#include "boardFuncs.h"
-#include "settingParser.h"
 #include "gameParser.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "gameCommands.h"
+
 
 #define BUFFER 1024
 
@@ -98,7 +97,7 @@ char* gameAcceptor(){
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
-		printf("ERROR: fgets has faild\n");
+		printf("ERROR: fgets has failed\n");
 		free(errorDet);
 		free(input);
 	}
@@ -205,3 +204,20 @@ GameCommand* gameParser(const char* str){
 	}
 	return command;
 }
+
+
+int NumToRow(int num){
+	int row = num/8;
+	return row;
+}
+
+int NumToCol(int num){
+	int col = num%8;
+	return col;
+}
+
+int RowColToNum(int row, int col){
+	int num = 8*row + col;
+	return num;
+}
+

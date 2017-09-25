@@ -17,6 +17,7 @@
 #include "gameCommands.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
+#include "gameParser.h"
 
 
 typedef struct GAMEWINDOW{

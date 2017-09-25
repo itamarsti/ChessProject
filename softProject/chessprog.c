@@ -7,12 +7,11 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "GUI.h"
-
+#include "chessprog.h"
 
 int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
@@ -20,6 +19,8 @@ int main(int argc, char* argv[]) {
 
 	bool resetBool = false;
 	bool consoleBool = true;
+	if(argc==1 || (argc==2 && strcmp(argv[1],"-c")==0)) consoleBool = true;
+	else if(argc==2 && strcmp(argv[1],"-g")==0) consoleBool = false;
 	if(!consoleBool){
 		boardGame* mainBoard = createBoard();
 		initBoard(mainBoard, true);

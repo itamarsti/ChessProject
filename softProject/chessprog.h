@@ -9,8 +9,6 @@
 #define CHESSPROG_H_
 
 #include "boardFuncs.h"
-#include "settingParser.h"
-#include "moveOps.h"
 #include "settingFlow.h"
 #include "gameFlow.h"
 #include "gameCommands.h"

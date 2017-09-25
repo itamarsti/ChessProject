@@ -7,12 +7,10 @@
 
 #include "boardFuncs.h"
 #include "settingParser.h"
-#include "gameCommands.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "gameParser.h"
 
 bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	assert(board!=NULL);

@@ -15,15 +15,13 @@
  *      Author: Itamar
  */
 
-#include "boardFuncs.h"
-#include "settingParser.h"
-#include "gameCommands.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "gameParser.h"
 #include "settingParser.h"
+#include "boardFuncs.h"
+
 
 bool mainSettingFlow(boardGame* board);
 bool cmdToActSetting(boardGame* board, SETTING_COMMAND cmd);

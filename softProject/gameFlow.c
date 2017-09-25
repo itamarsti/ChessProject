@@ -12,9 +12,9 @@
 #include <assert.h>
 #include "gameCommands.h"
 #include "gameParser.h"
-#include "moveOps.h"
 #include "boardFuncs.h"
 #include "settingParser.h"
+#include "gameFlow.h"
 
 
 
