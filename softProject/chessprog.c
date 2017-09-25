@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     fflush(stdout);
 
 	bool resetBool = false;
-	bool consoleBool = true;
+	bool consoleBool = false;
 	if(argc==1 || (argc==2 && strcmp(argv[1],"-c")==0)) consoleBool = true;
 	else if(argc==2 && strcmp(argv[1],"-g")==0) consoleBool = false;
 	if(!consoleBool){

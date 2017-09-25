@@ -466,6 +466,17 @@ void guiMain(boardGame* board){
 							}
 						}
 					}
+					else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_LIGHT){
+						SDL_Point p1 = {.x = event3.button.x, .y = event3.button.y};
+						//printf("xPos is :%d, yPos is:%d\n",p1.x,p1.y);
+						bool done2 = false;
+						while(!done2){
+							SDL_Event event8;
+							while(SDL_PollEvent(&event8)!=0){
+
+							}
+						}
+					}
 					else{
 						destroyGameRenderer(manager->gw);
 						createGR(manager->gw,false,false,false,false,false,false);

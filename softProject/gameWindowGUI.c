@@ -42,24 +42,6 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 	SDL_FreeSurface(surface);
 	//printf("creating game bg\n");
-/*
-	//Creating a chessBoard texture:
-	surface= SDL_LoadBMP("./utilities/gameWindow/chessBoard2.bmp");
-	if (surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
-		destroyGameWindow(gw);
-		return;
-	}
-	gw->cb = SDL_CreateTextureFromSurface(gw->renderer, surface);
-	if (gw->cb==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
-		destroyGameWindow(gw);
-		return;
-	}
-	SDL_FreeSurface(surface);
-	//printf("creating game cb\n");
-*/
-	//Creating a undo texture:
 
 	if(!undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undo.bmp");
 	else if(undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undoClicked.bmp");
@@ -364,6 +346,54 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 			return;
 		}
 		SDL_FreeSurface(surface);
+
+		//Creating a greenLight texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/greenLight.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->greenLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->greenLight==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+		//Creating a yellowLight texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/yellowLight.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->yellowLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->yellowLight==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+
+		//Creating a redLight texture:
+
+		surface = SDL_LoadBMP("./utilities/gameWindow/redLight.bmp");
+		if(surface==NULL){
+			printf("Could not create a surface: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		gw->redLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
+		if (gw->redLight==NULL){
+			printf("Could not create a texture: %s\n", SDL_GetError());
+			destroyGameWindow(gw);
+			return;
+		}
+		SDL_FreeSurface(surface);
 }
 
 GameWindow* createGW(){
@@ -519,6 +549,12 @@ void destroyGameWindow(GameWindow* gw){
 	printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 	printf("after destroy whiteKing\n");
+	if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
+	printf("after destroy greenLight\n");
+	if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
+	printf("after destroy redLight\n");
+	if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
+	printf("after destroy yellowLight\n");
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	printf("after destroy bg\n");
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
@@ -552,6 +588,9 @@ void destroyGameRenderer(GameWindow* gw){
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
+	if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
+	if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
+	if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 }
@@ -570,6 +609,12 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 				pos = fromPixToPos(event->button.x, event->button.y);
 				if(pos!=-1){
 					return GAME_WINDOW_DRAG_OBJ;
+				}
+			}
+			else if(event->button.button ==SDL_BUTTON_RIGHT){
+				pos = fromPixToPos(event->button.x, event->button.y);
+				if(pos!=-1){
+					return GAME_WINDOW_DRAG_LIGHT;
 				}
 			}
 			break;
@@ -600,6 +645,11 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 					return GAME_WINDOW_PUSH_OBJ;
 				}
 			}
+			 else if(event->button.button ==SDL_BUTTON_RIGHT){
+				if(isPixToPos(event->button.x, event->button.y)){
+					return GAME_WINDOW_PUSH_LIGHT;
+				}
+			}
 			 break;
 		case SDL_MOUSEMOTION:
 			if(isClickOnSaveGame(event->motion.x, event->motion.y)){
@@ -622,6 +672,9 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			 }
 			 else if(isPixToPos(event->motion.x, event->motion.y)){
 				 return GAME_WINDOW_HOVER_OBJ;
+			 }
+			 else if(isPixToPos(event->motion.x, event->motion.y)){
+				 return GAME_WINDOW_HOVER_LIGHT;
 			 }
 			 break;
 		case SDL_WINDOWEVENT:
