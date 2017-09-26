@@ -7,7 +7,8 @@
 
 #include "gameWindowGUI.h"
 #include "gameParser.h"
-
+#include "boardFuncs.h"
+#include "gameCommands.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -347,6 +348,8 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 		}
 		SDL_FreeSurface(surface);
 
+		/*
+
 		//Creating a greenLight texture:
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/greenLight.bmp");
@@ -394,6 +397,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 			return;
 		}
 		SDL_FreeSurface(surface);
+		*/
 }
 
 GameWindow* createGW(){
@@ -549,12 +553,12 @@ void destroyGameWindow(GameWindow* gw){
 	printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
 	printf("after destroy whiteKing\n");
-	if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
-	printf("after destroy greenLight\n");
-	if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
-	printf("after destroy redLight\n");
-	if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
-	printf("after destroy yellowLight\n");
+	//if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
+	//printf("after destroy greenLight\n");
+	//if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
+	//printf("after destroy redLight\n");
+	//if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
+	//printf("after destroy yellowLight\n");
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	printf("after destroy bg\n");
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
@@ -588,9 +592,9 @@ void destroyGameRenderer(GameWindow* gw){
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
-	if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
-	if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
-	if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
+	//if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
+	//if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
+	//if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 }

@@ -18,6 +18,7 @@
 #include "gameWindowGUI.h"
 #include "loadWindowGUI.h"
 #include "alphaBetaMinMax.h"
+#include "gameCommands.h"
 
 
 typedef struct MANAGER{

@@ -42,17 +42,17 @@ typedef struct GAMEWINDOW{
 	SDL_Texture* whiteKnight;
 	SDL_Texture* whiteQueen;
 	SDL_Texture* whiteKing;
-	SDL_Texture* greenLight;
-	SDL_Texture* redLight;
-	SDL_Texture* yellowLight;
+	//SDL_Texture* greenLight;
+	//SDL_Texture* redLight;
+	//SDL_Texture* yellowLight;
 }GameWindow;
 
 
 typedef enum {
 	GAME_WINDOW_DRAG_OBJ,
-	GAME_WINDOW_DRAG_LIGHT,
+	//GAME_WINDOW_DRAG_LIGHT,
 	GAME_WINDOW_PUSH_OBJ,
-	GAME_WINDOW_PUSH_LIGHT,
+	//GAME_WINDOW_PUSH_LIGHT,
 	GAME_WINDOW_PUSH_LOAD_GAME,
 	GAME_WINDOW_PUSH_SAVE_GAME,
 	GAME_WINDOW_PUSH_RESTART_GAME,
@@ -66,7 +66,7 @@ typedef enum {
 	GAME_WINDOW_HOVER_MAIN_MENU,
 	GAME_WINDOW_HOVER_EVENT_QUIT,
 	GAME_WINDOW_HOVER_OBJ,
-	GAME_WINDOW_HOVER_LIGHT,
+	//GAME_WINDOW_HOVER_LIGHT,
 	GAME_WINDOW_EVENT_NONE,
 	GAME_WINDOW_INVALID
 } GAME_WINDOW_EVENT;

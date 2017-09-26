@@ -12,7 +12,8 @@
 #include "settingFlow.h"
 #include "gameFlow.h"
 #include "gameCommands.h"
-
-
+#include "GUI.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
 
 #endif /* CHESSPROG_H_ */
