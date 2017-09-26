@@ -7,10 +7,11 @@
 
 #include "loadWindowGUI.h"
 #include <assert.h>
+#include <string.h>
 
 
 
-LoadWindow* createLW(int slotsNum){
+LoadWindow* createLW(){
 	printf("inside create LW\n");
 	LoadWindow* lw = (LoadWindow*) malloc(sizeof(LoadWindow));
 	if(lw==NULL){
@@ -24,8 +25,6 @@ LoadWindow* createLW(int slotsNum){
 		free(lw);
 		return NULL;
 	}
-
-
 	int numFiles = numOfFilesInDir();
 	printf("before create LR\n");
 	createLR(lw,numFiles,false,0,false);
@@ -340,8 +339,8 @@ void loadFilePath(boardGame*board, char* path){
 	board->gameMode = (int) buffer[11]-'0';
 	if(board->gameMode==1){
 		fscanf(file, "%[^\n]\n", buffer);	//difficulty turn
-		token = strtok(buffer," <>");
-		if(strcmp(token,"difficulty ")){
+		token = strtok(buffer,"<> ");
+		if(strcmp(token,"difficulty ")==0){
 			int difficulty = (int)buffer[12]-'0';
 			board->diffLevel = difficulty;
 		}

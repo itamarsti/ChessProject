@@ -11,8 +11,8 @@
 #include "boardFuncs.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
+#include <SDL.h>
+#include <SDL_video.h>
 #include "mainWindowGUI.h"
 #include "settingsWindowGUI.h"
 #include "gameWindowGUI.h"
@@ -31,7 +31,7 @@ typedef struct MANAGER{
 
 Manager* createManager();
 void destroyManager(Manager* manager);
-void guiMain(boardGame* board);
+void guiMain();
 bool loadSection(Manager* manager, int numOfFiles, int fileRemove);
 void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie);
 void saveGameFromGUI(boardGame* game, int numOfFiles);

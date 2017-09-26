@@ -70,17 +70,20 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 bool mainGameFlow(boardGame* board){
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
-	assert(board!=NULL); assert(board->boardArr!=NULL);
+	if(board==NULL){
+		printf("board is NULL");
+		exit(0);
+	}
+	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
-	char* input;
-	GameCommand* cmd;
 	bool loopBreaker = false;
 	while(!loopBreaker){
 		moveMessage(board);
-		input = gameAcceptor();
+		char* input = (char*) gameAcceptor();
 		assert(input!=NULL);
-		cmd = gameParser(input);
+		GameCommand* cmd = (GameCommand*) gameParser(input);
 		assert(cmd!=NULL);
+		printf("we have nice gameParser struct\n");
 		if(cmd->validArg){
 			if(cmd->cmd==RESET || cmd->cmd==QUIT2){
 				free(input);
@@ -100,11 +103,11 @@ bool mainGameFlow(boardGame* board){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
 				else if(cmd->cmd==INVALID_POSITION) printf("Invalid position on the board\n");
 				else if (cmd->cmd==INVALID_LINE2) printf("ERROR: Illegal Command\n");
-			}
-			continue;
 		}
-	free(input);
-	destroyGameStruct(cmd);
+		free(input);
+		destroyGameStruct(cmd);
+		continue;
+	}
 	return false;
 }
 

@@ -15,8 +15,8 @@
 #include <stdio.h>
 #include "boardFuncs.h"
 #include "gameCommands.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
+#include <SDL.h>
+#include <SDL_video.h>
 #include "gameParser.h"
 
 
@@ -76,7 +76,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
 void destroyGameRenderer(GameWindow* gw);
-void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xDest, int yDest);
+void drawGameWindow(GameWindow* gw, boardGame* board);
 GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* mw, SDL_Event* event);
 bool isClickOnSaveGame(int x, int y);
 void saveGameFromGUI(boardGame* game, int numOfFiles);

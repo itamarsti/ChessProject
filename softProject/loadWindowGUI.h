@@ -14,9 +14,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <dirent.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
-
+#include <SDL.h>
+#include <SDL_video.h>
 
 typedef enum{
 	LOAD_WINDOW_EVENT_QUIT,
@@ -49,7 +48,7 @@ typedef struct LOADWINDOW{
 }LoadWindow;
 
 
-LoadWindow* createLW(int slotsNum);
+LoadWindow* createLW();
 void createLR(LoadWindow* lw, int slotsNum, bool backLightened, int slotLight, bool loadLight);
 void destroyLoadWindow(LoadWindow* lw);
 void destroyLoadRenderer(LoadWindow* lw);

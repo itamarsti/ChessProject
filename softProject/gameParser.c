@@ -98,9 +98,10 @@ char* gameAcceptor(){
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
 		printf("ERROR: fgets has failed\n");
-		free(errorDet);
+		//free(errorDet);
 		free(input);
 	}
+	//printf("game acceptor works fine\n");
 	return input;
 	}
 
@@ -114,8 +115,10 @@ GameCommand* gameParser(const char* str){
 	command->validArg = true;
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
-	char stringDup[1024];
+	char stringDup[1024] = {'i','n','t','i','a','l'};
+	//printf("stringDup is:%s\n", stringDup);
 	strcpy(stringDup,str);
+	//printf("stringDup is:%s\n", stringDup);
 	char *token = strtok(stringDup, "\t\r\n ");
 	if(token==NULL) {
 		//printf("NULL");

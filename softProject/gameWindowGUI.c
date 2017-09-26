@@ -419,7 +419,7 @@ GameWindow* createGW(){
 	return gw;
 }
 
-void drawGameWindow(GameWindow* gw, boardGame* board, char objPos, int xGap, int yGap){
+void drawGameWindow(GameWindow* gw, boardGame* board){
 	//printf("the gap in old Draw x is:%d, the gap in y is:%d\n",xGap,yGap);
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
@@ -615,12 +615,14 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 					return GAME_WINDOW_DRAG_OBJ;
 				}
 			}
+			/*
 			else if(event->button.button ==SDL_BUTTON_RIGHT){
 				pos = fromPixToPos(event->button.x, event->button.y);
 				if(pos!=-1){
 					return GAME_WINDOW_DRAG_LIGHT;
 				}
 			}
+			*/
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if(fromPixToPos(event->button.x, event->button.y)!=-1){
@@ -649,11 +651,13 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 					return GAME_WINDOW_PUSH_OBJ;
 				}
 			}
+			/*
 			 else if(event->button.button ==SDL_BUTTON_RIGHT){
 				if(isPixToPos(event->button.x, event->button.y)){
 					return GAME_WINDOW_PUSH_LIGHT;
 				}
 			}
+			*/
 			 break;
 		case SDL_MOUSEMOTION:
 			if(isClickOnSaveGame(event->motion.x, event->motion.y)){
@@ -677,9 +681,11 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			 else if(isPixToPos(event->motion.x, event->motion.y)){
 				 return GAME_WINDOW_HOVER_OBJ;
 			 }
+			/*
 			 else if(isPixToPos(event->motion.x, event->motion.y)){
 				 return GAME_WINDOW_HOVER_LIGHT;
 			 }
+			 */
 			 break;
 		case SDL_WINDOWEVENT:
 			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {

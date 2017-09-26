@@ -35,25 +35,29 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 
 void mainSettingFlow(boardGame* board){
 	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements);
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
 	bool startBool = false;
-	char* string;
-	ChessCommand* cmd;
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	while(!startBool){
-		string = settingAcceptor();
+		char* string = (char*) settingAcceptor();
 		assert(string!=NULL);
-		cmd = settingParser(string,board->gameMode);
+		ChessCommand* cmd = (ChessCommand*) settingParser(string,board->gameMode);
 		assert(cmd!=NULL);
 		if(cmd->validArg==false){
 			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)
-					|| (cmd->cmd==INVALID_FILE))invalidSettingPrint(cmd->cmd);
+					|| (cmd->cmd==INVALID_FILE)){
+				invalidSettingPrint(cmd->cmd);
+				destroySettingStruct(cmd);
+				free(string);
+			}
 			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
 				printf("ERROR: Invalid Command\n");
+				destroySettingStruct(cmd);
+				free(string);
 				continue;
 			}
 		}
@@ -65,15 +69,13 @@ void mainSettingFlow(boardGame* board){
 			}
 			else if (cmd->cmd==DIFFICULTY_5){
 				printf("Expert level not supported, please choose a value between 1 to 4:\n");
+				destroySettingStruct(cmd);
 				continue;
 			}
 			startBool=cmdToActSetting(board, cmd);
-			if(!startBool){
-
-			}
 		}
 		free(string);
-		free(cmd);
+		destroySettingStruct(cmd);
 	}
 	return;
 }

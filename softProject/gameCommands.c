@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "spArrayList.h"
 #include "gameCommands.h"
 #include "boardFuncs.h"
 #include "gameParser.h"
@@ -27,10 +26,10 @@ void changePlayer(boardGame* board){
 
 void reset(boardGame* board){
 	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	spArrayListDestroy(board->history);
+	//spArrayListDestroy(board->history);
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
 	destroyBoard(board);
@@ -78,7 +77,7 @@ void saveFile(boardGame* board, const char* path){
 
 void exUndo(boardGame* board,bool printActivate){
 	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	int index = board->history->actualSize-1;
@@ -604,7 +603,7 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid = false;
-	boardGame* copy = copyBoard(board);
+	boardGame* copy = (boardGame*) copyBoard(board);
 	assert(copy!=NULL); assert(copy->boardArr!=NULL);
 	if((board->curPlayer==0) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isWhitePlayer(board->boardArr[rowDest][colDest]))){
@@ -631,6 +630,7 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		}
 	}
 	if(print) printf("Illegal move\n");
+	destroyBoard(copy);
 	return false;
 }
 

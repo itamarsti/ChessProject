@@ -15,8 +15,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
+#include <SDL.h>
+#include <SDL_video.h>
 
 
 typedef struct SETTINGSWINDOW{

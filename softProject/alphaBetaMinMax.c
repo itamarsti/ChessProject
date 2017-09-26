@@ -15,7 +15,7 @@
 
 
 int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore){
-	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int minWinner = INT_MAX;
 	int maxWinner = INT_MIN;
@@ -75,7 +75,7 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
 
 
 int score(boardGame* board){
-    assert(board!=NULL); assert(board->boardArr!=NULL);
+    assert(board!=NULL); //assert(board->boardArr!=NULL);
     assert(board->history!=NULL); assert(board->history->elements!=NULL);
     int score = 0;
     char symbol;
@@ -110,7 +110,7 @@ int scoreFuncId(char symbol){
 
 int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 	//printf("inside alphaBetaMove\n");
-	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	bool minmax = true;
 	int maxCompare = INT_MIN;
@@ -139,7 +139,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         				//printf("i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
         				if(moveObj(copy,RowColToNum(i,j),RowColToNum(k,l),false)){
         					//printf("valid move: i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
-        					if(isWinner(board)){
+        					if(isWinner(copy)){
         						undo(copy,false,true);
         						destroyBoard(copy);
         						arrMoves[0] = RowColToNum(i,j);
@@ -156,12 +156,10 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 									return arrMoves;
         						}
         						if(winnerScore>maxCompare){
-
         							maxCompare = winnerScore;
         							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
             						//printf("arrMoves[0] is:%d\n",arrMoves[0]);
             						//printf("arrMoves[1] is:%d\n",arrMoves[1]);
-
         						}
         					}
         					else if(!minmax){
@@ -195,7 +193,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 
 
 void moveAIobj(boardGame* board){
-	assert(board!=NULL); assert(board->boardArr!=NULL);
+	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
 	//printf("inside moveAiObj\n");

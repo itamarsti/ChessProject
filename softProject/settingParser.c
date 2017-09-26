@@ -139,20 +139,26 @@ char* settingAcceptor(){
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
-		printf("ERROR: fgets function has faild\n");
-		free(errorDet);
+		printf("ERROR: fgets function has failed\n");
+		//free(errorDet);
 		free(input);
 	}
 	return input;
-	}
+}
 
+ChessCommand* initChessCommand(){
+	ChessCommand* command = (ChessCommand*) malloc(sizeof(ChessCommand));
+	assert(command!=NULL);
+	command->validArg = true;
+	command->cmd = INVALID_LINE1;
+	return command;
+}
 
 ChessCommand* settingParser(const char* str, int numPlayers){
-	ChessCommand* command = (ChessCommand*)malloc(sizeof(ChessCommand));
+	ChessCommand* command = (ChessCommand*)initChessCommand();
 	assert(command!=NULL);
 	assert(str!=NULL);
-	command->validArg = true;
-	char stringDup[1024];
+	char stringDup[1024] = {'i','n','i','t','i','a','l'};
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	int decider = 0;
@@ -176,7 +182,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 			command->validArg = false;
 			return command;
 		}
-		SETTING_COMMAND cmd;
+		SETTING_COMMAND cmd = INVALID_LINE1;
 		if (decider==1) cmd = gameModeDecider(token);
 		else if(decider==2) cmd = diffiDecider(token,numPlayers);
 		else if (decider==3) cmd = gameColorDecider(token, numPlayers);

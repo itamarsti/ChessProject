@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "settingParser.h"
 #include "SPArrayList.h"
 
@@ -109,10 +110,10 @@ void printBoard(boardGame* board){
 
 void destroyBoard(boardGame* board){
 	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	spArrayListDestroy(board->history);
-	free(board->boardArr);
+	//free(board->boardArr);
 	free(board);
 }
 
@@ -164,7 +165,7 @@ boardGame* copyBoard(boardGame*board){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
-	boardGame* copy = createBoard();
+	boardGame* copy = (boardGame*)createBoard();
 	assert(copy!=NULL);
 	assert(copy->boardArr!=NULL);
 	for(int i=0;i<ROW;i++){
@@ -172,6 +173,7 @@ boardGame* copyBoard(boardGame*board){
 			copy->boardArr[i][j]=board->boardArr[i][j];
 		}
 	}
+	spArrayListDestroy(copy->history);
 	SPArrayList* histCopy = spArrayListCreate(HISTORY);
 	histCopy->actualSize = board->history->actualSize;
 	histCopy->maxSize = board->history->maxSize;
@@ -245,10 +247,7 @@ void quit(boardGame* board){
 	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	free(board->history->elements);
-	free(board->history);
-	free(board->boardArr);
-	free(board);
+	destroyBoard(board);
 	printf("Exiting...\n");
 	exit(0);
 }

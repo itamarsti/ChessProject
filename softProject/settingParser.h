@@ -47,5 +47,6 @@ SETTING_COMMAND gameModeDecider(char* str);
 SETTING_COMMAND gameColorDecider(char* str, int numPlayers);
 bool isFileExist(const char*path);
 void destroySettingStruct(ChessCommand* cmd);
+ChessCommand* initChessCommand();
 
 #endif /* SETTINGPARSER_H_ */
