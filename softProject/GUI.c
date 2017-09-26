@@ -25,9 +25,15 @@ void guiMain(){
 	if(manager->mw==NULL) printf("main window is null");
 	setDefault(manager->board);
 	initBoard(manager->board,true);
-	bool loadBool, settingsBool, gameBool, backMainBool, backGameBool = false;
+	bool loadBool = false; bool settingsBool = false;
+	bool gameBool = false; bool backMainBool = false; bool backGameBool = false;
 	bool mainBool = true;
 	while(1){
+		if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
+		if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
+		if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
+		if(gameBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^6\n");
+
 		if(mainBool){			//~~~~~~~~~Beginning of main window~~~~~~~~
 			initBoard(manager->board,true);
 			if(manager->mw==NULL) printf("main window is null");
@@ -81,6 +87,7 @@ void guiMain(){
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
+						printf("~~~~~~push start button was made~~~~~~~~~~~\n");
 						destroySettingsWindow(manager->sw);
 						gameBool = true;
 						quitSettings = true;
@@ -477,6 +484,7 @@ void guiMain(){
 
 							}
 						}
+
 					}
 					*/
 					else{

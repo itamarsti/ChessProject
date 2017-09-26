@@ -97,17 +97,23 @@ bool mainGameFlow(boardGame* board){
 					return true;
 				}
 			}
+			printf("before loop breaker\n");
 			loopBreaker = cmdToActGame(board,cmd, input);
+			printf("after loop breaker\n");
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");
 				else if(cmd->cmd==INVALID_POSITION) printf("Invalid position on the board\n");
 				else if (cmd->cmd==INVALID_LINE2) printf("ERROR: Illegal Command\n");
 		}
+		printf("before input\n");
 		free(input);
+		printf("before destroy struct\n");
 		destroyGameStruct(cmd);
+		printf("before continue\n");
 		continue;
 	}
+	printf("got til end of flow\n");
 	return false;
 }
 

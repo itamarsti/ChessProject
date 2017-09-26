@@ -84,8 +84,11 @@ bool isFileCreated(const char* path){
 
 
 void destroyGameStruct(GameCommand* cmd){
+	printf("inside destroy game struct\n");
 	assert(cmd!=NULL);
-	if(cmd->path!=NULL) free(cmd->path);
+	if(cmd->cmd==SAVE){
+		if(cmd->path!=NULL) free(cmd->path);
+	}
 	free(cmd);
 }
 
