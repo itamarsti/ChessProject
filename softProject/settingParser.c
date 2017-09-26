@@ -162,52 +162,97 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	int decider = 0;
+	command->cmd = INVALID_LINE1;
+	command->validArg = false;
 	if(token==NULL) {
-		command->cmd = INVALID_LINE1;
-		command->validArg = false;
 		return command;
 	}
-	else if(strcmp(token, "start")==0)command->cmd = START;
-	else if(strcmp(token, "quit")==0)command->cmd = QUIT1;
-	else if(strcmp(token, "default")==0)command->cmd = DEFAULT;
-	else if(strcmp(token, "print_setting")==0)command->cmd = PRINT_SETTINGS;
+	else if(strcmp(token, "start")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = START;
+			command->validArg = true;
+			return command;
+		}
+	}
+	else if(strcmp(token, "quit")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = QUIT1;
+			command->validArg = true;
+			return command;
+		}
+	}
+	else if(strcmp(token, "default")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = DEFAULT;
+			command->validArg = true;
+			return command;
+		}
+	}
+	else if(strcmp(token, "print_setting")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = PRINT_SETTINGS;
+			command->validArg = true;
+			return command;
+		}
+	}
 	else if((strcmp(token, "game_mode")==0)||(strcmp(token, "difficulty")==0)
 			||(strcmp(token, "user_color")==0)){
+		//printf("in here 1\n");
 		if ((strcmp(token, "game_mode")==0)) decider = 1;
 		else if ((strcmp(token, "difficulty")==0)) decider = 2;
 		else if ((strcmp(token, "user_color")==0)) decider = 3;
 		token = strtok(NULL, "\t\r\n ");
 		if(token==NULL || !spParserIsInt(token)){
-			command->cmd = INVALID_LINE1;
-			command->validArg = false;
 			return command;
 		}
+		//printf("in here 2, the decider is: %d\n", decider);
 		SETTING_COMMAND cmd = INVALID_LINE1;
 		if (decider==1) cmd = gameModeDecider(token);
 		else if(decider==2) cmd = diffiDecider(token,numPlayers);
 		else if (decider==3) cmd = gameColorDecider(token, numPlayers);
 		command->cmd = cmd;
 		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)|| cmd==INVALID_LINE1){
+			//printf("in here\n");
 			command->validArg = false;
+			//printf("in here 4\n");
 			return command;
 		}
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL) command->validArg = true;
+		else{
+			command->validArg = false;
+			command->cmd = INVALID_LINE1;
+		}
+		//printf("in here 3\n");
+		return command;
 	}
 	else if((strcmp(token, "load")==0)){
-		token = strtok(NULL, "\t\r\n");
-		if(!isFileExist(token)){
+		bool isPath = false;
+		token = strtok(NULL, "\t\r\n ");
+		//printf("the token is:%s\n",token);
+		bool exist = isFileExist(token);
+		if(!exist){
 			command->cmd = INVALID_FILE;
-			command->validArg = false;
-			return command;
 		}
-		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
-		strcpy(command->path,token);
-		//int n = strlen(token)-1;
-		command->cmd = LOAD_FILE;
-	}
-	else{
-		command->cmd = INVALID_LINE1;
-		command->validArg = false;
-
+		else if(exist){
+			command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
+			strcpy(command->path,token);
+				//int n = strlen(token)-1;
+			command->cmd = LOAD_FILE;
+			command->validArg = true;
+			isPath = true;
+		}
+		token = strtok(NULL, "\t\r\n ");
+		//printf("the token is:%s\n",token);
+		if(token!=NULL){
+			command->cmd = INVALID_LINE1;
+			command->validArg = false;
+			if(isPath==true) free(command->path);
+		}
 	}
 	return command;
 }

@@ -27,7 +27,10 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	else if (command->cmd==GAME_MODE_2) setNumPlayers(board, 2);
 	else if (command->cmd==DEFAULT) setDefault(board);
 	else if	(command->cmd==PRINT_SETTINGS)boardPrintSet(board);
-	else if (command->cmd ==LOAD_FILE) loadFile(board,command);
+	else if (command->cmd ==LOAD_FILE){
+		loadFile(board,command);
+		free(command->path);
+	}
 	return false;
 	}
 
