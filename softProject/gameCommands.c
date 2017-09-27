@@ -67,7 +67,7 @@ void saveFile(boardGame* board, const char* path){
 		fprintf(file,"</row_%d>\n",8-i);
 	}
 	fputs("\t</board>\n",file);
-	fputs("</game>",file);
+	fputs("</game>\n",file);
 	fclose(file);
 }
 
@@ -131,9 +131,12 @@ void moveMessage(boardGame* board){
 	}
 }
 
-void printCheckMessage(int player){
-	if(player==1) printf("Check: %s King is threatened!\n",WHITE);
-	else if(player==0) printf("Check: %s King is threatened!\n",BLACK);
+void printCheckMessage(int player,int userCol, int gameMode){
+	if(gameMode==1 && userCol==player)printf("Check!\n");
+	else{
+		if(player==1) printf("Check: %s King is threatened!\n",WHITE);
+		else if(player==0) printf("Check: %s King is threatened!\n",BLACK);
+	}
 }
 
 bool isCheckMate(boardGame* board){

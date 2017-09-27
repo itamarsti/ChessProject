@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 			//printf("before settings\n");
 			mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 			resetBool = false;
-			if(mainBoard->gameMode==1) printBoard(mainBoard);
+			if((mainBoard->gameMode==1)&& mainBoard->curPlayer==mainBoard->userCol) printBoard(mainBoard);
 			while(!resetBool){
 				if(mainBoard->gameMode==1){
 					if(mainBoard->curPlayer!=mainBoard->userCol){

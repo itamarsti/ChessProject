@@ -37,7 +37,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 					destroyGameStruct(cmd);
 					terminateGame(board,true, false);
 				}
-				printCheckMessage(board->curPlayer);
+				printCheckMessage(board->curPlayer,board->userCol, board->gameMode);
 				//printf("we got yill here");
 			}
 			else if ((isTie = isCheckMate(board))==true){

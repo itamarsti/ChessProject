@@ -127,7 +127,8 @@ void setColor(boardGame* board, int num){
 void setNumPlayers(boardGame* board, int num){
 	assert(board!=NULL);
 	board->gameMode = num;
-	printf("Game mode is set to %d players\n",board->gameMode);
+	if(num==1) printf("Game mode is set to %d player\n",board->gameMode);
+	else if(num==2) printf("Game mode is set to %d players\n",board->gameMode);
 	if(num==1){
 		board->diffLevel=2;
 		board->userCol=1;
@@ -196,7 +197,7 @@ void setDefault(boardGame* board){
 void invalidSettingPrint(SETTING_COMMAND cmd){
 	if (cmd==INVALID_DIFFICULT)printf ("Wrong difficulty level. The value should be between 1 to 5\n");
 	else if (cmd==INVALID_GAME_MODE) printf("Wrong game mode\n");
-	else if (cmd==INVALID_FILE) printf("Error: File doesn’t exist or cannot be opened\n");
+	else if (cmd==INVALID_FILE) printf("Error: File doesn't exist or cannot be opened\n");
 }
 
 void loadFile(boardGame*board, ChessCommand* cmd){

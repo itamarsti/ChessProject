@@ -143,6 +143,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         				if(moveObj(copy,RowColToNum(i,j),RowColToNum(k,l),false)){
         					//printf("valid move: i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
         					if(isWinner(copy)){
+        						//printf("inside isWinner\n");
         						undo(copy,false,true);
         						destroyBoard(copy);
         						arrMoves[0] = RowColToNum(i,j);
@@ -150,7 +151,10 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         						return arrMoves;
         					}
         					else if(minmax){
+        						//printf("int_max is:%d\n", INT_MAX);
+        						//printf("max_compare is:%d\n", maxCompare);
         						winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, maxCompare);
+        						//printf("the winner score1 is:%d\n",winnerScore);
         						if (winnerScore == INT_MAX){
 									//printf("the winner score is int_max\n");
             						destroyBoard(copy);
@@ -158,16 +162,19 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 									arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
         						}
-        						if(winnerScore>maxCompare){
+        						else if(winnerScore>=maxCompare){
+        							//printf("in here 1\n");
         							maxCompare = winnerScore;
-        							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
+        							arrMoves[0]=RowColToNum(i,j);
+        							arrMoves[1]= RowColToNum(k,l);
             						//printf("arrMoves[0] is:%d\n",arrMoves[0]);
             						//printf("arrMoves[1] is:%d\n",arrMoves[1]);
         						}
-        						//printf("done with winner score\n");
+        						//else printf("done with winner score\n");
         					}
         					else if(!minmax){
 								winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, minCompare);
+        						//printf("the winner score2 is:%d\n",winnerScore);
 								if (winnerScore == INT_MIN){
 									//printf("the winner score is int_min\n");
 									destroyBoard(copy);
@@ -175,9 +182,11 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 									arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
 								}
-								if(winnerScore<minCompare){
+								else if(winnerScore<=minCompare){
+									//printf("in here 2\n");
 									minCompare = winnerScore;
-        							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
+        							arrMoves[0]=RowColToNum(i,j);
+        							arrMoves[1]= RowColToNum(k,l);
         							//printf("arrMoves[0] is:%d\n",arrMoves[0]);
 									//printf("arrMoves[1] is:%d\n",arrMoves[1]);
 								}
@@ -220,7 +229,7 @@ void moveAIobj(boardGame* board){
 				free(moveArr);
 				terminateGame(board,true, false);
 			}
-			printCheckMessage(board->curPlayer);
+			printCheckMessage(board->curPlayer,board->userCol, board->gameMode);
 			//printf("we got yill here");
 		}
 		else if (isCheckMate(board)){

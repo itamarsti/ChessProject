@@ -12,7 +12,7 @@
 
 
 LoadWindow* createLW(){
-	printf("inside create LW\n");
+	//printf("inside create LW\n");
 	LoadWindow* lw = (LoadWindow*) malloc(sizeof(LoadWindow));
 	if(lw==NULL){
 		printf("Couldn't create LoadWindow struct\n");
@@ -26,9 +26,9 @@ LoadWindow* createLW(){
 		return NULL;
 	}
 	int numFiles = numOfFilesInDir();
-	printf("before create LR\n");
+	//printf("before create LR\n");
 	createLR(lw,numFiles,false,0,false);
-	printf("after create LR\n");
+	//printf("after create LR\n");
 	return lw;
 }
 
@@ -37,10 +37,10 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 	assert(slotsNum>=0); assert(slotsNum<=5); assert(slotLight>=0); assert(slotLight<=5);
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_Surface* surface = NULL;
-	printf("inside LW func\n");
+	//printf("inside LW func\n");
 	if(lw->renderer==NULL) printf("renderer is null");
-	SDL_RenderClear(lw->renderer);
-	printf("after clear LW func\n");
+	//SDL_RenderClear(lw->renderer);
+	//printf("after clear LW func\n");
 
 	// creating the load Window renderer
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
