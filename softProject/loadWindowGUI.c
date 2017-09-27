@@ -55,25 +55,25 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 
 	surface= SDL_LoadBMP("./utilities/loadWindow/anotherBackground.bmp");
 	if (surface==NULL){
-		printf("Could not create a bg surface in LoadWindow: %s\n", SDL_GetError());
+		//printf("Could not create a bg surface in LoadWindow: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
 		return;
 	}
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
-		printf("Could not create a bg texture in LoadWindow: %s\n", SDL_GetError());
+		//printf("Could not create a bg texture in LoadWindow: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
 		return;
 	}
 	SDL_FreeSurface(surface);
-	printf("after creating bg load\n");
+	//printf("after creating bg load\n");
 
 
 	//Creating a back texture:
 	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
 	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNew.bmp");
 	if(surface==NULL){
-		printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
+		//printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
@@ -510,4 +510,44 @@ void loadWindowShow(LoadWindow* lw){
 }
 
 
+void createBackTexture(LoadWindow* lw, bool backLight ){
+	assert(lw!=NULL); assert(lw->window!=NULL); assert(lw->renderer!=NULL);
+	SDL_Surface* surface = NULL;
+	SDL_DestroyTexture(lw->back);
+	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
+	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNew.bmp");
+	if(surface==NULL){
+		printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	lw->back = SDL_CreateTextureFromSurface(lw->renderer, surface);
+	if (lw->back==NULL){
+		printf("Could not create a back texture in LoadWindow: %s\n", SDL_GetError());
+		destroyLoadWindow(lw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+}
 
+
+void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight ){
+	assert(lw!=NULL); assert(lw->window!=NULL); assert(lw->renderer!=NULL);
+	SDL_Surface* surface = NULL;
+	SDL_DestroyTexture(lw->load);
+	//Creating a load texture:
+		if((loadLight)&& (slotLight!=0)) surface = SDL_LoadBMP("./utilities/loadWindow/loadNewClicked.bmp");
+		else surface = SDL_LoadBMP("./utilities/loadWindow/loadNew.bmp");
+		if(surface==NULL){
+			printf("Could not create a load surface in LoadWindow: %s\n", SDL_GetError());
+			return;
+		}
+		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+		lw->load = SDL_CreateTextureFromSurface(lw->renderer, surface);
+		if (lw->load==NULL){
+			printf("Could not create a load texture in LoadWindow: %s\n", SDL_GetError());
+			destroyLoadWindow(lw);
+			return;
+		}
+		SDL_FreeSurface(surface);
+}

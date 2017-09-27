@@ -108,8 +108,7 @@ void guiMain(){
 
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
 						setNumPlayers(manager->board,1);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,1,2,false,false);
+						createGameMode1Texture(manager->sw,  manager->board->gameMode);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -194,16 +193,13 @@ void guiMain(){
 		}
 		//----------------------------End of Settings Window--------------------------------
 		else if(loadBool){					//~~~~~~~~~Beginning of load window~~~~~~~~
-			printf("inside load before creating load window\n");
 			int dirFiles = numOfFilesInDir();
 			int fileRemove =0;
 			manager->lw = (LoadWindow*) createLW();
 			drawLoadWindow(manager->lw,dirFiles);
-			printf("after creating load window\n");
 			loadBool = false;
 			bool quitLoad = false;
 			while(!quitLoad){
-				printf("inside loop");
 				SDL_Event event2;
 				quitLoad = false;
 				while(SDL_WaitEvent(&event2)!=0){
@@ -233,14 +229,12 @@ void guiMain(){
 						break;
 					}
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
-						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,true,fileRemove,false);
+						createBackTexture(manager->lw, true);
 						drawLoadWindow(manager->lw,dirFiles);
 						break;
 					}
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_LOAD){
-						destroyLoadRenderer(manager->lw);
-						createLR(manager->lw,dirFiles,false,fileRemove,true);
+						createLoadTexture(manager->lw, fileRemove, true);
 						drawLoadWindow(manager->lw,dirFiles);
 						break;
 					}
@@ -260,10 +254,8 @@ void guiMain(){
 					break;
 					}
 					else{
-						printf("in here\n");
-						destroyLoadRenderer(manager->lw);
-						printf("in here2\n");
-						createLR(manager->lw,dirFiles,false,fileRemove,false);
+						createLoadTexture(manager->lw, fileRemove, false);
+						createBackTexture(manager->lw, false);
 						drawLoadWindow(manager->lw, dirFiles);
 						break;
 					}
@@ -271,8 +263,8 @@ void guiMain(){
 			}
 		}
 		//----------------------------End of Load Window--------------------------------
-		else if(gameBool){ //~~~~~~~~~Beginning of game window~~~~~~~~
-
+							//~~~~~~~~~Beginning of game window~~~~~~~~
+		else if(gameBool){
 			manager->gw = (GameWindow*) createGW();
 			drawGameWindow(manager->gw, manager->board);
 			bool gameSaved = false;

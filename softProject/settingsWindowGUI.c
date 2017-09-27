@@ -548,5 +548,24 @@ void drawSettingsWindow(SettingsWindow* sw){
 	SDL_RenderPresent(sw->renderer);
 }
 
+void createGameMode1Texture(SettingsWindow* sw, int numPlayers){
+	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
+	SDL_DestroyTexture(sw->gameMode1);
+	SDL_Surface* surface = NULL;
+	if(numPlayers==1)surface = SDL_LoadBMP("./utilities/settingsWindow/gameMode1Clicked.bmp");
+	else if(numPlayers==2) surface = SDL_LoadBMP("./utilities/settingsWindow/gameMode1.bmp");
+	if(surface==NULL){
+		printf("Could not create a mode1 surface in SettingsWindow: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	sw->gameMode1 = SDL_CreateTextureFromSurface(sw->renderer, surface);
+	if (sw->gameMode1==NULL){
+		printf("Could not create a mode1 texture in SettingsWindow: %s\n", SDL_GetError());
+		destroySettingsWindow(sw);
+		return;
+	}
+	SDL_FreeSurface(surface);
 
+}
 

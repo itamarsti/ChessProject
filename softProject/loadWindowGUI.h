@@ -66,6 +66,6 @@ bool isClickOnBackLW(int x, int y);
 bool isClickOnLoadSlot(int x, int y);
 bool isClickOnLWBack(int x, int y);
 bool isClickOnLWLoad(int x, int y);
-
-
+void createBackTexture(LoadWindow* lw, bool backLight);
+void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight);
 #endif /* LOADWINDOWGUI_H_ */

@@ -75,8 +75,9 @@ void destroySettingsRenderer(SettingsWindow* sw);
 void destroySettingsWindow(SettingsWindow* sw);
 SettingsWindow* createSW(int numPlayers, int color, int diffi);
 SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi,
-		bool backLighted,bool startLightened);
+bool backLighted,bool startLightened);
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event);
 void drawSettingsWindow(SettingsWindow* sw);
+void createGameMode1Texture(SettingsWindow* sw, int numPlayers);
 
 #endif /* SETTINGSWINDOWGUI_H_ */
