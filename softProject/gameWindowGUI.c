@@ -840,7 +840,7 @@ bool isPixToPos(int x, int y){
 
 
 void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL_Point* p2){
-	printf("the gap in drawimporved, x is:%d, the gap in y is:%d\n",-p1->x+p2->x,-p1->y+p2->y);
+	//printf("the gap in drawimporved, x is:%d, the gap in y is:%d\n",-p1->x+p2->x,-p1->y+p2->y);
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	//printf("inside draw\n");
