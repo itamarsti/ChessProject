@@ -22,27 +22,27 @@ MainWindow* createMW(){
 	mw->window = SDL_CreateWindow("Chess Game", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, 1000, 650, SDL_WINDOW_OPENGL);
 	if (mw->window==NULL){
-		printf("Could not create window: %s\n", SDL_GetError());
+		printf("Could not create window in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
 	// creating the Main Window renderer
 	mw->renderer = SDL_CreateRenderer(mw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (mw->renderer==NULL) {
-		printf("Could not create a renderer: %s\n", SDL_GetError());
+		printf("Could not create a renderer in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
 	//Creating a background texture:
 	surface= SDL_LoadBMP("./utilities/mainWindow/mainWindow.bmp");
 	if (surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a BackGround surface in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
 	mw->bg = SDL_CreateTextureFromSurface(mw->renderer, surface);
 	if (mw->bg==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a BackGround texture in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
@@ -52,13 +52,13 @@ MainWindow* createMW(){
 
 	surface = SDL_LoadBMP("./utilities/mainWindow/welcome.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a Welcome surface in MainWindowGUI: %s\n", SDL_GetError());
 		return NULL;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	mw->welcome = SDL_CreateTextureFromSurface(mw->renderer, surface);
 	if (mw->welcome==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a welcome texture in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
@@ -68,13 +68,13 @@ MainWindow* createMW(){
 
 	surface = SDL_LoadBMP("./utilities/mainWindow/newGame.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a newGame surface in MainWindowGUI: %s\n", SDL_GetError());
 		return NULL;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	mw->newGame = SDL_CreateTextureFromSurface(mw->renderer, surface);
 	if (mw->newGame==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a newGame texture in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
@@ -84,13 +84,13 @@ MainWindow* createMW(){
 
 	surface = SDL_LoadBMP("./utilities/mainWindow/loadGame.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a loadGame surface in MainWindowGUI: %s\n", SDL_GetError());
 		return NULL;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	mw->loadGame = SDL_CreateTextureFromSurface(mw->renderer, surface);
 	if (mw->loadGame==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a loadGame texture in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
@@ -100,13 +100,13 @@ MainWindow* createMW(){
 
 	surface = SDL_LoadBMP("./utilities/mainWindow/quitMain.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a quit surface in MainWindowGUI: %s\n", SDL_GetError());
 		return NULL;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	mw->quit = SDL_CreateTextureFromSurface(mw->renderer, surface);
 	if (mw->quit==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a quit texture in MainWindowGUI: %s\n", SDL_GetError());
 		destroyMainWindow(mw);
 		return NULL ;
 	}
@@ -116,34 +116,31 @@ MainWindow* createMW(){
 
 
 void destroyMainWindow(MainWindow* mw){
-	printf("inside destroy MainWindow\n");
+	//printf("inside destroy MainWindow\n");
 	if (mw==NULL) return;
-	printf("before welcom destroy mainWindow\n");
+	//printf("before welcom destroy mainWindow\n");
 	if(mw->welcome!=NULL) SDL_DestroyTexture(mw->welcome);
-	printf("after welcom destroy mainWindow\n");
+	//printf("after welcom destroy mainWindow\n");
 	if(mw->quit!=NULL) SDL_DestroyTexture(mw->quit);
-	printf("after quit destroy mainWindow\n");
+	//printf("after quit destroy mainWindow\n");
 	if(mw->newGame!=NULL) SDL_DestroyTexture(mw->newGame);
-	printf("after new game destroy mainWindow\n");
+	//printf("after new game destroy mainWindow\n");
 	if(mw->loadGame!=NULL) SDL_DestroyTexture(mw->loadGame);
-	printf("after load Game destroy mainWindow\n");
+	//printf("after load Game destroy mainWindow\n");
 	if(mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
-	printf("after bg destroy mainWindow\n");
+	//printf("after bg destroy mainWindow\n");
 	if(mw->renderer!=NULL) SDL_DestroyRenderer(mw->renderer);
-	printf("after renderer destroy mainWindow\n");
+	//printf("after renderer destroy mainWindow\n");
 	if (mw->window != NULL) SDL_DestroyWindow(mw->window);
-	printf("after window destroy mainWindow\n");
-
+	//printf("after window destroy mainWindow\n");
 	//if(mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
-
-	printf("the end of destroy main\n");
-
+	//printf("the end of destroy main\n");
 	free(mw);
 }
 
 void drawMainWindow(MainWindow* mw){
 	if(mw==NULL){
-		printf("mw is NULL");
+		printf("ERROR: MainWindow is NULL in drawWindow function");
 		return;
 	}
 	assert(mw->quit!=NULL);

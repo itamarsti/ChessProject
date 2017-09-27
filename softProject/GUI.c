@@ -350,6 +350,7 @@ void guiMain(){
 						continue;
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
+						if(numOfFilesInDir()==0) noLoadSlotDialog();
 						destroyGameWindow(manager->gw);
 						loadBool = true;
 						backGameBool = true;
@@ -566,6 +567,12 @@ void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie){
 void saveMessageDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Save Message",
 		"Game was saved!",NULL);
+}
+
+
+void noLoadSlotDialog(){
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Load Message",
+		"There are no saved Games!",NULL);
 }
 void quitGame(Manager* manager){
 	if(manager!=NULL){
