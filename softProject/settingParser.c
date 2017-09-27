@@ -130,12 +130,14 @@ bool isFileExist(const char* path){
 
 void destroySettingStruct(ChessCommand* cmd){
 	assert(cmd!=NULL);
-	if(cmd->path!=NULL) free(cmd->path);
+	if(cmd->cmd==LOAD_FILE){
+		if(cmd->path!=NULL) free(cmd->path);
+	}
 	free(cmd);
 }
 
 char* settingAcceptor(){
-
+	//printf("in settingacceptor\n");
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
@@ -143,6 +145,7 @@ char* settingAcceptor(){
 		//free(errorDet);
 		free(input);
 	}
+	//printf("out of setting acceptor\n");
 	return input;
 }
 
@@ -235,9 +238,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 		token = strtok(NULL, "\t\r\n ");
 		//printf("the token is:%s\n",token);
 		bool exist = isFileExist(token);
-		if(!exist){
-			command->cmd = INVALID_FILE;
-		}
+		if(!exist) command->cmd = INVALID_FILE;
 		else if(exist){
 			command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
 			strcpy(command->path,token);

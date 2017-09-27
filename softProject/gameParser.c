@@ -118,6 +118,8 @@ GameCommand* gameParser(const char* str){
 	command->validArg = true;
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
+	command->cmd = INVALID_LINE2;
+	command->validArg = false;
 	char stringDup[1024] = {'i','n','t','i','a','l'};
 	//printf("stringDup is:%s\n", stringDup);
 	strcpy(stringDup,str);
@@ -125,23 +127,51 @@ GameCommand* gameParser(const char* str){
 	char *token = strtok(stringDup, "\t\r\n ");
 	if(token==NULL) {
 		//printf("NULL");
-		command->cmd = INVALID_LINE2;
-		command->validArg = false;
 		return command;
 	}
-	else if(strcmp(token, "quit")==0) command->cmd = QUIT2;
-	else if(strcmp(token, "undo")==0)command->cmd = UNDO;
-	else if(strcmp(token, "reset")==0)command->cmd = RESET;
-	else if((strcmp(token, "save")==0)){
-		token = strtok(NULL, "\t\r\n");
-		if(!isFileCreated(token)){
-			command->cmd = INVALID_SAVE;
-			command->validArg = false;
+	else if(strcmp(token, "quit")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = QUIT2;
+			command->validArg = true;
 			return command;
 		}
-		command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
-		strcpy(command->path,token);
-		command->cmd = SAVE;
+	}
+	else if(strcmp(token, "undo")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = UNDO;
+			command->validArg = true;
+			return command;
+		}
+	}
+	else if(strcmp(token, "reset")==0){
+		token = strtok(NULL, "\t\r\n ");
+		if(token==NULL){
+			command->cmd = RESET;
+			command->validArg = true;
+			return command;
+		}
+	}
+	else if((strcmp(token, "save")==0)){
+		bool isPath = false;
+		token = strtok(NULL, "\t\r\n ");
+		bool isCreated = isFileCreated(token);
+		if(!isCreated)command->cmd = INVALID_SAVE;
+		else if(isCreated){
+			command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
+			strcpy(command->path,token);
+			command->cmd = SAVE;
+			command->validArg = true;
+			isPath = true;
+		}
+		token = strtok(NULL, "\t\r\n ");
+		if(token!=NULL){
+			command->cmd = INVALID_LINE2;
+			command->validArg = false;
+			if(isPath==true) free(command->path);
+		}
+		return command;
 	}
 	else if(strcmp(token, "move")==0){
 		command->validArg = false;
@@ -180,6 +210,7 @@ GameCommand* gameParser(const char* str){
 				}
 			}
 		}
+		return command;
 	}
 	else if((strcmp(token, "get_moves")==0)){
 		command->cmd = INVALID_LINE2;
@@ -203,10 +234,7 @@ GameCommand* gameParser(const char* str){
 				else command->cmd = INVALID_LINE2;
 			}
 		}
-	}
-	else{
-		command->cmd = INVALID_LINE2;
-		command->validArg = false;
+		return command;
 	}
 	return command;
 }

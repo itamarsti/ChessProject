@@ -27,10 +27,8 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	else if (command->cmd==GAME_MODE_2) setNumPlayers(board, 2);
 	else if (command->cmd==DEFAULT) setDefault(board);
 	else if	(command->cmd==PRINT_SETTINGS)boardPrintSet(board);
-	else if (command->cmd ==LOAD_FILE){
-		loadFile(board,command);
-		free(command->path);
-	}
+	else if (command->cmd ==LOAD_FILE)loadFile(board,command);
+	//printf("in settingFlow load serction\n");
 	return false;
 	}
 
@@ -46,9 +44,12 @@ void mainSettingFlow(boardGame* board){
 	bool startBool = false;
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	while(!startBool){
+		//printf("in the loop of settings flow\n");
 		char* string = (char*) settingAcceptor();
 		assert(string!=NULL);
+		//printf("befor settingcmd\n");
 		ChessCommand* cmd = (ChessCommand*) settingParser(string,board->gameMode);
+		//printf("after cmdsettings");
 		assert(cmd!=NULL);
 		if(cmd->validArg==false){
 			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)
@@ -75,10 +76,15 @@ void mainSettingFlow(boardGame* board){
 				destroySettingStruct(cmd);
 				continue;
 			}
+			//printf("cefore startBool\n");
 			startBool=cmdToActSetting(board, cmd);
+			//printf("after startbool\n");
 		}
+		//printf("before free\n");
 		free(string);
+		//printf("before destroy\n");
 		destroySettingStruct(cmd);
+		//printf("after destroy");
 	}
 	return;
 }

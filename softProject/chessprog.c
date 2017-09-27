@@ -25,8 +25,11 @@ int main(int argc, char* argv[]) {
 	}
 	else if(consoleBool){
 		while(1){
+			//printf("before creating\n");
 			boardGame* mainBoard = createBoard();
+			//printf("before init\n");
 			initBoard(mainBoard, true);
+			//printf("before settings\n");
 			mainSettingFlow(mainBoard);				//setting Function. Continues when user type "Start".
 			resetBool = false;
 			while(!resetBool){

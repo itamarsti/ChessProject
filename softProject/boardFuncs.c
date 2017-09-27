@@ -204,7 +204,7 @@ void invalidSettingPrint(SETTING_COMMAND cmd){
 }
 
 void loadFile(boardGame*board, ChessCommand* cmd){
-	printf("in load file\n");
+	//printf("in load file\n");
 	assert(board!=NULL); assert(board->boardArr!=NULL);assert(cmd!=NULL); assert(cmd->path!=NULL);
 	char* path = (char*)cmd->path;
 	assert(path!=NULL);
@@ -239,7 +239,7 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 			board->boardArr[i][j-7] = (char)buffer[j];
 		}
 	}
-	printf("end of load file\n");
+	//printf("end of load file\n");
 	fclose(file);
 }
 
