@@ -57,6 +57,7 @@ void mainSettingFlow(boardGame* board){
 				invalidSettingPrint(cmd->cmd);
 				destroySettingStruct(cmd);
 				free(string);
+				continue;
 			}
 			else if(cmd->cmd==INVALID_LINE1){			//what to do in that case???
 				printf("ERROR: Invalid Command\n");
@@ -74,6 +75,7 @@ void mainSettingFlow(boardGame* board){
 			else if (cmd->cmd==DIFFICULTY_5){
 				printf("Expert level not supported, please choose a value between 1 to 4:\n");
 				destroySettingStruct(cmd);
+				free(string);
 				continue;
 			}
 			//printf("cefore startBool\n");
@@ -84,7 +86,7 @@ void mainSettingFlow(boardGame* board){
 		free(string);
 		//printf("before destroy\n");
 		destroySettingStruct(cmd);
-		//printf("after destroy");
+		//printf("after destroy\n");
 	}
 	return;
 }

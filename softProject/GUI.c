@@ -22,24 +22,24 @@
 
 void guiMain(){
 	Manager* manager =(Manager*) createManager();
-	if(manager->mw==NULL) printf("main window is null");
+	if(manager==NULL) printf("ERROR: Manager is null");
 	setDefault(manager->board);
 	initBoard(manager->board,true);
 	bool loadBool = false; bool settingsBool = false;
 	bool gameBool = false; bool backMainBool = false; bool backGameBool = false;
 	bool mainBool = true;
 	while(1){
-		if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
-		if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
-		if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
-		if(gameBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^6\n");
+		//if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
+		//if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
+		//if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
+		//if(gameBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^6\n");
 
 		if(mainBool){			//~~~~~~~~~Beginning of main window~~~~~~~~
 			initBoard(manager->board,true);
-			if(manager->mw==NULL) printf("main window is null");
 			setDefault(manager->board);
 			//if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 			manager->mw = (MainWindow*) createMW();
+			if(manager->mw==NULL) printf("ERROR: main window is null");
 			drawMainWindow(manager->mw);
 			bool quitMain = false;
 			while(!quitMain){

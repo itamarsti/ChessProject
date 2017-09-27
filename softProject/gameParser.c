@@ -73,7 +73,7 @@ bool isFileCreated(const char* path){
 	strcpy(realpath,path);
 	fp=fopen(realpath,"w");
 	if(fp==NULL){
-		fclose(fp);
+		//Unneccessery fclose(fp);
 		free(realpath);
 		return false;
 	}

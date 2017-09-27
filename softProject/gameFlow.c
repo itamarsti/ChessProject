@@ -24,7 +24,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	assert(cmd!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	bool validMove, isMate, isTie= false;
+	bool validMove=false; bool isMate = false; bool isTie= false;
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd->position,cmd->destination, true);
 		if(validMove){
@@ -58,6 +58,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 		}
 		undo(board,true,true);
 		undo(board,true,true);
+		printBoard(board);
 		return true;
 	}
 	else if(cmd->cmd==SAVE) saveFile(board,cmd->path);
@@ -70,8 +71,9 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 bool mainGameFlow(boardGame* board){
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
+	//printf("insdie game flow\n");
 	if(board==NULL){
-		printf("board is NULL");
+		printf("ERROR: board is NULL");
 		exit(0);
 	}
 	//assert(board->boardArr!=NULL);

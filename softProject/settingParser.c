@@ -111,19 +111,28 @@ SETTING_COMMAND diffiDecider(char* str, int Players){
 }
 
 bool isFileExist(const char* path){
+	//printf("inside is ifFileExist function\n");
 	assert(path!=NULL);
 	FILE* fp;
 	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
+	//printf("after malloc of fileExist\n");
 	assert(realpath!=NULL);
 	strcpy(realpath,path);
+	//printf("before openFile of file exist\n");
 	fp=fopen(realpath,"r");
+	//printf("after openFile of fileExsits\n");
 	if(fp==NULL){
-		fclose(fp);
+		//printf("fp is NULL\n");
+		// Unnecessary fclose(fp);
+		//printf("after fclose() 1 file\n");
 		free(realpath);
+		//printf("after free realpath1\n");
 		return false;
 	}
 	fclose(fp);
+	//printf("after fclose() 2 file\n");
 	free(realpath);
+	//printf("at the end of is fileExist\n");
 	return true;
 }
 
@@ -165,7 +174,6 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	int decider = 0;
-	command->cmd = INVALID_LINE1;
 	command->validArg = false;
 	if(token==NULL) {
 		return command;
@@ -250,6 +258,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 		token = strtok(NULL, "\t\r\n ");
 		//printf("the token is:%s\n",token);
 		if(token!=NULL){
+			//printf("the token is not null\n");
 			command->cmd = INVALID_LINE1;
 			command->validArg = false;
 			if(isPath==true) free(command->path);

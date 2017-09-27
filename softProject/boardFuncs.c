@@ -97,13 +97,9 @@ void printBoard(boardGame* board){
 			}
 			printf(" %c\n",PIPE);
 		}
-		printf("  ");
-		for (int k=0;k<17;k++){
-			printf("%c",HYPHEN);
-		}
-		printf(" \n");
+		printf("  -----------------\n");
 		printf("   ");
-		printf("A B C D E F G H  \n");
+		printf("A B C D E F G H\n");
 	}
 	else return;
 }
@@ -146,10 +142,10 @@ void boardPrintSet(boardGame*board){
 	assert(board->boardArr!=NULL);
 	printf("SETTINGS:\n");
 	if(board->gameMode==2){
-		printf("GAME MODE: %d\n",board->gameMode);
+		printf("GAME_MODE: %d\n",board->gameMode);
 		return;}
 	else{
-		printf("GAME MODE: %d\n",board->gameMode);
+		printf("GAME_MODE: %d\n",board->gameMode);
 		printf("DIFFICULTY_LVL: %d\n",board->diffLevel);
 		if(board->userCol==0){
 			printf("USER_CLR: BLACK\n");

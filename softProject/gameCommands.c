@@ -611,8 +611,8 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1,false);
 			valid = isMyKingSafe(copy);
 			//if(!valid) printf("king is not safe for move from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
-			destroyBoard(copy);
 			if(valid){
+				destroyBoard(copy);
 				switchObj(board, rowPos, colPos, rowDest, colDest,obj1,true);
 				return true;
 			}
@@ -623,8 +623,8 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2,false);
 		valid = isMyKingSafe(copy);
 		//if(!valid) printf("the king is not safe");
-		destroyBoard(copy);
 		if(valid){
+			destroyBoard(copy);
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj2,true);
 			return true;
 		}
