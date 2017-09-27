@@ -179,7 +179,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	gw->blackPawn = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->blackPawn==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a blackPawn texture in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -189,13 +189,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	surface = SDL_LoadBMP("./utilities/gameWindow/blackBishop60.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a blackBishop surface in GameWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	gw->blackBishop = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->blackBishop==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a blackBoshop texture in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -206,13 +206,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	surface = SDL_LoadBMP("./utilities/gameWindow/blackRook60.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a blackRook surface in GameWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	gw->blackRook = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->blackRook==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a blackRook texture in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -222,13 +222,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	surface = SDL_LoadBMP("./utilities/gameWindow/blackKing60.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a blackKing surface in GameWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	gw->blackKing = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->blackKing==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a blackKing texture in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -238,13 +238,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	surface = SDL_LoadBMP("./utilities/gameWindow/blackQueen60.bmp");
 	if(surface==NULL){
-		printf("Could not create a surface: %s\n", SDL_GetError());
+		printf("Could not create a blackQueen surface in GameWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 	gw->blackQueen = SDL_CreateTextureFromSurface(gw->renderer, surface);
 	if (gw->blackQueen==NULL){
-		printf("Could not create a texture: %s\n", SDL_GetError());
+		printf("Could not create a blackQueen texture in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
 		return;
 	}
@@ -254,13 +254,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whiteKnight60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whiteKnight surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whiteKnight = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whiteKnight==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whiteKnight texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
@@ -271,13 +271,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whitePawn60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whitePawn surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whitePawn = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whitePawn==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whitePawn texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
@@ -287,13 +287,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whiteBishop60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whiteBishop surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whiteBishop = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whiteBishop==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whiteBishop texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
@@ -304,13 +304,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whiteRook60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whiteRook surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whiteRook = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whiteRook==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whiteRook texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
@@ -320,13 +320,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whiteKing60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whiteKing surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whiteKing = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whiteKing==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whiteKing texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
@@ -336,13 +336,13 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 		surface = SDL_LoadBMP("./utilities/gameWindow/whiteQueen60.bmp");
 		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
+			printf("Could not create a whiteQueen surface in GameWindow: %s\n", SDL_GetError());
 			return;
 		}
 		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
 		gw->whiteQueen = SDL_CreateTextureFromSurface(gw->renderer, surface);
 		if (gw->whiteQueen==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
+			printf("Could not create a whiteQueen texture in GameWindow: %s\n", SDL_GetError());
 			destroyGameWindow(gw);
 			return;
 		}
