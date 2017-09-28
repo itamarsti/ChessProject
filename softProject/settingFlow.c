@@ -80,6 +80,10 @@ void mainSettingFlow(boardGame* board){
 			}
 			//printf("cefore startBool\n");
 			startBool=cmdToActSetting(board, cmd);
+			if (board->diffLevel==5){
+				printf("Expert level not supported\n");
+				initBoard(board,true);
+			}
 			//printf("after startbool\n");
 		}
 		//printf("before free\n");

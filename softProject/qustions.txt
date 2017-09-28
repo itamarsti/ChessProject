@@ -16,3 +16,4 @@
 14. to fix the problem of memory!
 15. undo with 2 players in gui mode
 16. to fix the problem with input after the "real" input.
+17. to check the undo in gui state
