@@ -79,5 +79,13 @@ bool backLighted,bool startLightened);
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event);
 void drawSettingsWindow(SettingsWindow* sw);
 void createGameMode1Texture(SettingsWindow* sw, int numPlayers);
+void createGameMode2Texture(SettingsWindow* sw, int numPlayers);
+void createGameNoobTexture(SettingsWindow* sw, int numPlayers);
+void createGameEasyTexture(SettingsWindow* sw, int numPlayers);
+void createGameModerateTexture(SettingsWindow* sw, int numPlayers);
+void createGameHardTexture(SettingsWindow* sw, int numPlayers);
+void createGameDifficultyDecider(SettingsWindow* sw, int diffiOld, int diffiNew);
+void createSetWhiteTexture(SettingsWindow* sw, int numPlayers);
+void createSetBlackTexture(SettingsWindow* sw, int numPlayers);
 
 #endif /* SETTINGSWINDOWGUI_H_ */

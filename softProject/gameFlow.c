@@ -52,7 +52,7 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 			printf("Undo command not available in 2 players mode\n");
 			return false;
 		}
-		if(spArrayListIsEmpty(board->history)){
+		if(spArrayListIsEmpty(board->history) || board->history->actualSize==4){
 			printf("Empty history, move cannot be undone\n");
 			return false;
 		}

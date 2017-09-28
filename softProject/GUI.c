@@ -87,7 +87,7 @@ void guiMain(){
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
-						printf("~~~~~~push start button was made~~~~~~~~~~~\n");
+						//printf("~~~~~~push start button was made~~~~~~~~~~~\n");
 						destroySettingsWindow(manager->sw);
 						gameBool = true;
 						quitSettings = true;
@@ -109,13 +109,19 @@ void guiMain(){
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
 						setNumPlayers(manager->board,1);
 						createGameMode1Texture(manager->sw,  manager->board->gameMode);
+						createGameMode2Texture(manager->sw, manager->board->gameMode);
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, manager->board->diffLevel);
+						createSetWhiteTexture(manager->sw, manager->board->userCol);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
 						setNumPlayers(manager->board,2);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,2,1,manager->board->diffLevel,false,false);
+						createGameMode1Texture(manager->sw,  manager->board->gameMode);
+						createGameMode2Texture(manager->sw, manager->board->gameMode);
+						createGameDifficultyDecider(manager->sw ,0, manager->board->diffLevel);
+						createSetWhiteTexture(manager->sw, manager->board->gameMode);
+						createSetBlackTexture(manager->sw, manager->board->gameMode);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -140,45 +146,40 @@ void guiMain(){
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->diffLevel==1) continue;
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 1);
 						setDifficult(manager->board,1);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,manager->board->userCol,1,false,false);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->diffLevel==2) continue;
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 2);
 						setDifficult(manager->board,2);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,manager->board->userCol,2,false,false);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->diffLevel==3) continue;
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 3);
 						setDifficult(manager->board,3);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,manager->board->userCol,3,false,false);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->diffLevel==4) continue;
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 4);
 						setDifficult(manager->board,4);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,manager->board->userCol,4,false,false);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->diffLevel==5) continue;
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 5);
 						setDifficult(manager->board,5);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,manager->board->userCol,5,false,false);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -536,10 +537,10 @@ void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie){
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
 					"Check! white king is threatened!",NULL);
 			}
-			else if (curPlayer==0){
-				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
-						"Check! black king is threatened!",NULL);
-			}
+		else if (curPlayer==0){
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
+					"Check! black king is threatened!",NULL);
+		}
 	}
 	else if(mate){
 		if(curPlayer==1){

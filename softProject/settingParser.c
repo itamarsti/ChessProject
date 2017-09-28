@@ -217,9 +217,7 @@ ChessCommand* settingParser(const char* str, int numPlayers){
 		else if ((strcmp(token, "difficulty")==0)) decider = 2;
 		else if ((strcmp(token, "user_color")==0)) decider = 3;
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL || !spParserIsInt(token)){
-			return command;
-		}
+		if(token==NULL)	return command;
 		//printf("in here 2, the decider is: %d\n", decider);
 		SETTING_COMMAND cmd = INVALID_LINE1;
 		if (decider==1) cmd = gameModeDecider(token);

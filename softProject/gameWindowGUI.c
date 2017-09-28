@@ -515,44 +515,44 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 
 
 void destroyGameWindow(GameWindow* gw){
-	printf("insdie destroy game window\n");
+	//printf("insdie destroy game window\n");
 	if (gw==NULL) return;
 	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
-	printf("after destroy saveGame\n");
+	//printf("after destroy saveGame\n");
 	if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
-	printf("after destroy loadGame\n");
+	//printf("after destroy loadGame\n");
 	if (gw->restart!=NULL) SDL_DestroyTexture(gw->restart);
-	printf("after destroy restart\n");
+	//printf("after destroy restart\n");
 	if (gw->undo!=NULL) SDL_DestroyTexture(gw->undo);
-	printf("after destroy undo\n");
+	//printf("after destroy undo\n");
 	if (gw->mainMenu!=NULL) SDL_DestroyTexture(gw->mainMenu);
-	printf("after destroy mainMenu\n");
+	//printf("after destroy mainMenu\n");
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
-	printf("after destroy quit\n");
+	//printf("after destroy quit\n");
 	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
-	printf("after destroy blackPawn\n");
+	//printf("after destroy blackPawn\n");
 	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
-	printf("after destroy blackRook\n");
+	//printf("after destroy blackRook\n");
 	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
-	printf("after destroy blackKnight\n");
+	//printf("after destroy blackKnight\n");
 	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
-	printf("after destroy blackBishop\n");
+	//printf("after destroy blackBishop\n");
 	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
-	printf("after destroy blackQueen\n");
+	//printf("after destroy blackQueen\n");
 	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
-	printf("after destroy blackKing\n");
+	//printf("after destroy blackKing\n");
 	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
-	printf("after destroy whitePawn\n");
+	//printf("after destroy whitePawn\n");
 	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
-	printf("after destroy whiteRook\n");
+	//printf("after destroy whiteRook\n");
 	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
-	printf("after destroy whiteBishop\n");
+	//printf("after destroy whiteBishop\n");
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
-	printf("after destroy whiteKnight\n");
+	//printf("after destroy whiteKnight\n");
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
-	printf("after destroy whiteQueen\n");
+	//printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
-	printf("after destroy whiteKing\n");
+	//printf("after destroy whiteKing\n");
 	//if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
 	//printf("after destroy greenLight\n");
 	//if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
@@ -560,11 +560,11 @@ void destroyGameWindow(GameWindow* gw){
 	//if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
 	//printf("after destroy yellowLight\n");
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
-	printf("after destroy bg\n");
+	//printf("after destroy bg\n");
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
-	printf("after destroy renderer\n");
+	//printf("after destroy renderer\n");
 	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
-	printf("after destroy window\n");
+	//printf("after destroy window\n");
 	free(gw);
 	printf("the end of game window\n");
 
@@ -877,12 +877,12 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 
 	int row = NumToRow(fromPixToPos(p1->x,p1->y));
 	int col = NumToCol(fromPixToPos(p1->x,p1->y));
-	printf("the row is:%d, the col is:%d, the object is:%c\n", row,col,board->boardArr[row][col]);
+	//printf("the row is:%d, the col is:%d, the object is:%c\n", row,col,board->boardArr[row][col]);
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			if(i==row && j==col && board->boardArr[i][j]!=UNDERSCORE
 					&& fromPixToPos(p1->x,p1->y)!=-1 && fromPixToPos(p2->x,p2->y)!=-1){
-				printf("the first pixel should be: %d, the second is: %d\n",fromPixToPos(p1->x,p1->y), fromPixToPos(p2->x,p2->y));
+				//printf("the first pixel should be: %d, the second is: %d\n",fromPixToPos(p1->x,p1->y), fromPixToPos(p2->x,p2->y));
 				rec.x = (390 + j*69 - p1->x + p2->x); rec.y = (52 + i*69 - p1->y + p2->y); rec.w = 60 ;rec.h = 60;
 				if(board->boardArr[i][j]==BlackPawn) SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 				else if(board->boardArr[i][j]==BlackRook) SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
