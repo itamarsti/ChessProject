@@ -40,7 +40,6 @@ void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, i
 bool isWinner(boardGame* board);
 bool isTie(boardGame* board);
 void computerMoveMessage(boardGame* board, int position, int destination);
-bool checkPawnPromotion(boardGame* board);
 bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint);
 bool moveBishop(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);
 bool moveRook(boardGame* board, int xPos, int yPos, int xDest, int yDest, bool doPrint);

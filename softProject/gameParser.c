@@ -73,7 +73,6 @@ bool isFileCreated(const char* path){
 	strcpy(realpath,path);
 	fp=fopen(realpath,"w");
 	if(fp==NULL){
-		//Unneccessery fclose(fp);
 		free(realpath);
 		return false;
 	}
@@ -106,53 +105,28 @@ char* gameAcceptor(){
 	}
 	//printf("game acceptor works fine\n");
 	return input;
-	}
-
-
-
+}
 
 
 GameCommand* gameParser(const char* str){
 	GameCommand* command = (GameCommand*)malloc(sizeof(GameCommand));
 	assert(command!=NULL); assert(str!=NULL);
-	command->validArg = true;
-	setvbuf (stdout, NULL, _IONBF, 0);
-	fflush(stdout);
+	setvbuf (stdout, NULL, _IONBF, 0);	fflush(stdout);
 	command->cmd = INVALID_LINE2;
 	command->validArg = false;
 	char stringDup[1024] = {'i','n','t','i','a','l'};
-	//printf("stringDup is:%s\n", stringDup);
 	strcpy(stringDup,str);
-	//printf("stringDup is:%s\n", stringDup);
 	char *token = strtok(stringDup, "\t\r\n ");
-	if(token==NULL) {
-		//printf("NULL");
-		return command;
-	}
+	if(token==NULL)	return command;
 	else if(strcmp(token, "quit")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = QUIT2;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL)command->cmd = QUIT2;}
 	else if(strcmp(token, "undo")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = UNDO;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL)command->cmd = UNDO;}
 	else if(strcmp(token, "reset")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = RESET;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL)command->cmd = RESET;}
 	else if((strcmp(token, "save")==0)){
 		bool isPath = false;
 		token = strtok(NULL, "\t\r\n ");
@@ -163,16 +137,13 @@ GameCommand* gameParser(const char* str){
 			strcpy(command->path,token);
 			command->cmd = SAVE;
 			command->validArg = true;
-			isPath = true;
-		}
+			isPath = true;}
 		token = strtok(NULL, "\t\r\n ");
 		if(token!=NULL){
 			command->cmd = INVALID_LINE2;
 			command->validArg = false;
-			if(isPath==true) free(command->path);
-		}
-		return command;
-	}
+			if(isPath==true) free(command->path);}
+		return command;}
 	else if(strcmp(token, "move")==0){
 		command->validArg = false;
 		token = strtok(NULL, "\t\r\n ");
@@ -198,27 +169,17 @@ GameCommand* gameParser(const char* str){
 							if(token==NULL){
 								command->destination = RowColToNum(7-row,col);
 								command->cmd = MOVE;
-								command->validArg = true;
-							}
-							else command->cmd = INVALID_LINE2;
-						}
-					}
-				}
+								command->validArg = true;}
+							else command->cmd = INVALID_LINE2;}}}
 				else{
-					//printf("in here\n");
-					command->cmd = INVALID_LINE2;
-				}
-			}
-		}
-		return command;
-	}
+					command->cmd = INVALID_LINE2;}}}
+		return command;}
 	else if((strcmp(token, "get_moves")==0)){
 		command->cmd = INVALID_LINE2;
 		command->validArg = false;
 		token = strtok(NULL, "\t\r\n ");
 		if(token!=NULL){
 			int val = isTri(token);
-			//printf("the return number is:%d\n",val);
 			if(val==-1) command->cmd = INVALID_LINE2;
 			else if(val==1|| val==0){
 				if(val==0)command->cmd = INVALID_POSITION;
@@ -229,13 +190,10 @@ GameCommand* gameParser(const char* str){
 				if(token==NULL){
 					command->destination = RowColToNum(7-row,col);
 					command->cmd = GET_MOVES;
-					command->validArg = true;
-				}
-				else command->cmd = INVALID_LINE2;
-			}
-		}
-		return command;
-	}
+					command->validArg = true;}
+				else command->cmd = INVALID_LINE2;}}
+		return command;}
+	if(command->cmd==QUIT2 || command->cmd==UNDO || command->cmd==RESET) command->validArg=true;
 	return command;
 }
 

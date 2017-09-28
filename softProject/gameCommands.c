@@ -37,8 +37,6 @@ void reset(boardGame* board){
 	return;
 }
 
-
-
 void saveFile(boardGame* board, const char* path){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(path!=NULL);
@@ -70,7 +68,6 @@ void saveFile(boardGame* board, const char* path){
 	fputs("</game>\n",file);
 	fclose(file);
 }
-
 
 
 
@@ -226,14 +223,11 @@ bool isBlackPlayer(char c){
 
 
 void getMovesFunc(boardGame* board,int position){
-	//printf("getmovesFunc was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	int row = NumToRow(position);
 	int col = NumToCol(position);
-	if (position>63 || position<0 ){
-		printf("Invalid position on the board\n");}
-	//printf("current player is %d, the row is %d, the col is: %d\n",board->curPlayer,row,col);
+	if (position>63 || position<0 )	printf("Invalid position on the board\n");
 	if(board->gameMode==2){
 		printf("ERROR: the command is not available in 2-players mode\n");
 		return;
@@ -276,9 +270,9 @@ void getMovesFunc(boardGame* board,int position){
 			}
 		}
 		destroyBoard(copy);
-		}
-	return;
 	}
+return;
+}
 
 void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest){
 	assert(copy!=NULL);
@@ -303,7 +297,6 @@ void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, i
 	}
 	if (valid1==true)printf("<%d,%c>^\n",8-rowDest,(char)(colDest+'a'));
 	else printf("<%d,%c>\n",8-rowDest,(char)(colDest+'a'));
-
 }
 
 
@@ -340,35 +333,10 @@ void computerMoveMessage(boardGame* board, int position, int destination){
 	else if(c==BlackQueen || c==WhiteQueen) printf("queen");
 	else if(c==BlackKing || c==WhiteKing) printf("king");
 	printf(" at <%d,%c> to <%d,%c>\n",8-posRow,(char)(posCol+'A'),8-destRow, (char)(destCol+'A'));
-
-
 }
-
-
-bool checkPawnPromotion(boardGame* board){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	if(board->curPlayer==0){
-		for(int i=0;i<COL;i++){
-			if(board->boardArr[7][i]==BlackPawn){
-				return true;
-			}
-		}
-	}
-	else if(board->curPlayer==1){
-		for(int j=0;j<COL;j++){
-			if(board->boardArr[0][j]==WhitePawn){
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 
 
 bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
-	//printf("move pawn was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -420,12 +388,10 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		}
 	if(doPrint) printf("Illegal move\n");
 	return false;
-
 }
 
 bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid = false;
 	if(rowPos!=rowDest && colPos!=colDest){
@@ -447,8 +413,7 @@ bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 }
 
 bool moveBishop(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid = false;
 	if(rowPos==rowDest || colPos==colDest){
@@ -480,8 +445,9 @@ bool moveKnight(boardGame* board, int rowPos, int colPos, int rowDest, int colDe
 	}
 	if(doPrint) printf("Illegal move\n");
 	return false;
-
 }
+
+
 bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -604,6 +570,7 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 	return !valid;
 }
 
+
 bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2, bool print){
 	//printf("switch and check was acted from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
 	assert(board!=NULL);
@@ -640,6 +607,7 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	destroyBoard(copy);
 	return false;
 }
+
 
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj,bool chaPla){
 	assert(board!=NULL);
@@ -689,8 +657,8 @@ bool moveObj(boardGame* board,int position, int destination,bool doPrint){
 	return validMove;	//change player and add move to history are in switchObj func.
 }
 
-bool isMyKingSafe(boardGame* board){
 
+bool isMyKingSafe(boardGame* board){
 	assert(board!=NULL);
 	bool safe = false;
 	int position = -1;
@@ -794,66 +762,57 @@ bool isSafeStraight(boardGame* board,int row, int col,char symbol){
 
 
 bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
+	assert(board!=NULL);assert(board->boardArr!=NULL);
 	int i = 1;
 	if(symbol==WhiteKing){
 		while (row+i<ROW && col+i<COL){
 			if(board->boardArr[row+i][col+i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col+i]==BlackBishop||board->boardArr[row+i][col+i]==BlackQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row-i>=0 && col+i<COL){
 			if(board->boardArr[row-i][col+i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col+i]==BlackBishop||board->boardArr[row-i][col+i]==BlackQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row-i>=0 && col-i>=0){
 			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col-i]==BlackBishop||board->boardArr[row-i][col-i]==BlackQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row+i<ROW && col-i>=0){
 			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col-i]==BlackBishop||board->boardArr[row+i][col-i]==BlackQueen)
 				return false;
-			else break;
-		}
+			else break;}
 	}
 	else if(symbol==BlackKing){
 		while (row+i<ROW && col+i<COL){
 			if(board->boardArr[row+i][col+i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col+i]==WhiteBishop||board->boardArr[row+i][col+i]==WhiteQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row-i>=0 && col+i<COL){
 			if(board->boardArr[row-i][col+i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col+i]==WhiteBishop||board->boardArr[row-i][col+i]==WhiteQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row-i>=0 && col-i>=0){
 			if(board->boardArr[row-i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row-i][col-i]==WhiteBishop||board->boardArr[row-i][col-i]==WhiteQueen)
 				return false;
-			else break;
-		}
+			else break;}
 		i = 1;
 		while (row+i<ROW && col-i>=0){
 			if(board->boardArr[row+i][col-i]==UNDERSCORE) i++;
 			else if(board->boardArr[row+i][col-i]==WhiteBishop||board->boardArr[row+i][col-i]==WhiteQueen)
 				return false;
-			else break;
-		}
+			else break;}
 	}
 	return true;
 }
@@ -938,9 +897,7 @@ int trackKingPosition(boardGame* board, char symbol){
 
 
 void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest){
-	assert(board!=NULL);
-	assert(board->boardArr!=NULL);
-	assert(board->history!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
 	if(spArrayListIsFull(board->history)){
 		for(int i=0;i<4;i++){

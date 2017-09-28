@@ -4,7 +4,7 @@ O_FILES= chessprog.o SPArrayList.o settingParser.o boardFuncs.o settingFlow.o ga
 H_Files = chessProg.h SPArrayList.h settingParser.h boardFuncs.h settingFlow.h gameParser.h gameCommands.h gameFlow.h alphaBetaMinMax.h mainWindowGUI.h settingsWindowGUI.h loadWindowGUI.h gameWindowGUI.h GUI.h
 
 EXEC = chessprog
-COMP_FLAG = -std=c99 -Wall -Wextra \
+COMP_FLAG = -std=c99 -Wall -Wextra -lm -g \
 -Werror -pedantic-errors
 SDL_COMP_FLAG = -I/usr/local/lib/sdl_2.0.5/include/SDL2 -D_REENTRANT
 SDL_LIB = -L/usr/local/lib/sdl_2.0.5/lib -Wl,-rpath,/usr/local/lib/sdl_2.0.5/lib -Wl,--enable-new-dtags -lSDL2 -lSDL2main -lm
@@ -63,7 +63,7 @@ loadWindowGUI.o: loadWindowGUI.c loadWindowGUI.h boardFuncs.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
     
     
-gameWindowGUI.o: gameWindowGUI.c gameWindowGUI.h gameCommands.h gameParser.h boardFuncs.h
+gameWindowGUI.o: gameWindowGUI.c gameWindowGUI.h gameCommands.h gameParser.h boardFuncs.h loadWindowGUI.h
 	$(CC) $(COMP_FLAG) $(SDL_COMP_FLAG) -c $*.c
 
 GUI.o: GUI.c GUI.h gameCommands.h gameParser.h boardFuncs.h mainWindowGUI.h settingsWindowGUI.h loadWindowGUI.h gameWindowGUI.h alphaBetaMinMax.h

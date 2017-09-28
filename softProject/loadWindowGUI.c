@@ -27,13 +27,13 @@ LoadWindow* createLW(){
 	}
 	int numFiles = numOfFilesInDir();
 	//printf("before create LR\n");
-	createLR(lw,numFiles,false,0,false);
+	createLR(lw,numFiles,0,false);
 	//printf("after create LR\n");
 	return lw;
 }
 
 
-void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool loadLight){
+void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight){
 	assert(slotsNum>=0); assert(slotsNum<=5); assert(slotLight>=0); assert(slotLight<=5);
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_Surface* surface = NULL;
@@ -70,8 +70,7 @@ void createLR(LoadWindow* lw, int slotsNum, bool backLight, int slotLight, bool 
 
 
 	//Creating a back texture:
-	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
-	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNew.bmp");
+	surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
 	if(surface==NULL){
 		//printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
 		return;
@@ -443,6 +442,7 @@ LOAD_WINDOW_EVENT loadWindowHandleEvent(LoadWindow* lw, SDL_Event* event){
 				return LOAD_WINDOW_PUSH_BACK;
 			}
 			break;
+		/*
 		case SDL_MOUSEMOTION:
 			if(isClickOnLWLoad(event->motion.x,event->motion.y)){
 				return LOAD_WINDOW_HOVER_LOAD;
@@ -451,6 +451,7 @@ LOAD_WINDOW_EVENT loadWindowHandleEvent(LoadWindow* lw, SDL_Event* event){
 				return LOAD_WINDOW_HOVER_BACK;
 			}
 			break;
+			*/
 		case SDL_WINDOWEVENT:
 			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
 				return LOAD_WINDOW_EVENT_QUIT;
@@ -510,12 +511,11 @@ void loadWindowShow(LoadWindow* lw){
 }
 
 
-void createBackTexture(LoadWindow* lw, bool backLight ){
+void createBackTexture(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL); assert(lw->renderer!=NULL);
 	SDL_Surface* surface = NULL;
 	SDL_DestroyTexture(lw->back);
-	if(backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
-	else if(!backLight) surface = SDL_LoadBMP("./utilities/loadWindow/backNew.bmp");
+	surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
 		return;

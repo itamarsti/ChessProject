@@ -40,9 +40,9 @@ typedef struct SETTINGSWINDOW{
 
 
 typedef enum {
-	SETTINGS_WINDOW_HOVER_BACK,
+	//SETTINGS_WINDOW_HOVER_BACK,
 	SETTINGS_WINDOW_PUSH_BACK,
-	SETTINGS_WINDOW_HOVER_START,
+	//SETTINGS_WINDOW_HOVER_START,
 	SETTINGS_WINDOW_PUSH_START,
 	SETTINGS_WINDOW_GAME_MODE_1,
 	SETTINGS_WINDOW_GAME_MODE_2,
@@ -74,8 +74,7 @@ bool isClickOnBack(int x, int y);
 void destroySettingsRenderer(SettingsWindow* sw);
 void destroySettingsWindow(SettingsWindow* sw);
 SettingsWindow* createSW(int numPlayers, int color, int diffi);
-SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi,
-bool backLighted,bool startLightened);
+SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi);
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event);
 void drawSettingsWindow(SettingsWindow* sw);
 void createGameMode1Texture(SettingsWindow* sw, int numPlayers);

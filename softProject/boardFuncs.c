@@ -10,35 +10,10 @@
 #include <string.h>
 #include "settingParser.h"
 #include "SPArrayList.h"
+#include "boardFuncs.h"
 
-
-typedef struct boardGame{
-	char boardArr[8][8];
-	SPArrayList* history;
-	int gameMode;
-	int diffLevel;
-	int userCol;
-	int curPlayer;
-}boardGame;
-
-#define ROW 8
-#define COL 8
-#define PIPE '|'
-#define UNDERSCORE '_'
-#define HYPHEN '-'
-#define BlackPawn 'M'
-#define WhitePawn 'm'
-#define BlackBishop 'B'
-#define WhiteBishop 'b'
-#define BlackRook 'R'
-#define WhiteRook 'r'
-#define BlackKnight 'N'
-#define WhiteKnight 'n'
-#define BlackQueen 'Q'
-#define WhiteQueen 'q'
-#define BlackKing 'K'
-#define WhiteKing 'k'
 #define HISTORY 24
+
 
 boardGame* createBoard(){
 	boardGame* board = (boardGame*)malloc(sizeof(boardGame));
@@ -201,7 +176,6 @@ void invalidSettingPrint(SETTING_COMMAND cmd){
 }
 
 void loadFile(boardGame*board, ChessCommand* cmd){
-	//printf("in load file\n");
 	assert(board!=NULL); assert(board->boardArr!=NULL);assert(cmd!=NULL); assert(cmd->path!=NULL);
 	char* path = (char*)cmd->path;
 	assert(path!=NULL);
@@ -236,7 +210,6 @@ void loadFile(boardGame*board, ChessCommand* cmd){
 			board->boardArr[i][j-7] = (char)buffer[j];
 		}
 	}
-	//printf("end of load file\n");
 	fclose(file);
 }
 

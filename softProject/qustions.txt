@@ -1,15 +1,9 @@
-5. what happens if in setting mode, first user's input is for game color or difficult
-	and later the user's input for "game_mode state" is changed to 2.
-7. how to react when the player's command is "save file"..the game continues?
-	we wait until the player is doing move?
+
 10. adding the case if it's not an XML FILE
-12. to ask if every time we are moving to 2-players state - everything need to be defaulted.
-13. to fix the numbers order in the background
-14. to fix the problem of memory!
-15. undo with 2 players in gui mode
-16. to fix the problem with input after the "real" input.
-17. to check the undo in gui state
-18. checking what happens in gui state after after winning or tie
-19. to check if after i saved and than made moves is it asking me if i want to save again
-	in gui.
-20. to make the function shorter.
+18. checking what happens in gui state after winning or tie
+20. to make functions shorter.
+21. to check memory problems in GUI.
+22. to write documentation to the project.
+25. to check the alphabeta pruning
+26. gameParser is too long!!!!
+27. settingParser is too long!!

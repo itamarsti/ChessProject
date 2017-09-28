@@ -47,6 +47,7 @@ bool spParserIsInt(const char* str){
     return true;
 }
 
+
 SETTING_COMMAND gameModeDecider(char* str){
 	assert(str!=NULL);
 	bool isInt = spParserIsInt(str);
@@ -64,6 +65,7 @@ SETTING_COMMAND gameModeDecider(char* str){
 			}
 		}
 	}
+
 
 SETTING_COMMAND gameColorDecider(char* str, int numPlayers){
 	assert(str!=NULL);
@@ -83,6 +85,7 @@ SETTING_COMMAND gameColorDecider(char* str, int numPlayers){
 			}
 		}
 	}
+
 
 
 SETTING_COMMAND diffiDecider(char* str, int Players){
@@ -110,29 +113,20 @@ SETTING_COMMAND diffiDecider(char* str, int Players){
 		}
 }
 
+
 bool isFileExist(const char* path){
-	//printf("inside is ifFileExist function\n");
 	assert(path!=NULL);
 	FILE* fp;
 	char*realpath = (char*)malloc(sizeof(char)*strlen(path)+1);
-	//printf("after malloc of fileExist\n");
 	assert(realpath!=NULL);
 	strcpy(realpath,path);
-	//printf("before openFile of file exist\n");
 	fp=fopen(realpath,"r");
-	//printf("after openFile of fileExsits\n");
 	if(fp==NULL){
-		//printf("fp is NULL\n");
-		// Unnecessary fclose(fp);
-		//printf("after fclose() 1 file\n");
 		free(realpath);
-		//printf("after free realpath1\n");
 		return false;
 	}
 	fclose(fp);
-	//printf("after fclose() 2 file\n");
 	free(realpath);
-	//printf("at the end of is fileExist\n");
 	return true;
 }
 
@@ -168,100 +162,63 @@ ChessCommand* initChessCommand(){
 
 ChessCommand* settingParser(const char* str, int numPlayers){
 	ChessCommand* command = (ChessCommand*)initChessCommand();
-	assert(command!=NULL);
-	assert(str!=NULL);
+	assert(command!=NULL); assert(str!=NULL);
 	char stringDup[1024] = {'i','n','i','t','i','a','l'};
 	strcpy(stringDup,str);
 	char *token = strtok(stringDup, "\t\r\n ");
 	int decider = 0;
 	command->validArg = false;
-	if(token==NULL) {
-		return command;
-	}
+	if(token==NULL) return command;
 	else if(strcmp(token, "start")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = START;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL) command->cmd = START;}
 	else if(strcmp(token, "quit")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = QUIT1;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL )command->cmd = QUIT1;}
 	else if(strcmp(token, "default")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = DEFAULT;
-			command->validArg = true;
-			return command;
-		}
-	}
+		if(token==NULL) command->cmd = DEFAULT;}
 	else if(strcmp(token, "print_setting")==0){
 		token = strtok(NULL, "\t\r\n ");
-		if(token==NULL){
-			command->cmd = PRINT_SETTINGS;
-			command->validArg = true;
-			return command;
-		}
-	}
-	else if((strcmp(token, "game_mode")==0)||(strcmp(token, "difficulty")==0)
-			||(strcmp(token, "user_color")==0)){
-		//printf("in here 1\n");
+		if(token==NULL) command->cmd = PRINT_SETTINGS;}
+	else if((strcmp(token, "game_mode")==0)||(strcmp(token, "difficulty")==0) ||(strcmp(token, "user_color")==0)){
 		if ((strcmp(token, "game_mode")==0)) decider = 1;
 		else if ((strcmp(token, "difficulty")==0)) decider = 2;
 		else if ((strcmp(token, "user_color")==0)) decider = 3;
 		token = strtok(NULL, "\t\r\n ");
 		if(token==NULL)	return command;
-		//printf("in here 2, the decider is: %d\n", decider);
 		SETTING_COMMAND cmd = INVALID_LINE1;
 		if (decider==1) cmd = gameModeDecider(token);
 		else if(decider==2) cmd = diffiDecider(token,numPlayers);
 		else if (decider==3) cmd = gameColorDecider(token, numPlayers);
 		command->cmd = cmd;
 		if((cmd==INVALID_DIFFICULT)|| (cmd==INVALID_GAME_MODE)|| cmd==INVALID_LINE1){
-			//printf("in here\n");
 			command->validArg = false;
-			//printf("in here 4\n");
-			return command;
-		}
+			return command;}
 		token = strtok(NULL, "\t\r\n ");
 		if(token==NULL) command->validArg = true;
 		else{
 			command->validArg = false;
-			command->cmd = INVALID_LINE1;
-		}
-		//printf("in here 3\n");
-		return command;
-	}
+			command->cmd = INVALID_LINE1;}
+		return command;}
 	else if((strcmp(token, "load")==0)){
 		bool isPath = false;
 		token = strtok(NULL, "\t\r\n ");
-		//printf("the token is:%s\n",token);
 		bool exist = isFileExist(token);
 		if(!exist) command->cmd = INVALID_FILE;
 		else if(exist){
 			command->path = (char*)malloc(sizeof(char)*(strlen(token)+1));
 			strcpy(command->path,token);
-				//int n = strlen(token)-1;
 			command->cmd = LOAD_FILE;
 			command->validArg = true;
-			isPath = true;
-		}
+			isPath = true;}
 		token = strtok(NULL, "\t\r\n ");
-		//printf("the token is:%s\n",token);
 		if(token!=NULL){
-			//printf("the token is not null\n");
 			command->cmd = INVALID_LINE1;
 			command->validArg = false;
-			if(isPath==true) free(command->path);
-		}
-	}
+			if(isPath==true) free(command->path);}}
+	if(command->cmd==QUIT1 || command->cmd==DEFAULT  || command->cmd==PRINT_SETTINGS || command->cmd==START){
+		command->validArg = true;}
 	return command;
 }
 

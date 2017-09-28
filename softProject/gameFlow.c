@@ -20,10 +20,7 @@
 
 
 bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
-	assert(board!=NULL);
-	assert(cmd!=NULL);
-	assert(board->history!=NULL);
-	assert(board->history->elements!=NULL);
+	assert(board!=NULL); assert(cmd!=NULL);	assert(board->history!=NULL);	assert(board->history->elements!=NULL);
 	bool validMove=false; bool isMate = false; bool isTie= false;
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd->position,cmd->destination, true);
@@ -32,7 +29,6 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 			if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
 				//printf("there is a risk on the king");
 				if((isMate = isCheckMate(board))==true){
-					//printf("the is checkMate");
 					free(input);
 					destroyGameStruct(cmd);
 					terminateGame(board,true, false);

@@ -38,6 +38,7 @@ void saveGameFromGUI(boardGame* game, int numOfFiles);
 void saveMessageDialog();
 void slotDialog();
 void quitGame(Manager* manager);
+void savePleaseMessageDialog();
 
 
 #endif /* GUI_H_ */

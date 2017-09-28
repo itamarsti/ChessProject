@@ -18,6 +18,7 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include "gameParser.h"
+#include "loadWindowGUI.h"
 
 
 typedef struct GAMEWINDOW{
@@ -59,20 +60,19 @@ typedef enum {
 	GAME_WINDOW_PUSH_UNDO,
 	GAME_WINDOW_PUSH_MAIN_MENU,
 	GAME_WINDOW_PUSH_EVENT_QUIT,
-	GAME_WINDOW_HOVER_LOAD_GAME,
-	GAME_WINDOW_HOVER_SAVE_GAME,
-	GAME_WINDOW_HOVER_RESTART_GAME,
-	GAME_WINDOW_HOVER_UNDO,
-	GAME_WINDOW_HOVER_MAIN_MENU,
-	GAME_WINDOW_HOVER_EVENT_QUIT,
+	//GAME_WINDOW_HOVER_LOAD_GAME,
+	//GAME_WINDOW_HOVER_SAVE_GAME,
+	//GAME_WINDOW_HOVER_RESTART_GAME,
+	//GAME_WINDOW_HOVER_UNDO,
+	//GAME_WINDOW_HOVER_MAIN_MENU,
+	//GAME_WINDOW_HOVER_EVENT_QUIT,
 	GAME_WINDOW_HOVER_OBJ,
 	//GAME_WINDOW_HOVER_LIGHT,
 	GAME_WINDOW_EVENT_NONE,
 	GAME_WINDOW_INVALID
 } GAME_WINDOW_EVENT;
 
-void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
-		, bool loadBool, bool mmBool, bool quitBool);
+void createGR(GameWindow* gw, bool undoBool, bool loadBool);
 GameWindow* createGW();
 void destroyGameWindow(GameWindow* gw);
 void destroyGameRenderer(GameWindow* gw);
@@ -91,6 +91,8 @@ int saveGameMessageBox();
 int fromPixToPos(int x, int y);
 bool isPixToPos(int x, int y);
 void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL_Point* p2);
-
+void createGameLoadTexture(GameWindow* gw, bool loadBool);
+void createGameUndoTexture(GameWindow* gw, bool undoBool);
+void createGameSaveTexture(GameWindow* gw, bool saveBool);
 
 #endif /* GAMEWINDOWGUI_H_ */

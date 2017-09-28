@@ -130,8 +130,7 @@ void destroySettingsRenderer(SettingsWindow* sw){
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
 }
 
-SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi,
-	bool backLightened,bool startLightened){
+SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi){
 	assert(sw!=NULL); assert(sw->window!=NULL);
 	SDL_Surface* surface = NULL;
 	// creating the Settings Window renderer
@@ -379,8 +378,7 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 */
 
 	//Creating a back texture:
-	if(!backLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/back.bmp");
-	else if(backLightened)surface = SDL_LoadBMP("./utilities/settingsWindow/backClicked.bmp");
+	surface = SDL_LoadBMP("./utilities/settingsWindow/backClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a back surface in SettingsWindow: %s\n", SDL_GetError());
 		return NULL;
@@ -395,8 +393,8 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 	SDL_FreeSurface(surface);
 
 	//Creating a start texture:
-	if(!startLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/start.bmp");
-	else if(startLightened) surface = SDL_LoadBMP("./utilities/settingsWindow/startClicked.bmp");
+
+	surface = SDL_LoadBMP("./utilities/settingsWindow/startClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a start surface in SettingsWindow: %s\n", SDL_GetError());
 		return NULL;
@@ -427,7 +425,7 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 		destroySettingsWindow(sw);
 		return NULL ;
 	}
-	createSR(sw, numPlayers, color, diffi, false,false);
+	createSR(sw, numPlayers, color, diffi);
 	return sw;
 }
 
@@ -484,6 +482,7 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 				return SETTINGS_WINDOW_PUSH_START;
 			}
 			break;
+		/*
 		case SDL_MOUSEMOTION:
 			if(isClickOnBack(event->motion.x, event->motion.y)){
 				return SETTINGS_WINDOW_HOVER_BACK;
@@ -492,6 +491,7 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 				return SETTINGS_WINDOW_HOVER_START;
 			}
 			break;
+			*/
 		case SDL_WINDOWEVENT:
 			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
 				return SETTINGS_WINDOW_EVENT_QUIT;

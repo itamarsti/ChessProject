@@ -28,9 +28,8 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	else if (command->cmd==DEFAULT) setDefault(board);
 	else if	(command->cmd==PRINT_SETTINGS)boardPrintSet(board);
 	else if (command->cmd ==LOAD_FILE)loadFile(board,command);
-	//printf("in settingFlow load serction\n");
 	return false;
-	}
+}
 
 
 
@@ -44,12 +43,9 @@ void mainSettingFlow(boardGame* board){
 	bool startBool = false;
 	printf("Specify game setting or type 'start' to begin a game with the current setting:\n");
 	while(!startBool){
-		//printf("in the loop of settings flow\n");
 		char* string = (char*) settingAcceptor();
 		assert(string!=NULL);
-		//printf("befor settingcmd\n");
 		ChessCommand* cmd = (ChessCommand*) settingParser(string,board->gameMode);
-		//printf("after cmdsettings");
 		assert(cmd!=NULL);
 		if(cmd->validArg==false){
 			if ((cmd->cmd==INVALID_DIFFICULT)|| (cmd->cmd==INVALID_GAME_MODE)
@@ -78,19 +74,14 @@ void mainSettingFlow(boardGame* board){
 				free(string);
 				continue;
 			}
-			//printf("cefore startBool\n");
 			startBool=cmdToActSetting(board, cmd);
 			if (board->diffLevel==5){
 				printf("Expert level not supported\n");
 				initBoard(board,true);
 			}
-			//printf("after startbool\n");
 		}
-		//printf("before free\n");
 		free(string);
-		//printf("before destroy\n");
 		destroySettingStruct(cmd);
-		//printf("after destroy\n");
 	}
 	return;
 }

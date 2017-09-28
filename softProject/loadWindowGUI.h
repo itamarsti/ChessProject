@@ -28,8 +28,8 @@ typedef enum{
 	LOAD_WINDOW_GAME5SLOT,
 	LOAD_WINDOW_PUSH_BACK,
 	LOAD_WINDOW_PUSH_LOAD,
-	LOAD_WINDOW_HOVER_BACK,
-	LOAD_WINDOW_HOVER_LOAD,
+	//LOAD_WINDOW_HOVER_BACK,
+	//LOAD_WINDOW_HOVER_LOAD,
 }LOAD_WINDOW_EVENT;
 
 
@@ -49,7 +49,7 @@ typedef struct LOADWINDOW{
 
 
 LoadWindow* createLW();
-void createLR(LoadWindow* lw, int slotsNum, bool backLightened, int slotLight, bool loadLight);
+void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight);
 void destroyLoadWindow(LoadWindow* lw);
 void destroyLoadRenderer(LoadWindow* lw);
 int numOfFilesInDir();
@@ -66,6 +66,6 @@ bool isClickOnBackLW(int x, int y);
 bool isClickOnLoadSlot(int x, int y);
 bool isClickOnLWBack(int x, int y);
 bool isClickOnLWLoad(int x, int y);
-void createBackTexture(LoadWindow* lw, bool backLight);
+void createBackTexture(LoadWindow* lw);
 void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight);
 #endif /* LOADWINDOWGUI_H_ */

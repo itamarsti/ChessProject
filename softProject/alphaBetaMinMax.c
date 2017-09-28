@@ -15,7 +15,6 @@
 
 
 int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore){
-	//printf("inside recursive func\n");
 	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	int minWinner = INT_MAX;
@@ -24,14 +23,13 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
     else{
         int scoreWinner;
         int player = board->curPlayer;
-        //bool edge = true;			//is there an edge?!
-        for(int i=0;i<ROW;i++){
-        	for (int j=0;j<COL;j++){
+        for(int i=ROW;i>=0;i--){
+        	for (int j=COL; j>=0;j--){
         		if((player==1 && !isWhitePlayer(board->boardArr[i][j]))||
 				   (player==0 && !isBlackPlayer(board->boardArr[i][j]))||
 				   board->boardArr[i][j]==UNDERSCORE) continue;
-        		for(int k=0;k<ROW;k++){
-        			for (int l=0; l<COL;l++){
+        		for(int k=ROW;k>=0;k--){
+        			for (int l=COL; l>=0;l--){
         				if(moveObj(board, RowColToNum(i,j), RowColToNum(k,l),false)){
         					if(isWinner(board)){
         						if(minmax==true){
@@ -45,7 +43,7 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         					}
         					else if(minmax==true){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,maxWinner);
-        						if(scoreWinner>maxWinner){
+        						if(scoreWinner>=maxWinner){
 									maxWinner = scoreWinner;
 								}
         						if(scoreWinner>=recScore){
@@ -55,7 +53,7 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         					}
         					else if(minmax==false){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,minWinner);
-        						if(scoreWinner<minWinner){
+        						if(scoreWinner<=minWinner){
 									minWinner = scoreWinner ;
 								}
         						if(scoreWinner<=recScore){
@@ -69,7 +67,6 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         		}
         	}
         }
-    //printf("at the end of recursive call\n");
 	if(minmax) return maxWinner;
 	else return minWinner;
     }
@@ -132,13 +129,13 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         // bool maxPlayer = false;
         if(copy->curPlayer==1) minmax = false;
         //if(copy->curPlayer==0) maxPlayer=true;
-        for(int i=0;i<ROW;i++){
-        	for(int j=0; j<COL;j++){
+        for(int i=ROW;i>=0;i--){
+        	for(int j=COL; j>=0;j--){
         		if((!minmax && !isWhitePlayer(copy->boardArr[i][j]))||
 				   (minmax && !isBlackPlayer(copy->boardArr[i][j]))||
 				   copy->boardArr[i][j]==UNDERSCORE) continue;
-        		for (int k=0;k<ROW;k++){
-        			for(int l=0;l<COL;l++){
+        		for (int k=ROW;k>=0;k--){
+        			for(int l=COL; l>=0;l--){
         				//printf("i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
         				if(moveObj(copy,RowColToNum(i,j),RowColToNum(k,l),false)){
         					//printf("valid move: i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);

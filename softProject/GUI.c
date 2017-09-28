@@ -29,10 +29,10 @@ void guiMain(){
 	bool gameBool = false; bool backMainBool = false; bool backGameBool = false;
 	bool mainBool = true;
 	while(1){
-		//if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
-		//if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
-		//if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
-		//if(gameBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^6\n");
+		if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
+		if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
+		if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
+		if(gameBool) printf("^^^^^^^^^^^^^gameBool bool is true^^^^^^^^^^6\n");
 
 		if(mainBool){			//~~~~~~~~~Beginning of main window~~~~~~~~
 			initBoard(manager->board,true);
@@ -93,19 +93,6 @@ void guiMain(){
 						quitSettings = true;
 						break;
 					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_BACK){
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,true,false);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_HOVER_START){
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,true);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
 						setNumPlayers(manager->board,1);
 						createGameMode1Texture(manager->sw,  manager->board->gameMode);
@@ -130,7 +117,7 @@ void guiMain(){
 						if(manager->board->userCol==1) continue;
 						setColor(manager->board,1);
 						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,1,manager->board->diffLevel,false,false);
+						createSR(manager->sw,1,1,manager->board->diffLevel);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -139,7 +126,7 @@ void guiMain(){
 						if(manager->board->userCol==0) continue;
 						setColor(manager->board,0);
 						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,0,manager->board->diffLevel,false,false);
+						createSR(manager->sw,1,0,manager->board->diffLevel);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -183,17 +170,12 @@ void guiMain(){
 						drawSettingsWindow(manager->sw);
 						break;
 					}
-					else{
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,manager->board->gameMode,manager->board->userCol,manager->board->diffLevel,false,false);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
 				}
 			}
 		}
 		//----------------------------End of Settings Window--------------------------------
 		else if(loadBool){					//~~~~~~~~~Beginning of load window~~~~~~~~
+			printf("at the begining of load window\n");
 			int dirFiles = numOfFilesInDir();
 			int fileRemove =0;
 			manager->lw = (LoadWindow*) createLW();
@@ -229,16 +211,6 @@ void guiMain(){
 						}
 						break;
 					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_BACK){
-						createBackTexture(manager->lw, true);
-						drawLoadWindow(manager->lw,dirFiles);
-						break;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_HOVER_LOAD){
-						createLoadTexture(manager->lw, fileRemove, true);
-						drawLoadWindow(manager->lw,dirFiles);
-						break;
-					}
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT
 						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT
 						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT
@@ -250,15 +222,9 @@ void guiMain(){
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
 					destroyLoadRenderer(manager->lw);
-					createLR(manager->lw,dirFiles,false,fileRemove,false);
+					createLR(manager->lw,dirFiles,fileRemove,true);
 					drawLoadWindow(manager->lw,dirFiles);
 					break;
-					}
-					else{
-						createLoadTexture(manager->lw, fileRemove, false);
-						createBackTexture(manager->lw, false);
-						drawLoadWindow(manager->lw, dirFiles);
-						break;
 					}
 				}
 			}
@@ -268,15 +234,22 @@ void guiMain(){
 		else if(gameBool){
 			manager->gw = (GameWindow*) createGW();
 			drawGameWindow(manager->gw, manager->board);
-			bool gameSaved = false;
+			bool gameSaved = true;
 			gameBool = false;
 			bool quit = false;
 			while(!quit){
+				bool undoBool = manager->board->history->actualSize>4 ? true:false;
+				bool loadInsideBool = numOfFilesInDir()>0 ? true: false;
 				if(manager->board->gameMode==1 && manager->board->curPlayer!=manager->board->userCol){
 					moveAIobj(manager->board);
-					destroyGameRenderer(manager->gw);
-					createGR(manager->gw,false,false,false,false,false,false);
+					//destroyGameRenderer(manager->gw);
+					//createGR(manager->gw,undoBool,loadInsideBool);
+					if(manager->board->history->actualSize>4){
+						createGameUndoTexture(manager->gw, true);
+					}
+					createGameSaveTexture(manager->gw,true);
 					drawGameWindow(manager->gw, manager->board);
+					gameSaved = false;
 					bool kingSafe = isMyKingSafe(manager->board);
 					bool checkMate = isCheckMate(manager->board);
 					if(kingSafe==false && checkMate==true){
@@ -294,6 +267,7 @@ void guiMain(){
 				}
 				SDL_Event event3;
 				while(SDL_PollEvent(&event3)){
+
 					if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_EVENT_QUIT){
 						if(!gameSaved){
 							int save = saveGameMessageBox();
@@ -312,13 +286,19 @@ void guiMain(){
 						destroyGameWindow(manager->gw);
 						quitGame(manager);
 					}
+					else if(!(event3.type==SDL_MOUSEBUTTONUP && event3.button.button ==SDL_BUTTON_LEFT)
+							&& !(event3.type==SDL_MOUSEBUTTONDOWN && event3.button.button ==SDL_BUTTON_LEFT)
+							&&!(event3.type=SDL_MOUSEMOTION && (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)))){
+						break;
+					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
 						if(manager->board->gameMode==1){
-							if(manager->board->history->actualSize!=0){
+							if(manager->board->history->actualSize>4){
 								undo(manager->board, false, true); //one more undo
 								undo(manager->board, false, true);
-								destroyGameRenderer(manager->gw);
-								createGR(manager->gw,false,false,false,false,false,false);
+								if(manager->board->history->actualSize<=4){
+									createGameUndoTexture(manager->gw, false);
+								}
 								drawGameWindow(manager->gw, manager->board);
 								gameSaved = false;
 							}
@@ -327,10 +307,10 @@ void guiMain(){
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_RESTART_GAME){
 						initBoard(manager->board,false);
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,false,false,false,false);
+						createGameUndoTexture(manager->gw,false);
+						createGameSaveTexture(manager->gw,false);
 						drawGameWindow(manager->gw, manager->board);
-						gameSaved = false;
+						gameSaved = true;
 						break;
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_SAVE_GAME){
@@ -338,17 +318,23 @@ void guiMain(){
 							int files = numOfFilesInDir();
 							saveGameFromGUI(manager->board,files);
 							saveMessageDialog();
+							createGameLoadTexture(manager->gw,true);
+							createGameSaveTexture(manager->gw,false);
+							drawGameWindow(manager->gw, manager->board);
 							gameSaved = true;
 						}
-						continue;
+						else if(gameSaved) savePleaseMessageDialog();
+						break;
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
 						int num = numOfFilesInDir();
 						if(num==0) slotDialog();
+						printf("in push load window\n");
 						destroyGameWindow(manager->gw);
 						loadBool = true;
 						backGameBool = true;
 						quit = true;
+						printf("in here1\n");
 						break;
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
@@ -367,52 +353,11 @@ void guiMain(){
 							else if(save==0){		//no
 							}
 						}
-
 						gameSaved = true;
 						destroyGameWindow(manager->gw);
 						mainBool = true;
 						quit = true;
 						break;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_EVENT_QUIT){
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,false,false,false,true);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_UNDO){
-						if(manager->board->gameMode==1){
-							if(manager->board->history->actualSize!=0){
-								destroyGameRenderer(manager->gw);
-								createGR(manager->gw,true,false,false,false,false,false);
-								drawGameWindow(manager->gw, manager->board);
-							}
-						}
-						continue;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_RESTART_GAME){
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,true,false,false,false,false);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_SAVE_GAME){
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,true,false,false,false);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_LOAD_GAME){
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,false,true,false,false);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
-					}
-					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_HOVER_MAIN_MENU){
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,false,false,true,false);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
 					}
 					else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_OBJ){
 						SDL_Point p1 = {.x = event3.button.x, .y = event3.button.y};
@@ -423,10 +368,15 @@ void guiMain(){
 							while(SDL_PollEvent(&event8)!=0){
 								SDL_Point p2 = {.x = event8.button.x, .y = event8.button.y};
 								//printf("xDest is :%d, yDest is:%d\n",p2.x,p2.y);
-								if(gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_HOVER_OBJ){
-									SDL_RenderClear(manager->gw->renderer);
-									destroyGameRenderer(manager->gw);
-									createGR(manager->gw,false,false,false,false,false,false);
+								if(!(event3.type==SDL_MOUSEBUTTONUP && event3.button.button ==SDL_BUTTON_LEFT)
+										&& !(event3.type==SDL_MOUSEBUTTONDOWN && event3.button.button ==SDL_BUTTON_LEFT)
+										&&!(event3.type=SDL_MOUSEMOTION && (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)))){
+									break;
+								}
+								else if(gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_HOVER_OBJ){
+									//SDL_RenderClear(manager->gw->renderer);
+									//destroyGameRenderer(manager->gw);
+									//createGR(manager->gw,undoBool,loadInsideBool);
 									drawGameWindowImproved(manager->gw, manager->board,&p1,&p2);
 									continue;
 								}
@@ -436,12 +386,15 @@ void guiMain(){
 									int dest = fromPixToPos(p3.x, p3.y);
 									//printf("the position is:%d, the destination is: %d\n", pos, dest);
 									if(moveObj(manager->board, pos, dest, false)){
-										SDL_RenderClear(manager->gw->renderer);
-										destroyGameRenderer(manager->gw);
-										createGR(manager->gw,false,false,false,false,false,false);
+										//SDL_RenderClear(manager->gw->renderer);
+										if(manager->board->history->actualSize>4 && manager->board->gameMode==1){
+											createGameUndoTexture(manager->gw, true);
+										}
+										createGameSaveTexture(manager->gw,true);
 										drawGameWindow(manager->gw, manager->board);
 										bool kingSafe = isMyKingSafe(manager->board);
 										bool checkMate = isCheckMate(manager->board);
+										gameSaved = false;
 										if(kingSafe==false && checkMate==true){
 											checkMessageWarning(manager->board->curPlayer, false, true, false);
 											quitGame(manager);
@@ -454,49 +407,30 @@ void guiMain(){
 											checkMessageWarning(manager->board->curPlayer, true, false, false);
 										}
 									}
+									else{
+										drawGameWindow(manager->gw, manager->board);
+									}
 									done = true;
 									break;
 								}
+
 								else{
 									SDL_RenderClear(manager->gw->renderer);
 									destroyGameRenderer(manager->gw);
-									createGR(manager->gw,false,false,false,false,false,false);
+									createGR(manager->gw,undoBool,loadInsideBool);
 									drawGameWindow(manager->gw, manager->board);
 									done = true;
 									break;
 								}
-							}
-						}
-					}
-					/*
-					else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_LIGHT){
-						SDL_Point p1 = {.x = event3.button.x, .y = event3.button.y};
-						//printf("xPos is :%d, yPos is:%d\n",p1.x,p1.y);
-						bool done2 = false;
-						while(!done2){
-							SDL_Event event8;
-							while(SDL_PollEvent(&event8)!=0){
 
 							}
 						}
-
-					}
-					*/
-					else{
-						destroyGameRenderer(manager->gw);
-						createGR(manager->gw,false,false,false,false,false,false);
-						drawGameWindow(manager->gw, manager->board);
-						continue;
 					}
 				}
-
 			}
 		}
 	}
 }
-
-
-
 
 
 Manager* createManager(){
@@ -563,6 +497,10 @@ void saveMessageDialog(){
 		"Game was saved!",NULL);
 }
 
+void savePleaseMessageDialog(){
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Save Message",
+		"Please make a move before SAVING!",NULL);
+}
 
 void slotDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Load Message",

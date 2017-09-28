@@ -14,8 +14,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
-		, bool loadBool, bool mmBool, bool quitBool){
+void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	assert(gw!=NULL); assert(gw->window!=NULL);
 	SDL_Surface* surface = NULL;
 	//printf("creating game renderer\n");
@@ -29,7 +28,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	}
 
 	//Creating a background texture:
-	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackground4.bmp");
+	surface= SDL_LoadBMP("./utilities/gameWindow/gameBackgrounFinal.bmp");
 	if (surface==NULL){
 		printf("Could not create a background surface in GameWindow: %s\n", SDL_GetError());
 		destroyGameWindow(gw);
@@ -44,6 +43,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	SDL_FreeSurface(surface);
 	//printf("creating game bg\n");
 
+	//Creating an undo texture:
 	if(!undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undo.bmp");
 	else if(undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undoClicked.bmp");
 	if(surface==NULL){
@@ -61,8 +61,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	//printf("creating game undo\n");
 
 	//Creating a restart texture:
-	if(!restartBool)surface = SDL_LoadBMP("./utilities/gameWindow/restart.bmp");
-	else if(restartBool)surface = SDL_LoadBMP("./utilities/gameWindow/restartClicked.bmp");
+	surface = SDL_LoadBMP("./utilities/gameWindow/restartClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a restart surface in GameWindow: %s\n", SDL_GetError());
 		return;
@@ -80,8 +79,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	//Creating a saveGame texture:
 
-	if(!saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/save.bmp");
-	else if(saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/saveClicked.bmp");
+	surface = SDL_LoadBMP("./utilities/gameWindow/save.bmp");
 	if(surface==NULL){
 		printf("Could not create a save surface in GameWindow: %s\n", SDL_GetError());
 		return;
@@ -117,8 +115,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 	//printf("creating game load\n");
 
 	//Creating a mainMenu texture:
-	if(!mmBool) surface = SDL_LoadBMP("./utilities/gameWindow/mainMenu.bmp");
-	else if(mmBool) surface = SDL_LoadBMP("./utilities/gameWindow/mainMenuClicked.bmp");
+	surface = SDL_LoadBMP("./utilities/gameWindow/mainMenuClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a mainMenu surface in GameWindow: %s\n", SDL_GetError());
 		return;
@@ -135,8 +132,7 @@ void createGR(GameWindow* gw, bool undoBool, bool restartBool, bool saveBool
 
 	//Creating a Quit texture:
 
-	if(!quitBool) surface = SDL_LoadBMP("./utilities/gameWindow/quit.bmp");
-	else if(quitBool) surface = SDL_LoadBMP("./utilities/gameWindow/quitClicked.bmp");
+	surface = SDL_LoadBMP("./utilities/gameWindow/quitClicked.bmp");
 	if(surface==NULL){
 		printf("Could not create a quit surface in GameWindow: %s\n", SDL_GetError());
 		return;
@@ -415,7 +411,9 @@ GameWindow* createGW(){
 		destroyGameWindow(gw);
 		return NULL ;
 	}
-	createGR(gw,false,false,false,false,false,false);
+	int load = numOfFilesInDir();
+	if(load==0) createGR(gw,false,false);
+	else if(load!=0) createGR(gw,false,true);
 	return gw;
 }
 
@@ -660,6 +658,7 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			*/
 			 break;
 		case SDL_MOUSEMOTION:
+			/*
 			if(isClickOnSaveGame(event->motion.x, event->motion.y)){
 				return GAME_WINDOW_HOVER_SAVE_GAME;
 			 }
@@ -678,7 +677,8 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 			 else if(isClickOnMainMenu(event->motion.x, event->motion.y)){
 				 return  GAME_WINDOW_HOVER_MAIN_MENU;
 			 }
-			 else if(isPixToPos(event->motion.x, event->motion.y)){
+			 */
+			 if(isPixToPos(event->motion.x, event->motion.y)){
 				 return GAME_WINDOW_HOVER_OBJ;
 			 }
 			/*
@@ -949,5 +949,68 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 		}
 	}
 	SDL_RenderPresent(gw->renderer);
+}
 
+
+
+void createGameLoadTexture(GameWindow* gw, bool loadBool){
+	assert(gw!=NULL); assert(gw->window!=NULL); assert(gw->renderer!=NULL);
+	SDL_Surface* surface = NULL;
+	SDL_DestroyTexture(gw->loadGame);
+	if(!loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/load.bmp");
+	else if(loadBool) surface = SDL_LoadBMP("./utilities/gameWindow/loadclicked.bmp");
+	if(surface==NULL){
+		printf("Could not create a load surface in GameWindow: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->loadGame = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->loadGame==NULL){
+		printf("Could not create a load texture in GameWindow: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+
+}
+
+void createGameUndoTexture(GameWindow* gw, bool undoBool){
+	assert(gw!=NULL); assert(gw->window!=NULL); assert(gw->renderer!=NULL);
+	SDL_Surface* surface = NULL;
+	SDL_DestroyTexture(gw->undo);
+	if(!undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undo.bmp");
+	else if(undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undoClicked.bmp");
+	if(surface==NULL){
+		printf("Could not create a undo surface in GameWindow: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->undo = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->undo==NULL){
+		printf("Could not create a undo texture in GameWindow: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
+}
+
+
+void createGameSaveTexture(GameWindow* gw, bool saveBool){
+	assert(gw!=NULL); assert(gw->window!=NULL); assert(gw->renderer!=NULL);
+	SDL_Surface* surface = NULL;
+	SDL_DestroyTexture(gw->saveGame);
+	if(!saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/save.bmp");
+	else if(saveBool)surface = SDL_LoadBMP("./utilities/gameWindow/saveClicked.bmp");
+	if(surface==NULL){
+		printf("Could not create a save surface in GameWindow: %s\n", SDL_GetError());
+		return;
+	}
+	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
+	gw->saveGame = SDL_CreateTextureFromSurface(gw->renderer, surface);
+	if (gw->saveGame==NULL){
+		printf("Could not create a save texture in GameWindow: %s\n", SDL_GetError());
+		destroyGameWindow(gw);
+		return;
+	}
+	SDL_FreeSurface(surface);
 }
