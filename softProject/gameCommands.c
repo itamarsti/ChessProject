@@ -234,8 +234,12 @@ void getMovesFunc(boardGame* board,int position){
 	if (position>63 || position<0 ){
 		printf("Invalid position on the board\n");}
 	//printf("current player is %d, the row is %d, the col is: %d\n",board->curPlayer,row,col);
-	if(board->gameMode==2 || (board->gameMode==1 && board->diffLevel>=3)){
-		printf("Illegal move\n");
+	if(board->gameMode==2){
+		printf("ERROR: the command is not available in 2-players mode\n");
+		return;
+	}
+	if(board->gameMode==1 && board->diffLevel>=3){
+		printf("ERROR: the command is not available in difficulty>2\n");
 		return;
 	}
 	if (board->curPlayer==0 &&

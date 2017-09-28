@@ -1,19 +1,12 @@
-1. backspace/whitespace Policy
-2. are the commands suppose to be in small letters/capital letters
-3. ask about whitespaces in file name
-4. what to do with illegal move
 5. what happens if in setting mode, first user's input is for game color or difficult
 	and later the user's input for "game_mode state" is changed to 2.
-6. the load file need to be parsed!!
 7. how to react when the player's command is "save file"..the game continues?
 	we wait until the player is doing move?
-8. don't forget to do getMoves
-9. to do all the limitations for 1 player/2 players
 10. adding the case if it's not an XML FILE
-11. is game_moves also possible in 2players mode
 12. to ask if every time we are moving to 2-players state - everything need to be defaulted.
 13. to fix the numbers order in the background
 14. to fix the problem of memory!
 15. undo with 2 players in gui mode
 16. to fix the problem with input after the "real" input.
 17. to check the undo in gui state
+18. checking what happens in gui state after after winning or tie
