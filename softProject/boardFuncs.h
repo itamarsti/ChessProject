@@ -11,6 +11,14 @@
 #include "SPArrayList.h"
 #include "settingParser.h"
 
+/**
+ * The struct saving the game board. Consists of 5 parts:
+ *			1. boardArr - 8X8 char Array to save the objects states
+ *			2. history - SPArrayList such as in ex3 to save the moves
+ *			3. gameMode - to save how many players(1 player ot 2)
+ *			4. userCol - to save the user color (0 for white 1 for black)
+ *			5. furPlayer - to save the current player (0 for white 1 for black)
+ */
 typedef struct boardGame{
 	char boardArr[8][8];
 	SPArrayList* history;

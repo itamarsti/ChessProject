@@ -17,6 +17,37 @@
 #include "gameFlow.h"
 
 
+/**
+ * gameFlow summary:
+ *
+ * The Handling part of the game section.
+ * Containing functions which their purpose is to translate commands inputs
+ * to a game Action relative to the Game Board.
+ *
+ *
+ * cmdToActGame		   	- Activating the relevant function based on the game command type.
+ * mainGameFlow          - The main loop of the game section and responsible for
+ * 							  the game flow (from gameCommand - to a Game action).
+ *
+ *
+ */
+
+
+
+/**
+ *
+ *
+ * Managing some gameBoard command to actions based on the relevant commands.
+ * The commands are move, quit, reset, undo, get_moves and save.
+ * @param board - the Board Game Data structure.
+ * @param cmd - the Game command Data structure.
+ * @param input - the user's input.
+ * @return
+ * True - if valid action has happened that will cause a progress in the game (undo and move);
+ * False - if the command will not cause a progress (such as save, get moves or illegal move).
+ *notice!! also includes the checking if there was a check/checkmate/tie at the end of every turn.
+ *
+ */
 
 
 bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
@@ -25,16 +56,13 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 	if (cmd->cmd==MOVE){
 		validMove = moveObj(board,cmd->position,cmd->destination, true);
 		if(validMove){
-			//printf("checking the opponent state checkmate/tie\n");
 			if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
-				//printf("there is a risk on the king");
 				if((isMate = isCheckMate(board))==true){
 					free(input);
 					destroyGameStruct(cmd);
 					terminateGame(board,true, false);
 				}
 				printCheckMessage(board->curPlayer,board->userCol, board->gameMode);
-				//printf("we got yill here");
 			}
 			else if ((isTie = isCheckMate(board))==true){
 				free(input);
@@ -63,16 +91,25 @@ bool cmdToActGame(boardGame* board, GameCommand* cmd, char* input){
 }
 
 
-
+/**
+ *
+ *
+ * Managing every turn actions based on the relevant commands.
+ * The function responsible the activate the request for the user's input,
+ * setting it in the CommandGame data structure and handling the command with external function.
+ * @param board - the Board Game Data structure.
+ * @return
+ * True - if reset action was requested.
+ * False - for every other action (besides quit which will cause to terminating the game).
+ *
+ */
 bool mainGameFlow(boardGame* board){
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
-	//printf("insdie game flow\n");
 	if(board==NULL){
 		printf("ERROR: board is NULL");
 		exit(0);
 	}
-	//assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	bool loopBreaker = false;
 	while(!loopBreaker){
@@ -101,14 +138,10 @@ bool mainGameFlow(boardGame* board){
 				else if(cmd->cmd==INVALID_POSITION) printf("Invalid position on the board\n");
 				else if (cmd->cmd==INVALID_LINE2) printf("ERROR: Illegal Command\n");
 		}
-		//printf("before input\n");
 		free(input);
-		//printf("before destroy struct\n");
 		destroyGameStruct(cmd);
-		//printf("before continue\n");
 		continue;
 	}
-	//printf("got til end of flow\n");
 	return false;
 }
 

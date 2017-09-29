@@ -14,43 +14,69 @@
 #include <assert.h>
 
 
+
+
+/*
+ * gameParser summary:
+ *
+ * A parser for the Settings Section in the game.
+ * The Parser includes functions that accept inputs from the user, no long than 1024 Byte,
+ * and parse them to specific commands for game actions.
+ * A summary of the supported functions is given below:
+ *
+ *
+ * isTri		   			- Asserting if string is in the form of "<char*,char*>
+ * isFileCreated           	- Checking if the save path is illegal and the file can be created.
+ * destroyGameStruct		- Destroying the game Command Structure.
+ * gameAcceptor    			- Accepting inputs from user
+ * gameParser        		- Managing the parsing from input String -> till game command Structure.
+ * NumToRow     			- converting position between 0-63 to a row on boardGame.
+ * NumToCol     			- converting position between 0-63 to a column on boardGame.
+ * RowColToNum    			- converting row & column to position between 0-63.
+ *
+ *
+ *
+ */
+
+
 #define BUFFER 1024
 
-
-
+/**
+ *
+ *  Asserting that a String is of the form of "<Integer, Char>"
+ *  @param str - the String
+ *  @return
+ *  -1, if the command is invalid (illegal format);
+ *  0, if the string is in the form of <char*, char*>
+ *  1 if it's in the right form of "<Integer, Char>"
+ *
+ *
+ */
 int isTri(char* str){
 	assert(str!=NULL);
 	int counter = 0;
 	bool invalidPosition = false;
 	if (str[0]!='<'){
-		//printf("not starts with < char\n");
 		return -1;	//not tight format
 	}
-	//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
 	counter++;
 	while(str[counter]!=','){
-		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
 		if(str[counter]=='\0') return -1;
 		counter++;
 	}
 	if(counter==1) return -1;
 	if(counter>2){
-		//printf("invalidPosition was changed in the first time\n");
 		invalidPosition =true;
 	}
 	int counterComma = counter;
 	while(str[counter]!='>'){
-		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
 		if(str[counter]=='\0') return -1;
 		counter++;
 	}
-	//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
 	if(counter == counterComma+1) return -1;
 	if(counter >counterComma+2) invalidPosition =true;
 	counter++;
 	while(str[counter]!='\0'){
-		//printf("the char is:%c	 the counter is:%d\n",str[counter],counter);
-		//printf("in while loop\n");
 		if(str[counter]=='\r' || str[counter]=='\t' || str[counter]==' ' || str[counter]=='\n'){
 			counter++;
 			continue;
@@ -59,12 +85,21 @@ int isTri(char* str){
 			return -1;
 		}
 	}
-	//printf("the row is:%d, the col is:%d \n",(str[1]-'0'),(int)str[3]-'A');
 	if ((int)(str[1]-'0')>=1 && (int)(str[1]-'0')<=8 && (int)str[3]>='A'
 			&& (int)str[3]<='H' && invalidPosition==false) return 1;
 	return 0;
 }
 
+
+/**
+ *
+ *  Asserting that a a given path of file can be created locally.
+ *  @param path - the above mentioned path
+ *  @return
+ *  true if it's can be created, else - false.
+ *
+ *
+ */
 bool isFileCreated(const char* path){
 	assert(path!=NULL);
 	FILE* fp;
@@ -81,6 +116,15 @@ bool isFileCreated(const char* path){
 	return true;
 }
 
+/**
+ *
+ *  Destroying the Game Command data structure.
+ *  @param cmd - the data structure
+ *  @return
+ *  void.
+ *
+ *
+ */
 
 void destroyGameStruct(GameCommand* cmd){
 	//printf("inside destroy game struct\n");
@@ -91,6 +135,14 @@ void destroyGameStruct(GameCommand* cmd){
 	free(cmd);
 }
 
+/**
+ *
+ *  Accepting game inputs from the user.
+ *  @return
+ *  The user's input as a String.
+ *
+ *
+ */
 
 
 char* gameAcceptor(){
@@ -107,7 +159,16 @@ char* gameAcceptor(){
 	return input;
 }
 
-
+/**
+ *
+ *  Creating the data Structure of game Command and sets the right arguments in it,
+ *  depends on the user's input (parsing from input to Game Command data structure).
+ *  @param str - the user's input as a string
+ *  @return
+ *  GameCommand data Structure which contains the game's instructions.
+ *
+ *
+ */
 GameCommand* gameParser(const char* str){
 	GameCommand* command = (GameCommand*)malloc(sizeof(GameCommand));
 	assert(command!=NULL); assert(str!=NULL);
@@ -197,17 +258,43 @@ GameCommand* gameParser(const char* str){
 	return command;
 }
 
+/**
+ *
+ *  Converting position between 0-63 on BoardGame to a specific row.
+ *  @param num - Integer in the range of 0-63
+ *  @return
+ *  The row on BoardGame (Integer)
+ *
+ */
 
 int NumToRow(int num){
 	int row = num/8;
 	return row;
 }
 
+/**
+ *
+ *  Converting position between 0-63 on BoardGame to a specific column.
+ *  @param num - Integer in the range of 0-63
+ *  @return
+ *  The column on BoardGame (Integer)
+ *
+ */
 int NumToCol(int num){
 	int col = num%8;
 	return col;
 }
 
+
+/**
+ *
+ *  Converting a given column & row to a position in range 0-63.
+ *  @param row - Integer in the range of 0-7
+ *  @param col - Integer in the range of 0-7
+ *  @return
+ *  position in the range of 0-63 (Integer)
+ *
+ */
 int RowColToNum(int row, int col){
 	int num = 8*row + col;
 	return num;

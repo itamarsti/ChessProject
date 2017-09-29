@@ -6,7 +6,7 @@
  */
 
 /**
- * settingParser summary:
+ * settingFlow summary:
  *
  * The Handling part of the Settings section.
  * Containing functions which their purpose is to translate commands inputs

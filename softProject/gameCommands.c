@@ -15,6 +15,66 @@
 #include "gameParser.h"
 
 
+/**
+ * gameCommands summary:
+ *
+ * This parts includes all the functions which relevant to the Game Moves and the Game flow
+ * such as objects move operations, undo, saving, reseting, winner checks etc.
+ *
+ *
+ * undo						- Committing undo action .
+ * exUndo					- Executing the undo action.
+ * changePlayer				- changes the playr's turn each turn.
+ * reset					- Doing reset to the GameBoard.
+ * saveFile					- Saving the current board status to a File.
+ * moveMessage				- Printing message before every turn.
+ * printCheckMessage		- Printing the "Check/checkmate/tie message".
+ * isCheckMate				- Checking if there was a checkMate or tie.
+ * isThereOptionMove		- Checking if were left options move to an object
+ * terminateGame			- Terminating the game in case of CheckMate or tie
+ * isWhitePlayer			- Checking if a position on board is occupied by a white player Object
+ * isBlackPlayer			- Checking if a position on board is occupied by a black player Object
+ * getMovesFunc				- Printing all the possible moves from a given position
+ * getMovesPrintFunc		- Printing the get_moves function on the demanded format
+ * isWinner					- Checking if there was a CheckMate
+ * isTie					- Checking if there was a tie
+ * computerMoveMessage		- Printing the computer move by the demanded format
+ * movePawn					- Checking if a pawn move Object on board is valid and move it
+ * moveBishop				- Checking if a Bishop's move Object on board is valid and move it
+ * moveRook					- Checking if a Rook move Object on board is valid and move it
+ * moveKnight				- Checking if a Knight move Object on board is valid and move it
+ * moveKing					- Checking if a King move Object on board is valid and move it
+ * moveQueen				- Checking if a Queen move Object on board is valid and move it
+ * isValidDiagonal			- Checking if diagonal move on board is legal
+ * isValidHorAndVar			- Checking if horizontal and vertical moves on board are legal
+ * moveObj					- The main function which managing a move of an object on board game
+ * switchObj				- Doing the actual move of an Object of any kind
+ * switchAndCheck			- Checking if the king is safe and activating switchObj
+ * addMoveToHistory			- Adding the move to the board game history.
+ * trackKingPosition		- Checking where is the white/black king position
+ * isMyKingSafe				- Checking if no opponent's object threatening the king
+ * safeArea					- Managing the checks if the king is safe in different directions
+ * isSafeStraight			- Checking if king is safe in straight direction
+ * isSafeDiagnoal			- Checking if king is safe in diagonal direction
+ * isSafeFromKingAndKnight	- Checking if king is safe from the opponent's king and knight
+ * isSafeFromPawn			- Checking if king is safe from the opponent's pawn
+ *
+ *
+ *
+ */
+
+
+
+/**
+ *
+ *
+ * Changing the current Player on GameBoard Settings
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * void
+ *
+ */
 
 void changePlayer(boardGame* board){
 	assert(board!=NULL);
@@ -23,19 +83,38 @@ void changePlayer(boardGame* board){
 }
 
 
-
+/**
+ *
+ *
+ * Doing restart to the game by destroying it and printing the relevant message
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * void
+ *
+ */
 void reset(boardGame* board){
 	assert(board!=NULL);
-	//assert(board->boardArr!=NULL);
+	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	//spArrayListDestroy(board->history);
 	setvbuf (stdout, NULL, _IONBF, 0);
 	fflush(stdout);
 	destroyBoard(board);
 	printf("Restarting...\n");
 	return;
 }
+
+/**
+ *
+ * Saving the current state of the Game Board to a given path
+ *
+ * @param board - the Board Game Data structure.
+ * @param path - the path where we want to save the current state.
+ * @return
+ * void
+ *
+ */
 
 void saveFile(boardGame* board, const char* path){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
@@ -70,7 +149,17 @@ void saveFile(boardGame* board, const char* path){
 }
 
 
-
+/**
+ *
+ * Doing the actual work of undo by using the history and replace the objects
+ * on the Game board.
+ *
+ * @param board - the Board Game Data structure.
+ * @param printActivate - true if we want to print the "undo action"
+ * @return
+ * void
+ *
+ */
 
 void exUndo(boardGame* board,bool printActivate){
 	assert(board!=NULL);
@@ -100,6 +189,18 @@ void exUndo(boardGame* board,bool printActivate){
 }
 
 
+/**
+ *
+ * Activating the Exundo function and deleting the last 4 details from the history.
+ *
+ * @param board - the Board Game Data structure.
+ * @param printActivate - true if we want to see the exUndo prints
+ * @param playerChangeActivate - true if we want change players turn after undo
+ * @return
+ * void
+ *
+ */
+
 void undo(boardGame* board, bool printActivate, bool playerChangeAcivate){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -112,6 +213,16 @@ void undo(boardGame* board, bool printActivate, bool playerChangeAcivate){
 	}
 	return;
 }
+
+/**
+ *
+ * Printing the move Message of the user in the right format
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * void
+ *
+ */
 
 void moveMessage(boardGame* board){
 	assert(board!=NULL);
@@ -128,6 +239,18 @@ void moveMessage(boardGame* board){
 	}
 }
 
+/**
+ *
+ * Printing the check Message in case there was a "check".
+ *
+ * @param player - the current player.
+ * @param userCol - the user color.
+ * @param gameMode - the Game mode.
+ * @return
+ * void
+ *
+ */
+
 void printCheckMessage(int player,int userCol, int gameMode){
 	if(gameMode==1 && userCol==player)printf("Check!\n");
 	else{
@@ -135,6 +258,18 @@ void printCheckMessage(int player,int userCol, int gameMode){
 		else if(player==0) printf("Check: %s King is threatened!\n",BLACK);
 	}
 }
+
+/**
+ *
+ * Checking if there are no legal moves on board (indication for checkMate/tie)
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * true - if there is no valid move
+ * false - if there is at least 1 valid move.
+ *
+ */
+
 
 bool isCheckMate(boardGame* board){
 	assert(board!=NULL);
@@ -163,6 +298,20 @@ bool isCheckMate(boardGame* board){
 	return true;
 }
 
+/**
+ *
+ * Checking if by a given row and column (position on board), there is move from it
+ * to other valid destination.
+ *
+ * @param board - the Board Game Data structure.
+ * @paran row - the row on board.
+ * @param col - the column on board.
+ * @return
+ * true - if there is at least one valid move.
+ * false - if there no moves at all.
+ *
+ */
+
 bool isThereOptionMove(boardGame* board,int row,int col){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -177,8 +326,6 @@ bool isThereOptionMove(boardGame* board,int row,int col){
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			valid = moveObj(copy,RowColToNum(row,col),RowColToNum(i,j),false);
-			//printf("current player is:%d",copy->curPlayer);
-			//if(!valid)printf("move from %d,%d to %d,%d\n",row,col,i,j);
 			if(valid){
 				destroyBoard(copy);
 				return true;
@@ -189,6 +336,15 @@ bool isThereOptionMove(boardGame* board,int row,int col){
 	return false;
 }
 
+/**
+ *
+ * Printing CheckMate or Tie message, destroying the board and exit the program.
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * void
+ *
+ */
 
 void terminateGame(boardGame* board, bool mate, bool tie){
 	assert(board!=NULL);
@@ -211,14 +367,36 @@ void terminateGame(boardGame* board, bool mate, bool tie){
 	}
 }
 
+/**
+ *
+ * Checking if a char is a white legal obj.
+ *
+ * @param c - char.
+ * @return
+ * true - if it's a white legal object, false - otherWise.
+ *
+ */
+
 bool isWhitePlayer(char c){
-	if (c=='n' || c=='b' || c=='m' || c=='r' || c=='k' || c=='q') return true;
+	if (c==WhitePawn || c==WhiteRook || c==WhiteBishop || c==WhiteQueen
+			|| c==WhiteKing || c==WhiteKnight) return true;
 	return false;
 }
 
+/**
+ *
+ * Checking if a char is a black legal obj.
+ *
+ * @param c - char.
+ * @return
+ * true - if it's a black legal object, false - otherWise.
+ *
+ */
+
 bool isBlackPlayer(char c){
-	if (c=='N' || c=='B' || c=='M' || c=='R' || c=='K' || c=='Q') return true;
-	return false;
+	if (c==BlackPawn || c==BlackRook || c==BlackBishop || c==BlackQueen
+				|| c==BlackKing || c==BlackKnight) return true;
+		return false;
 }
 
 
@@ -881,6 +1059,18 @@ bool isSafeFromPawn(boardGame* board,int row, int col,char symbol){
 	}
 	return true;
 }
+
+/**
+ *
+ * Tracking an object position on board using it's symbol,
+ * actually was used only to find the king's position.
+ *
+ * @param board - the Board Game Data structure.
+ * @param symbol - the whiteKing/BlackKing symbol
+ * @return
+ * The king's position on board (0-63), -1 if it's not there (never should happen).
+ *
+ */
 
 
 int trackKingPosition(boardGame* board, char symbol){

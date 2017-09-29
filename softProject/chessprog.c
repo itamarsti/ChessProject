@@ -12,6 +12,31 @@
 #include <assert.h>
 #include "chessprog.h"
 
+
+
+/**
+ * chessprog summary:
+ *
+ * The opening part of the game.
+ *
+ * main	- responsible for choosing if console/GUI and also runs the main Loop of the console mode.
+ *
+ *
+ */
+
+/**
+ *
+ *
+ * Determine if we are going to play in GUI mode or in console mode.
+ * Also, in case of console mode, runing the main game loop using the settingFlow and gameFlow
+ * functions.
+ * @param argc - number of inputs in the commandLine.
+ * @param argv - the commandLine options. argv[0] the program name, argv[1],
+ * 					("-g" for GUI, "-c" for console).
+ * @return 0 (no meaning).
+ *
+ *
+ */
 int main(int argc, char* argv[]) {
     setvbuf (stdout, NULL, _IONBF, 0);
     fflush(stdout);

@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 /*
- * all the possible commands Messeages.
+ * all the possible  Settings commands Messeages.
  */
 
 typedef enum {
@@ -37,7 +37,7 @@ typedef enum {
 } SETTING_COMMAND;
 
 /**
- * The struct holding the commands and their availability.
+ * The struct saving the settings commands and their availability.
  */
 
 

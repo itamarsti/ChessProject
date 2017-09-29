@@ -11,6 +11,9 @@
 #include <stdbool.h>
 
 
+/*
+ * all the possible Game commands Messeages.
+ */
 typedef enum {
 	MOVE,
 	GET_MOVES,
@@ -23,6 +26,10 @@ typedef enum {
 	INVALID_POSITION
 } GAME_COMMAND;
 
+
+/**
+ * The struct saving the game commands and their availability.
+ */
 typedef struct g_command {
 	GAME_COMMAND cmd;
 	bool validArg; //is set to true if the line contains a valid argument

@@ -43,20 +43,20 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         					}
         					else if(minmax==true){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,maxWinner);
-        						if(scoreWinner>=maxWinner){
+        						if(scoreWinner>maxWinner){
 									maxWinner = scoreWinner;
 								}
-        						if(scoreWinner>=recScore){
+        						if(scoreWinner>recScore){
 									undo(board,false,true);
 									return scoreWinner;
 								}
         					}
         					else if(minmax==false){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,minWinner);
-        						if(scoreWinner<=minWinner){
+        						if(scoreWinner<minWinner){
 									minWinner = scoreWinner ;
 								}
-        						if(scoreWinner<=recScore){
+        						if(scoreWinner<recScore){
                 					undo(board,false,true);
                 					return scoreWinner;
         						}
