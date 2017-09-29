@@ -12,7 +12,6 @@
 
 
 LoadWindow* createLW(){
-	//printf("inside create LW\n");
 	LoadWindow* lw = (LoadWindow*) malloc(sizeof(LoadWindow));
 	if(lw==NULL){
 		printf("Couldn't create LoadWindow struct\n");

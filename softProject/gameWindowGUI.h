@@ -43,9 +43,6 @@ typedef struct GAMEWINDOW{
 	SDL_Texture* whiteKnight;
 	SDL_Texture* whiteQueen;
 	SDL_Texture* whiteKing;
-	//SDL_Texture* greenLight;
-	//SDL_Texture* redLight;
-	//SDL_Texture* yellowLight;
 }GameWindow;
 
 

@@ -10,6 +10,11 @@
 
 
 #include <stdbool.h>
+
+/*
+ * all the possible commands Messeages.
+ */
+
 typedef enum {
 	START,
 	GAME_MODE_1,
@@ -30,6 +35,11 @@ typedef enum {
 	QUIT1,
 	INVALID_LINE1
 } SETTING_COMMAND;
+
+/**
+ * The struct holding the commands and their availability.
+ */
+
 
 typedef struct s_command {
 	SETTING_COMMAND cmd;

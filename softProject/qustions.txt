@@ -1,9 +1,6 @@
 
-10. adding the case if it's not an XML FILE
-18. checking what happens in gui state after winning or tie
+
 20. to make functions shorter.
-21. to check memory problems in GUI.
 22. to write documentation to the project.
 25. to check the alphabeta pruning
 26. gameParser is too long!!!!
-27. settingParser is too long!!

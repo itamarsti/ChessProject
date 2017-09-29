@@ -5,7 +5,31 @@
  *      Author: Itamar
  */
 
-
+/**
+ * settingParser summary:
+ *
+ * A parser for the Settings Section in the game.
+ * The Parser includes functions that accept inputs from the user, no long than 1024 Byte,
+ * and parse them to specific commands for determining the game settings.
+ * A summary of the supported functions is given below:
+ *
+ *
+ *
+ *
+ * settingAcceptor		   	- Accepts input from the user's command line.
+ * spParserIsInt           	- Checking if the String is made only of in Integers.
+ * isFileExist		       	- Checking if a given file's path exists.
+ * destroySettingStruct    	- Destroying the setting Structure.
+ * initChessCommand        	- Initializing the Setting Struct with false and invalid values.
+ * diffiDecider     		- parsing the game difficulty.
+ * gameModeDecider     		- parsing how many players.
+ * gameColorDecider    		- parsing the user's color in the game.
+ * diffLevelToInt			- Converting from difficulty Command to an int.
+ * settingParser            - The controller function which manage the commands.
+ *
+ *
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +41,15 @@
 #define BUFFER 1024
 
 
-
+/**
+ *
+ *  Converting from Difficulty Command to the parallel Integer.
+ *  @param cmd - the command message.
+ *  @return
+ *  -1, if the command is not Difficulty type.
+ *  Integer between 1-5 if the command is right.
+ *
+ */
 int diffLevelToInt(SETTING_COMMAND cmd){
 	if(cmd==DIFFICULTY_1) return 1;
 	else if(cmd==DIFFICULTY_2) return 2;
@@ -27,7 +59,15 @@ int diffLevelToInt(SETTING_COMMAND cmd){
 	else return -1;
 }
 
-
+/**
+ *
+ * Checking is a String is an Integer (consisted only from numbers).
+ * @param str - the String above mentioned.
+ * @return
+ * false -  if a char is not an Integer.
+ * true - if every char in the string is Integer.
+ *
+ */
 bool spParserIsInt(const char* str){
     int index = 0;
     int validNum;
@@ -47,6 +87,14 @@ bool spParserIsInt(const char* str){
     return true;
 }
 
+/**
+ *
+ * Converting from a String to game_mode Command (1 player to 2 players).
+ * @param str - the String above mentioned.
+ * @return
+ * Command Message. if the string is illegal an Invalid Command Message will return.
+ *
+ */
 
 SETTING_COMMAND gameModeDecider(char* str){
 	assert(str!=NULL);
@@ -66,6 +114,16 @@ SETTING_COMMAND gameModeDecider(char* str){
 		}
 	}
 
+
+
+/**
+ *
+ * Converting from a String to user_color Command (black or white).
+ * @param str - the String above mentioned.
+ * @return
+ * Command Message. if the string is illegal an Invalid Command Message will return.
+ *
+ */
 
 SETTING_COMMAND gameColorDecider(char* str, int numPlayers){
 	assert(str!=NULL);
@@ -87,6 +145,15 @@ SETTING_COMMAND gameColorDecider(char* str, int numPlayers){
 	}
 
 
+/**
+ *
+ * Converting from a String to difficulty Command (1-5).
+ * @param  str - the String above mentioned.
+ * @param  Players - number of players in game (1 or 2)
+ * @return
+ * Command Message. if the string is illegal an Invalid Command Message will return.
+ *
+ */
 
 SETTING_COMMAND diffiDecider(char* str, int Players){
 	assert(str!=NULL);
@@ -114,6 +181,16 @@ SETTING_COMMAND diffiDecider(char* str, int Players){
 }
 
 
+/**
+ *
+ * Checking if a path (String) is exist or not
+ * @param path - the path above mentioned.
+ * @return
+ * False - if the file in the path is not exist.
+ * True - otherwise.
+ *
+ */
+
 bool isFileExist(const char* path){
 	assert(path!=NULL);
 	FILE* fp;
@@ -130,6 +207,14 @@ bool isFileExist(const char* path){
 	return true;
 }
 
+/**
+ *
+ * Destroying the structure holding the commands and free the memory.
+ * @param  cmd - the data structure.
+ * @return
+ * no Return value.
+ *
+ */
 
 void destroySettingStruct(ChessCommand* cmd){
 	assert(cmd!=NULL);
@@ -139,19 +224,33 @@ void destroySettingStruct(ChessCommand* cmd){
 	free(cmd);
 }
 
+
+/**
+ *
+ * Accepting user's input from the comamand line.
+ * @return
+ * returns the user's input as a string.
+ *
+ */
 char* settingAcceptor(){
-	//printf("in settingacceptor\n");
 	char* input = (char*)malloc(sizeof(char)*BUFFER);
 	char* errorDet = fgets(input,BUFFER,stdin); //handle the case errorDet=NULL;
 	if(errorDet==NULL){
 		printf("ERROR: fgets function has failed\n");
-		//free(errorDet);
 		free(input);
 	}
-	//printf("out of setting acceptor\n");
 	return input;
 }
 
+/**
+ *
+ * Initializing the cmd Data Structure by creating space in memory
+ * and giving "invalid" values for the variables.
+ *
+ * @return
+ * pointer to ChessCommand Data Structure.
+ *
+ */
 ChessCommand* initChessCommand(){
 	ChessCommand* command = (ChessCommand*) malloc(sizeof(ChessCommand));
 	assert(command!=NULL);
@@ -159,6 +258,18 @@ ChessCommand* initChessCommand(){
 	command->cmd = INVALID_LINE1;
 	return command;
 }
+
+
+/**
+ *
+ *
+ * The main parsing function which managing the parsing data structure.
+ * @param str - the user's input
+ * @param numPlayers - the game Mode (1 players as default or 2 players)
+ * @return
+ * Chess Command data Structure with the correct values and commands.
+ *
+ */
 
 ChessCommand* settingParser(const char* str, int numPlayers){
 	ChessCommand* command = (ChessCommand*)initChessCommand();

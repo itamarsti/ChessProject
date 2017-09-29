@@ -14,10 +14,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define SQUARE 69
+#define WIDTH 390
+#define HEIGHT 52
+
 void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	assert(gw!=NULL); assert(gw->window!=NULL);
 	SDL_Surface* surface = NULL;
-	//printf("creating game renderer\n");
+
 	// creating the game Window renderer
 	//if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	gw->renderer = SDL_CreateRenderer(gw->window, -1, SDL_RENDERER_ACCELERATED);
@@ -343,57 +347,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 			return;
 		}
 		SDL_FreeSurface(surface);
-
-		/*
-
-		//Creating a greenLight texture:
-
-		surface = SDL_LoadBMP("./utilities/gameWindow/greenLight.bmp");
-		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
-			return;
-		}
-		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
-		gw->greenLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
-		if (gw->greenLight==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
-			destroyGameWindow(gw);
-			return;
-		}
-		SDL_FreeSurface(surface);
-
-		//Creating a yellowLight texture:
-
-		surface = SDL_LoadBMP("./utilities/gameWindow/yellowLight.bmp");
-		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
-			return;
-		}
-		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
-		gw->yellowLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
-		if (gw->yellowLight==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
-			destroyGameWindow(gw);
-			return;
-		}
-		SDL_FreeSurface(surface);
-
-		//Creating a redLight texture:
-
-		surface = SDL_LoadBMP("./utilities/gameWindow/redLight.bmp");
-		if(surface==NULL){
-			printf("Could not create a surface: %s\n", SDL_GetError());
-			return;
-		}
-		SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
-		gw->redLight = SDL_CreateTextureFromSurface(gw->renderer, surface);
-		if (gw->redLight==NULL){
-			printf("Could not create a texture: %s\n", SDL_GetError());
-			destroyGameWindow(gw);
-			return;
-		}
-		SDL_FreeSurface(surface);
-		*/
 }
 
 GameWindow* createGW(){
@@ -424,7 +377,7 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 	//printf("inside draw\n");
 
 	if(gw==NULL){
-		printf("gw is NULL");
+		printf("Error: GameWindow is NULL\n");
 		return;
 	}
 	assert(gw->window!=NULL); assert(gw->renderer!=NULL);
@@ -432,8 +385,6 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 	SDL_SetRenderDrawColor(gw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(gw->renderer);
 	SDL_RenderCopy(gw->renderer, gw->bg, NULL, &rec);
-	//rec.x = 350; rec.y = 25; rec.w = 600;rec.h = 600;	//chessBoard message
-	//SDL_RenderCopy(gw->renderer,gw->cb,NULL,&rec);
 
 	rec.x = 60; rec.y = 60; rec.w = 200;rec.h = 60;	//undo message
 	SDL_RenderCopy(gw->renderer,gw->undo,NULL,&rec);
@@ -456,113 +407,82 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			if(board->boardArr[i][j]==BlackPawn){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackRook
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackRook
 				SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackBishop
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackBishop
 				SDL_RenderCopy(gw->renderer,gw->blackBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKnight
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackKnight
 				SDL_RenderCopy(gw->renderer,gw->blackKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKing
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackKing
 				SDL_RenderCopy(gw->renderer,gw->blackKing,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhitePawn){
-				 rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				 rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whitePawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKing,NULL,&rec);
 			}
 		}
 	}
-
-
 	SDL_RenderPresent(gw->renderer);
-	//printf("got till end of draw\n");
 }
 
 
 void destroyGameWindow(GameWindow* gw){
-	//printf("insdie destroy game window\n");
 	if (gw==NULL) return;
 	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
-	//printf("after destroy saveGame\n");
 	if (gw->loadGame!=NULL) SDL_DestroyTexture(gw->loadGame);
-	//printf("after destroy loadGame\n");
 	if (gw->restart!=NULL) SDL_DestroyTexture(gw->restart);
-	//printf("after destroy restart\n");
 	if (gw->undo!=NULL) SDL_DestroyTexture(gw->undo);
-	//printf("after destroy undo\n");
 	if (gw->mainMenu!=NULL) SDL_DestroyTexture(gw->mainMenu);
-	//printf("after destroy mainMenu\n");
 	if (gw->quit!=NULL)	SDL_DestroyTexture(gw->quit);
-	//printf("after destroy quit\n");
 	if(gw->blackPawn!=NULL) SDL_DestroyTexture(gw->blackPawn);
-	//printf("after destroy blackPawn\n");
 	if(gw->blackRook!=NULL) SDL_DestroyTexture(gw->blackRook);
-	//printf("after destroy blackRook\n");
 	if(gw->blackKnight!=NULL) SDL_DestroyTexture(gw->blackKnight);
-	//printf("after destroy blackKnight\n");
 	if(gw->blackBishop!=NULL) SDL_DestroyTexture(gw->blackBishop);
-	//printf("after destroy blackBishop\n");
 	if(gw->blackQueen!=NULL) SDL_DestroyTexture(gw->blackQueen);
-	//printf("after destroy blackQueen\n");
 	if(gw->blackKing!=NULL) SDL_DestroyTexture(gw->blackKing);
-	//printf("after destroy blackKing\n");
 	if(gw->whitePawn!=NULL) SDL_DestroyTexture(gw->whitePawn);
-	//printf("after destroy whitePawn\n");
 	if(gw->whiteRook!=NULL) SDL_DestroyTexture(gw->whiteRook);
-	//printf("after destroy whiteRook\n");
 	if(gw->whiteBishop!=NULL) SDL_DestroyTexture(gw->whiteBishop);
-	//printf("after destroy whiteBishop\n");
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
-	//printf("after destroy whiteKnight\n");
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
-	//printf("after destroy whiteQueen\n");
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
-	//printf("after destroy whiteKing\n");
-	//if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
-	//printf("after destroy greenLight\n");
-	//if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
-	//printf("after destroy redLight\n");
-	//if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
-	//printf("after destroy yellowLight\n");
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
-	//printf("after destroy bg\n");
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
-	//printf("after destroy renderer\n");
 	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
-	//printf("after destroy window\n");
 	free(gw);
 	printf("the end of game window\n");
 
@@ -590,9 +510,6 @@ void destroyGameRenderer(GameWindow* gw){
 	if(gw->whiteKnight!=NULL) SDL_DestroyTexture(gw->whiteKnight);
 	if(gw->whiteQueen!=NULL) SDL_DestroyTexture(gw->whiteQueen);
 	if(gw->whiteKing!=NULL) SDL_DestroyTexture(gw->whiteKing);
-	//if(gw->greenLight!=NULL) SDL_DestroyTexture(gw->greenLight);
-	//if(gw->redLight!=NULL) SDL_DestroyTexture(gw->redLight);
-	//if(gw->yellowLight!=NULL) SDL_DestroyTexture(gw->yellowLight);
 	if (gw->bg!=NULL) SDL_DestroyTexture(gw->bg);
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 }
@@ -609,18 +526,8 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 		case SDL_MOUSEBUTTONDOWN:
 			if(event->button.button ==SDL_BUTTON_LEFT){
 				pos = fromPixToPos(event->button.x, event->button.y);
-				if(pos!=-1){
-					return GAME_WINDOW_DRAG_OBJ;
-				}
+				if(pos!=-1)	return GAME_WINDOW_DRAG_OBJ;
 			}
-			/*
-			else if(event->button.button ==SDL_BUTTON_RIGHT){
-				pos = fromPixToPos(event->button.x, event->button.y);
-				if(pos!=-1){
-					return GAME_WINDOW_DRAG_LIGHT;
-				}
-			}
-			*/
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if(fromPixToPos(event->button.x, event->button.y)!=-1){
@@ -649,43 +556,11 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 					return GAME_WINDOW_PUSH_OBJ;
 				}
 			}
-			/*
-			 else if(event->button.button ==SDL_BUTTON_RIGHT){
-				if(isPixToPos(event->button.x, event->button.y)){
-					return GAME_WINDOW_PUSH_LIGHT;
-				}
-			}
-			*/
-			 break;
+			break;
 		case SDL_MOUSEMOTION:
-			/*
-			if(isClickOnSaveGame(event->motion.x, event->motion.y)){
-				return GAME_WINDOW_HOVER_SAVE_GAME;
-			 }
-			 else if(isClickOnLoadGameWindow(event->motion.x, event->motion.y)){
-				 return GAME_WINDOW_HOVER_LOAD_GAME;
-			 }
-			 else if(isClickOnQuitGameWindow(event->motion.x, event->motion.y)){
-				 return  GAME_WINDOW_HOVER_EVENT_QUIT;
-			 }
-			 else if(isClickOnRestart(event->motion.x, event->motion.y)){
-				 return  GAME_WINDOW_HOVER_RESTART_GAME;
-			 }
-			 else if(isClickOnUndo(event->motion.x, event->motion.y)){
-				 return  GAME_WINDOW_HOVER_UNDO;
-			 }
-			 else if(isClickOnMainMenu(event->motion.x, event->motion.y)){
-				 return  GAME_WINDOW_HOVER_MAIN_MENU;
-			 }
-			 */
 			 if(isPixToPos(event->motion.x, event->motion.y)){
 				 return GAME_WINDOW_HOVER_OBJ;
 			 }
-			/*
-			 else if(isPixToPos(event->motion.x, event->motion.y)){
-				 return GAME_WINDOW_HOVER_LIGHT;
-			 }
-			 */
 			 break;
 		case SDL_WINDOWEVENT:
 			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
@@ -715,7 +590,7 @@ bool isClickOnSaveGame(int x, int y){
 }
 
 bool isClickOnLoadGameWindow(int x, int y){
-	if((x>=60 && x<=260)&& (y>=330&&y<=390)) return true;
+	if((x>=60 && x<=260)&& (y>=330&&y<=WIDTH)) return true;
 	return false;
 }
 bool isClickOnMainMenu(int x, int y){
@@ -840,13 +715,10 @@ bool isPixToPos(int x, int y){
 
 
 void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL_Point* p2){
-	//printf("the gap in drawimporved, x is:%d, the gap in y is:%d\n",-p1->x+p2->x,-p1->y+p2->y);
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	//printf("inside draw\n");
-
 	if(gw==NULL){
-		printf("gw is NULL");
+		printf("ERROR: GameWindow is NULL inside drawGWimproved\n");
 		return;
 	}
 	assert(gw->window!=NULL); assert(gw->renderer!=NULL);
@@ -854,27 +726,18 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 	SDL_SetRenderDrawColor(gw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(gw->renderer);
 	SDL_RenderCopy(gw->renderer, gw->bg, NULL, &rec);
-	//rec.x = 350; rec.y = 25; rec.w = 600;rec.h = 600;	//chessBoard message
-	//SDL_RenderCopy(gw->renderer,gw->cb,NULL,&rec);
-
 	rec.x = 60; rec.y = 60; rec.w = 200;rec.h = 60;	//undo message
 	SDL_RenderCopy(gw->renderer,gw->undo,NULL,&rec);
-
 	rec.x = 60; rec.y = 150; rec.w = 200;rec.h = 60;	//restart message
 	SDL_RenderCopy(gw->renderer,gw->restart,NULL,&rec);
-
 	rec.x = 60; rec.y = 240; rec.w = 200;rec.h = 60;	//save message
 	SDL_RenderCopy(gw->renderer,gw->saveGame,NULL,&rec);
-
 	rec.x = 60; rec.y = 330; rec.w = 200;rec.h = 60;	//load message
 	SDL_RenderCopy(gw->renderer,gw->loadGame,NULL,&rec);
-
 	rec.x = 60; rec.y = 420; rec.w = 200;rec.h = 60;	//mainMenu message
 	SDL_RenderCopy(gw->renderer,gw->mainMenu,NULL,&rec);
-
 	rec.x = 60; rec.y = 510; rec.w = 200;rec.h = 60;	//quit message
 	SDL_RenderCopy(gw->renderer,gw->quit,NULL,&rec);
-
 	int row = NumToRow(fromPixToPos(p1->x,p1->y));
 	int col = NumToCol(fromPixToPos(p1->x,p1->y));
 	//printf("the row is:%d, the col is:%d, the object is:%c\n", row,col,board->boardArr[row][col]);
@@ -883,7 +746,7 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 			if(i==row && j==col && board->boardArr[i][j]!=UNDERSCORE
 					&& fromPixToPos(p1->x,p1->y)!=-1 && fromPixToPos(p2->x,p2->y)!=-1){
 				//printf("the first pixel should be: %d, the second is: %d\n",fromPixToPos(p1->x,p1->y), fromPixToPos(p2->x,p2->y));
-				rec.x = (390 + j*69 - p1->x + p2->x); rec.y = (52 + i*69 - p1->y + p2->y); rec.w = 60 ;rec.h = 60;
+				rec.x = (WIDTH + j*SQUARE - p1->x + p2->x); rec.y = (HEIGHT + i*SQUARE - p1->y + p2->y); rec.w = 60 ;rec.h = 60;
 				if(board->boardArr[i][j]==BlackPawn) SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 				else if(board->boardArr[i][j]==BlackRook) SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
 				else if(board->boardArr[i][j]==BlackBishop) SDL_RenderCopy(gw->renderer,gw->blackBishop,NULL,&rec);
@@ -899,51 +762,51 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 				continue;
 			}
 			else if(board->boardArr[i][j]==BlackPawn){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackRook
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackRook
 				SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackBishop
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackBishop
 				SDL_RenderCopy(gw->renderer,gw->blackBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKnight
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackKnight
 				SDL_RenderCopy(gw->renderer,gw->blackKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//BlackKing
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//BlackKing
 				SDL_RenderCopy(gw->renderer,gw->blackKing,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==BlackQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->blackQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhitePawn){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whitePawn,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteRook){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteRook,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteBishop){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteBishop,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKnight){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKnight,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteQueen){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteQueen,NULL,&rec);
 			}
 			else if(board->boardArr[i][j]==WhiteKing){
-				rec.x = (390 + j*69); rec.y = (52 + i*69); rec.w = 60 ;rec.h = 60;	//black pawn
+				rec.x = (WIDTH + j*SQUARE); rec.y = (HEIGHT + i*SQUARE); rec.w = 60 ;rec.h = 60;	//black pawn
 				SDL_RenderCopy(gw->renderer,gw->whiteKing,NULL,&rec);
 			}
 		}

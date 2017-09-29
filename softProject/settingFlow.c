@@ -5,6 +5,22 @@
  *      Author: Itamar
  */
 
+/**
+ * settingParser summary:
+ *
+ * The Handling part of the Settings section.
+ * Containing functions which their purpose is to translate commands inputs
+ * to a Settings Action relative to the Game Board.
+ *
+ *
+ * cmdToActSetting		   	- Activating the relevant function based on the command type.
+ * mainSettingFlow          - The main loop of the Settings section and responsible for
+ * 							  the settings flow (from input - to a Board's action).
+ *
+ *
+ */
+
+
 #include "boardFuncs.h"
 #include "settingParser.h"
 #include <assert.h>
@@ -12,6 +28,18 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
+/**
+ *
+ *
+ * Managing the reSetting of the Game Board based on the relevant commands.
+ * @param board - the Board Game Data structure.
+ * @param command - the settings command Data structure.
+ * @return
+ * True - if start (for starting the game)
+ * False - otherwise.
+ *
+ */
 bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	assert(board!=NULL);
 	assert(command!=NULL);
@@ -31,11 +59,22 @@ bool cmdToActSetting(boardGame* board, ChessCommand* command){
 	return false;
 }
 
-
+/**
+ *
+ *
+ * Managing the settings Flow from getting the user's inputs,
+ * translate the input to command and activating the command.
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * void.
+ *
+ *
+ */
 
 void mainSettingFlow(boardGame* board){
 	assert(board!=NULL);
-	//assert(board->boardArr!=NULL);
+	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	assert(board->history->elements);
 	setvbuf (stdout, NULL, _IONBF, 0);

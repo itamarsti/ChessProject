@@ -39,6 +39,6 @@ void saveMessageDialog();
 void slotDialog();
 void quitGame(Manager* manager);
 void savePleaseMessageDialog();
-
+int livingOnTheEdge(boardGame* board);
 
 #endif /* GUI_H_ */

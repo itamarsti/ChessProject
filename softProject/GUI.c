@@ -26,10 +26,10 @@ void guiMain(){
 	bool loadBool = false; bool settingsBool = false;bool gameBool = false;
 	bool backMainBool = false; bool backGameBool = false; bool mainBool = true;
 	while(1){
-		if(mainBool) printf("~~~~~~~~~~~~main bool is true~~~~~~~~~~~~~~\n");
-		else if(loadBool) printf("~~~~~~~~~~~~loadBool bool is true~~~~~~~~~~~~\n");
-		else if(settingsBool) printf("~~~~~~~~~~~~settingsBool bool is true~~~~~~~~~~~~\n");
-		else if(gameBool) printf("~~~~~~~~~~~~gameBool bool is true~~~~~~~~~~~~\n");
+		//if(mainBool) printf("~~~~~~~~~~~~main bool is true~~~~~~~~~~~~~~\n");
+		//else if(loadBool) printf("~~~~~~~~~~~~loadBool bool is true~~~~~~~~~~~~\n");
+		//else if(settingsBool) printf("~~~~~~~~~~~~settingsBool bool is true~~~~~~~~~~~~\n");
+		//else if(gameBool) printf("~~~~~~~~~~~~gameBool bool is true~~~~~~~~~~~~\n");
 		//~~~~~~~~~Beginning of main window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		if(mainBool){
 			initBoard(manager->board,true);
@@ -171,17 +171,19 @@ void guiMain(){
 			}
 		}
 		//----------------------------End of Settings Window--------------------------------
-		else if(loadBool){					//~~~~~~~~~Beginning of load window~~~~~~~~
-			printf("at the begining of load window\n");
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of load window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		else if(loadBool){
 			int dirFiles = numOfFilesInDir();
 			int fileRemove =0;
 			manager->lw = (LoadWindow*) createLW();
+			if(manager->lw==NULL) {
+				printf("ERROR: Couldn't create LoadWindow struct\n");
+				quitGame(manager);
+			}
 			drawLoadWindow(manager->lw,dirFiles);
-			loadBool = false;
-			bool quitLoad = false;
+			loadBool = false; bool quitLoad = false;
 			while(!quitLoad){
 				SDL_Event event2;
-				quitLoad = false;
 				while(SDL_WaitEvent(&event2)!=0){
 					dirFiles = numOfFilesInDir();
 					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
@@ -192,9 +194,7 @@ void guiMain(){
 						destroyLoadWindow(manager->lw);
 						if (backGameBool)gameBool = true;
 						else if(backMainBool)mainBool = true;
-						backMainBool = false;
-						backGameBool = false;
-						quitLoad = true;
+						backMainBool = false; backGameBool = false; quitLoad = true;
 						break;
 					}
 					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
@@ -202,8 +202,7 @@ void guiMain(){
 							initBoard(manager->board,true);
 							loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
 							destroyLoadWindow(manager->lw);
-							gameBool = true;
-							quitLoad = true;
+							gameBool = true; quitLoad = true;
 							break;
 						}
 						break;
@@ -226,51 +225,42 @@ void guiMain(){
 				}
 			}
 		}
-		//----------------------------End of Load Window--------------------------------
-							//~~~~~~~~~Beginning of game window~~~~~~~~
+		//-----------------------------------End of Load Window--------------------------------
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of game window~~~~~~~~~~~~~~~~~~~~~~~~~~
 		else if(gameBool){
 			manager->gw = (GameWindow*) createGW();
+			if(manager->gw==NULL) {
+				printf("ERROR: Couldn't create GameWindow struct\n");
+				quitGame(manager);
+			}
 			drawGameWindow(manager->gw, manager->board);
-			bool gameSaved = true;
-			gameBool = false;
-			bool quit = false;
+			bool gameSaved = true; gameBool = false; bool quit = false;
 			while(!quit){
 				bool undoBool = manager->board->history->actualSize>4 ? true:false;
 				bool loadInsideBool = numOfFilesInDir()>0 ? true: false;
 				if(manager->board->gameMode==1 && manager->board->curPlayer!=manager->board->userCol){
 					moveAIobj(manager->board);
-					//destroyGameRenderer(manager->gw);
-					//createGR(manager->gw,undoBool,loadInsideBool);
 					if(manager->board->history->actualSize>4){
 						createGameUndoTexture(manager->gw, true);
 					}
 					createGameSaveTexture(manager->gw,true);
 					drawGameWindow(manager->gw, manager->board);
 					gameSaved = false;
-					bool kingSafe = isMyKingSafe(manager->board);
-					bool checkMate = isCheckMate(manager->board);
-					if(kingSafe==false && checkMate==true){
-						checkMessageWarning(manager->board->curPlayer, false, true, false);
+					int edge =  livingOnTheEdge(manager->board);
+					if(edge==2 || edge==3){
+						destroyGameWindow(manager->gw);
 						quitGame(manager);
-					}
-					else if(kingSafe==true && checkMate==true){
-						checkMessageWarning(manager->board->curPlayer, false, false, true);
-						quitGame(manager);
-					}
-					else if(kingSafe==false && checkMate==false){
-						checkMessageWarning(manager->board->curPlayer, true, false, false);
 					}
 					continue;
 				}
 				SDL_Event event3;
 				while(SDL_PollEvent(&event3)){
-
 					if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_EVENT_QUIT){
 						if(!gameSaved){
 							int save = saveGameMessageBox();
 							if(save ==2) continue;	//cancel
 							else if(save==-1){		//error
-								printf("Error in Save MessagBox");
+								printf("Error: Save MessagBox couldn't be opened");
 								continue;
 							}
 							else if (save==1){		//yes
@@ -291,7 +281,7 @@ void guiMain(){
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_UNDO){
 						if(manager->board->gameMode==1){
 							if(manager->board->history->actualSize>4){
-								undo(manager->board, false, true); //one more undo
+								undo(manager->board, false, true);
 								undo(manager->board, false, true);
 								if(manager->board->history->actualSize<=4){
 									createGameUndoTexture(manager->gw, false);
@@ -326,12 +316,8 @@ void guiMain(){
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_LOAD_GAME){
 						int num = numOfFilesInDir();
 						if(num==0) slotDialog();
-						printf("in push load window\n");
 						destroyGameWindow(manager->gw);
-						loadBool = true;
-						backGameBool = true;
-						quit = true;
-						printf("in here1\n");
+						loadBool = true; backGameBool = true; quit = true;
 						break;
 					}
 					else if (gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_PUSH_MAIN_MENU){
@@ -339,7 +325,7 @@ void guiMain(){
 							int save = saveGameMessageBox();
 							if(save ==2) continue;	//cancel
 							else if(save==-1){		//error
-								printf("Error in Save MessagBox");
+								printf("Error: Save MessagBox couldn't be opened");
 								continue;
 							}
 							else if (save==1){		//yes
@@ -350,10 +336,8 @@ void guiMain(){
 							else if(save==0){		//no
 							}
 						}
-						gameSaved = true;
 						destroyGameWindow(manager->gw);
-						mainBool = true;
-						quit = true;
+						mainBool = true; gameSaved = true;quit = true;
 						break;
 					}
 					else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_OBJ){
@@ -389,19 +373,11 @@ void guiMain(){
 										}
 										createGameSaveTexture(manager->gw,true);
 										drawGameWindow(manager->gw, manager->board);
-										bool kingSafe = isMyKingSafe(manager->board);
-										bool checkMate = isCheckMate(manager->board);
 										gameSaved = false;
-										if(kingSafe==false && checkMate==true){
-											checkMessageWarning(manager->board->curPlayer, false, true, false);
+										int edge =  livingOnTheEdge(manager->board);
+										if(edge==2 || edge==3){
+											destroyGameWindow(manager->gw);
 											quitGame(manager);
-										}
-										else if(kingSafe==true && checkMate==true){
-											checkMessageWarning(manager->board->curPlayer, false, false, true);
-											quitGame(manager);
-										}
-										else if(kingSafe==false && checkMate==false){
-											checkMessageWarning(manager->board->curPlayer, true, false, false);
 										}
 									}
 									else{
@@ -438,7 +414,7 @@ Manager* createManager(){
 	}
 	manager->board = createBoard();
 	if(manager->board==NULL){
-		printf("ERROR couldn't create boardGame in GUI");
+		printf("ERROR: couldn't create boardGame in GUI\n");
 		destroyManager(manager);
 		return NULL;
 	}
@@ -453,7 +429,6 @@ Manager* createManager(){
 
 
 void destroyManager(Manager* manager){
-	printf("in destroy manager\n");
 	if(manager==NULL) return;
 	if(manager->board!=NULL) destroyBoard(manager->board);
 	free(manager);
@@ -525,5 +500,24 @@ void setBoardDefaultManager(Manager* manager){
 	manager->board->diffLevel=2;
 	manager->board->gameMode=1;
 	manager->board->userCol=1;
+}
+
+
+int livingOnTheEdge(boardGame* board){
+	bool kingSafe = isMyKingSafe(board);
+	bool checkMate = isCheckMate(board);
+	if(kingSafe==false && checkMate==false){
+		checkMessageWarning(board->curPlayer, true, false, false);
+		return 1;
+	}
+	else if(kingSafe==false && checkMate==true){
+		checkMessageWarning(board->curPlayer, false, true, false);
+		return 2;
+	}
+	else if(kingSafe==true && checkMate==true){
+		checkMessageWarning(board->curPlayer, false, false, true);
+		return 3;
+	}
+	return 0;
 }
 
