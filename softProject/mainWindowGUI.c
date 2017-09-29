@@ -115,40 +115,26 @@ MainWindow* createMW(){
 }
 
 
+
 void destroyMainWindow(MainWindow* mw){
-	//printf("inside destroy MainWindow\n");
 	if (mw==NULL) return;
-	//printf("before welcom destroy mainWindow\n");
 	if(mw->welcome!=NULL) SDL_DestroyTexture(mw->welcome);
-	//printf("after welcom destroy mainWindow\n");
 	if(mw->quit!=NULL) SDL_DestroyTexture(mw->quit);
-	//printf("after quit destroy mainWindow\n");
 	if(mw->newGame!=NULL) SDL_DestroyTexture(mw->newGame);
-	//printf("after new game destroy mainWindow\n");
 	if(mw->loadGame!=NULL) SDL_DestroyTexture(mw->loadGame);
-	//printf("after load Game destroy mainWindow\n");
 	if(mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
-	//printf("after bg destroy mainWindow\n");
 	if(mw->renderer!=NULL) SDL_DestroyRenderer(mw->renderer);
-	//printf("after renderer destroy mainWindow\n");
 	if (mw->window != NULL) SDL_DestroyWindow(mw->window);
-	//printf("after window destroy mainWindow\n");
-	//if(mw->bg!=NULL) SDL_DestroyTexture(mw->bg);
-	//printf("the end of destroy main\n");
 	free(mw);
 }
 
 void drawMainWindow(MainWindow* mw){
 	if(mw==NULL){
-		printf("ERROR: MainWindow is NULL in drawWindow function");
+		printf("ERROR: MainWindow is NULL in drawWindow function\n");
 		return;
 	}
-	assert(mw->quit!=NULL);
-	assert(mw->bg!=NULL);
-	assert(mw->loadGame!=NULL);
-	assert(mw->newGame!=NULL);
-	assert(mw->renderer!=NULL);
-	assert(mw->window != NULL);
+	assert(mw->quit!=NULL);	assert(mw->bg!=NULL);assert(mw->loadGame!=NULL);
+	assert(mw->newGame!=NULL);	assert(mw->renderer!=NULL);	assert(mw->window != NULL);
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_SetRenderDrawColor(mw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(mw->renderer);

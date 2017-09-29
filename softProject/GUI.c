@@ -22,29 +22,27 @@
 
 void guiMain(){
 	Manager* manager =(Manager*) createManager();
-	if(manager==NULL) printf("ERROR: Manager is null");
-	setDefault(manager->board);
-	initBoard(manager->board,true);
-	bool loadBool = false; bool settingsBool = false;
-	bool gameBool = false; bool backMainBool = false; bool backGameBool = false;
-	bool mainBool = true;
+	if(manager==NULL) printf("ERROR: creating Manager had failed\n");
+	bool loadBool = false; bool settingsBool = false;bool gameBool = false;
+	bool backMainBool = false; bool backGameBool = false; bool mainBool = true;
 	while(1){
-		if(mainBool) printf("^^^^^^^^^^^^^main bool is true^^^^^^^^^^\n");
-		if(loadBool) printf("^^^^^^^^^^^^^loadBool bool is true^^^^^^^^^^\n");
-		if(settingsBool) printf("^^^^^^^^^^^^^settingsBool bool is true^^^^^^^^^^\n");
-		if(gameBool) printf("^^^^^^^^^^^^^gameBool bool is true^^^^^^^^^^6\n");
-
-		if(mainBool){			//~~~~~~~~~Beginning of main window~~~~~~~~
+		if(mainBool) printf("~~~~~~~~~~~~main bool is true~~~~~~~~~~~~~~\n");
+		else if(loadBool) printf("~~~~~~~~~~~~loadBool bool is true~~~~~~~~~~~~\n");
+		else if(settingsBool) printf("~~~~~~~~~~~~settingsBool bool is true~~~~~~~~~~~~\n");
+		else if(gameBool) printf("~~~~~~~~~~~~gameBool bool is true~~~~~~~~~~~~\n");
+		//~~~~~~~~~Beginning of main window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		if(mainBool){
 			initBoard(manager->board,true);
 			setDefault(manager->board);
-			//if(manager->mw!=NULL) destroyMainWindow(manager->mw);
 			manager->mw = (MainWindow*) createMW();
-			if(manager->mw==NULL) printf("ERROR: main window is null");
+			if(manager->mw==NULL) {
+				printf("ERROR: Couldn't create MainWindow struct\n");
+				quitGame(manager);
+			}
 			drawMainWindow(manager->mw);
-			bool quitMain = false;
+			bool quitMain = false; mainBool = false;
 			while(!quitMain){
 				SDL_Event event;
-				mainBool = false;
 				while(SDL_PollEvent(&event)!=0){
 					if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
 						destroyMainWindow(manager->mw);
@@ -52,26 +50,27 @@ void guiMain(){
 					}
 					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
 						destroyMainWindow(manager->mw);
-						loadBool = true;
-						backMainBool = true;
-						quitMain = true;
+						loadBool = true; backMainBool = true; quitMain = true;
 						break;
 					}
 					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
 						destroyMainWindow(manager->mw);
-						settingsBool = true;
-						quitMain = true;
+						settingsBool = true; quitMain = true;
 						break;
 					}
 				}
 			}
 		}
 		//----------------------------End of main Window--------------------------------
-		else if(settingsBool){				//~~~~~~~~~Beginning of settings window~~~~~~~~
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of settings window~~~~~~~~~~~~~~~~~~~~~~
+		else if(settingsBool){
 			manager->sw = (SettingsWindow*) createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
+			if(manager->sw==NULL) {
+				printf("ERROR: Couldn't create SettingsWindow struct\n");
+				quitGame(manager);
+			}
 			drawSettingsWindow(manager->sw);
-			settingsBool = false;
-			bool quitSettings = false;
+			bool quitSettings = false; settingsBool = false;
 			while(!quitSettings){
 				SDL_Event event1;
 				quitSettings = false;
@@ -82,23 +81,21 @@ void guiMain(){
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_BACK){
 						destroySettingsWindow(manager->sw);
-						mainBool = true;
-						quitSettings = true;
+						mainBool = true; quitSettings = true;
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
-						//printf("~~~~~~push start button was made~~~~~~~~~~~\n");
 						destroySettingsWindow(manager->sw);
-						gameBool = true;
-						quitSettings = true;
+						gameBool = true; quitSettings = true;
 						break;
 					}
 					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
+						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 2);
 						setNumPlayers(manager->board,1);
 						createGameMode1Texture(manager->sw,  manager->board->gameMode);
 						createGameMode2Texture(manager->sw, manager->board->gameMode);
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, manager->board->diffLevel);
-						createSetWhiteTexture(manager->sw, manager->board->userCol);
+						createSetWhiteTexture(manager->sw, 1);
+						createSetBlackTexture(manager->sw, 1);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -107,8 +104,8 @@ void guiMain(){
 						createGameMode1Texture(manager->sw,  manager->board->gameMode);
 						createGameMode2Texture(manager->sw, manager->board->gameMode);
 						createGameDifficultyDecider(manager->sw ,0, manager->board->diffLevel);
-						createSetWhiteTexture(manager->sw, manager->board->gameMode);
-						createSetBlackTexture(manager->sw, manager->board->gameMode);
+						createSetWhiteTexture(manager->sw, 0);
+						createSetBlackTexture(manager->sw, 1);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -116,8 +113,8 @@ void guiMain(){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->userCol==1) continue;
 						setColor(manager->board,1);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,1,manager->board->diffLevel);
+						createSetWhiteTexture(manager->sw, 1);
+						createSetBlackTexture(manager->sw,1);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -125,8 +122,8 @@ void guiMain(){
 						if(manager->board->gameMode==2) continue;
 						if(manager->board->userCol==0) continue;
 						setColor(manager->board,0);
-						destroySettingsRenderer(manager->sw);
-						createSR(manager->sw,1,0,manager->board->diffLevel);
+						createSetWhiteTexture(manager->sw, 0);
+						createSetBlackTexture(manager->sw, 0);
 						drawSettingsWindow(manager->sw);
 						break;
 					}
@@ -436,12 +433,12 @@ void guiMain(){
 Manager* createManager(){
 	Manager* manager = (Manager*) malloc(sizeof(Manager));
 	if(manager==NULL){
-		printf("coudln't create manager");
+		printf("ERROR: coudln't create manager struct\n");
 		return NULL;
 	}
 	manager->board = createBoard();
 	if(manager->board==NULL){
-		printf("couldn't create boardGame in GUI");
+		printf("ERROR couldn't create boardGame in GUI");
 		destroyManager(manager);
 		return NULL;
 	}
