@@ -206,7 +206,7 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 
 
 
-void moveAIobj(boardGame* board){
+void moveAIobj(boardGame* board, bool checkActive){
 	//printf("at the beggining of move AI OBJEcCT\n");
 	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
@@ -218,7 +218,7 @@ void moveAIobj(boardGame* board){
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
 	//if(!valid) printf("not valid\n");
 	//if(valid) printf("computer move is not!!! valid\n");
-	if(valid){
+	if(valid && checkActive){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
 		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
 			//printf("there is a risk on the king");

@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 			while(!resetBool){
 				if(mainBoard->gameMode==1){
 					if(mainBoard->curPlayer!=mainBoard->userCol){
-						moveAIobj(mainBoard);
+						moveAIobj(mainBoard, true);
 						printBoard(mainBoard);
 					}
 					else if(mainBoard->curPlayer==mainBoard->userCol){

@@ -81,10 +81,9 @@ void printBoard(boardGame* board){
 
 void destroyBoard(boardGame* board){
 	assert(board!=NULL);
-	//assert(board->boardArr!=NULL);
+	assert(board->boardArr!=NULL);
 	assert(board->history!=NULL);
 	spArrayListDestroy(board->history);
-	//free(board->boardArr);
 	free(board);
 }
 

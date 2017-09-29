@@ -81,7 +81,6 @@ bool mainGameFlow(boardGame* board){
 		assert(input!=NULL);
 		GameCommand* cmd = (GameCommand*) gameParser(input);
 		assert(cmd!=NULL);
-		//printf("we have nice gameParser struct\n");
 		if(cmd->validArg){
 			if(cmd->cmd==RESET || cmd->cmd==QUIT2){
 				free(input);
@@ -95,9 +94,7 @@ bool mainGameFlow(boardGame* board){
 					return true;
 				}
 			}
-		//	printf("before loop breaker\n");
 			loopBreaker = cmdToActGame(board,cmd, input);
-			//printf("after loop breaker\n");
 		}
 		else if (!cmd->validArg){
 				if(cmd->cmd==INVALID_SAVE) printf("File cannot be created or modified\n");

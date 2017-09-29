@@ -33,7 +33,7 @@ Manager* createManager();
 void destroyManager(Manager* manager);
 void guiMain();
 bool loadSection(Manager* manager, int numOfFiles, int fileRemove);
-void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie);
+void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie, int gameMode, int userCol);
 void saveGameFromGUI(boardGame* game, int numOfFiles);
 void saveMessageDialog();
 void slotDialog();

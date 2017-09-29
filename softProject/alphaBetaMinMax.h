@@ -18,6 +18,6 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
 int score(boardGame* board);
 int scoreFuncId(char symbol);
 int* AlphaBetaMove(boardGame* board,unsigned int maxDepth);
-void moveAIobj(boardGame* board);
+void moveAIobj(boardGame* board, bool checkActive);
 
 #endif /* ALPHABETAMINMAX_H_ */

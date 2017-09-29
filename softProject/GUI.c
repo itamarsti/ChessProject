@@ -239,7 +239,7 @@ void guiMain(){
 				bool undoBool = manager->board->history->actualSize>4 ? true:false;
 				bool loadInsideBool = numOfFilesInDir()>0 ? true: false;
 				if(manager->board->gameMode==1 && manager->board->curPlayer!=manager->board->userCol){
-					moveAIobj(manager->board);
+					moveAIobj(manager->board, false);
 					if(manager->board->history->actualSize>4){
 						createGameUndoTexture(manager->gw, true);
 					}
@@ -437,15 +437,21 @@ void destroyManager(Manager* manager){
 
 
 
-void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie){
+void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie, int gameMode, int userCol){
 	if(check){
-		if(curPlayer==1){
+		if(gameMode==2 || (gameMode==1 && curPlayer!=userCol)){
+			if(curPlayer==1){
+					SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
+						"Check! white king is threatened!",NULL);
+				}
+			else if (curPlayer==0){
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
-					"Check! white king is threatened!",NULL);
+						"Check! black king is threatened!",NULL);
 			}
-		else if (curPlayer==0){
+		}
+		else if(gameMode ==1 && curPlayer==userCol){
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,"Check Message",
-					"Check! black king is threatened!",NULL);
+					"Check!",NULL);
 		}
 	}
 	else if(mate){
@@ -506,16 +512,17 @@ void setBoardDefaultManager(Manager* manager){
 int livingOnTheEdge(boardGame* board){
 	bool kingSafe = isMyKingSafe(board);
 	bool checkMate = isCheckMate(board);
+	if(checkMate) printf("mate");
 	if(kingSafe==false && checkMate==false){
-		checkMessageWarning(board->curPlayer, true, false, false);
+		checkMessageWarning(board->curPlayer, true, false, false, board->gameMode,board->userCol);
 		return 1;
 	}
 	else if(kingSafe==false && checkMate==true){
-		checkMessageWarning(board->curPlayer, false, true, false);
+		checkMessageWarning(board->curPlayer, false, true, false,board->gameMode,board->userCol);
 		return 2;
 	}
 	else if(kingSafe==true && checkMate==true){
-		checkMessageWarning(board->curPlayer, false, false, true);
+		checkMessageWarning(board->curPlayer, false, false, true,board->gameMode,board->userCol);
 		return 3;
 	}
 	return 0;
