@@ -51,11 +51,6 @@ void guiMain(){
 	bool loadBool = false; bool settingsBool = false;bool gameBool = false;
 	bool backMainBool = false; bool backGameBool = false; bool mainBool = true;
 	while(1){
-		//if(mainBool) printf("~~~~~~~~~~~~main bool is true~~~~~~~~~~~~~~\n");
-		//else if(loadBool) printf("~~~~~~~~~~~~loadBool bool is true~~~~~~~~~~~~\n");
-		//else if(settingsBool) printf("~~~~~~~~~~~~settingsBool bool is true~~~~~~~~~~~~\n");
-		//else if(gameBool) printf("~~~~~~~~~~~~gameBool bool is true~~~~~~~~~~~~\n");
-		//~~~~~~~~~Beginning of main window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		if(mainBool){
 			initBoard(manager->board,true);
 			setDefault(manager->board);
@@ -68,7 +63,8 @@ void guiMain(){
 			int handle = mainWindowGuiManager(manager->mw);
 			if(handle==1) quitGame(manager);
 			else if(handle==2){
-				loadBool = true; backMainBool = true;
+				loadBool = true;
+				backMainBool = true;
 			}
 			else if(handle==3)settingsBool = true;
 		}
@@ -184,56 +180,21 @@ void guiMain(){
 		//----------------------------End of Settings Window--------------------------------
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of load window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		else if(loadBool){
-			int dirFiles = numOfFilesInDir();
-			int fileRemove =0;
 			manager->lw = (LoadWindow*) createLW();
 			if(manager->lw==NULL) {
 				printf("ERROR: Couldn't create LoadWindow struct\n");
 				quitGame(manager);
 			}
-			drawLoadWindow(manager->lw,dirFiles);
-			loadBool = false; bool quitLoad = false;
-			while(!quitLoad){
-				SDL_Event event2;
-				while(SDL_WaitEvent(&event2)!=0){
-					dirFiles = numOfFilesInDir();
-					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
-						destroyLoadWindow(manager->lw);
-						quitGame(manager);
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_BACK){
-						destroyLoadWindow(manager->lw);
-						if (backGameBool)gameBool = true;
-						else if(backMainBool)mainBool = true;
-						backMainBool = false; backGameBool = false; quitLoad = true;
-						break;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
-						if(dirFiles>0 && fileRemove>0){
-							initBoard(manager->board,true);
-							loadRemoveChangeFile(dirFiles, fileRemove,manager->board,manager->lw);
-							destroyLoadWindow(manager->lw);
-							gameBool = true; quitLoad = true;
-							break;
-						}
-						break;
-					}
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT
-						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT
-						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT
-						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT
-						||loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT){
-					if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
-					else if (loadWindowHandleEvent(manager->lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
-					destroyLoadRenderer(manager->lw);
-					createLR(manager->lw,dirFiles,fileRemove,true);
-					drawLoadWindow(manager->lw,dirFiles);
-					break;
-					}
-				}
+			loadBool = false;
+			int handleLoad = loadWindowGuiManager(manager->lw, manager->board,backGameBool,backMainBool);
+			if(handleLoad==1) quitGame(manager);
+			else if(handleLoad==2  || handleLoad==4){
+				if (handleLoad==2) backGameBool = false;
+				gameBool = true;
+			}
+			else if (handleLoad==3){
+				backMainBool = false;
+				mainBool = true;
 			}
 		}
 		//-----------------------------------End of Load Window--------------------------------

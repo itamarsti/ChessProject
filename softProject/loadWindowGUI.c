@@ -34,6 +34,8 @@
  * createLoadTexture			- Creating and Destroying the load Texture (light/not light)
  * loadWindowHide				- Hiding the Window
  * loadWindowShow				- Showing the Window
+ *loadWindowGuiManager 			- Handling the different cases and translates command to action
+ *
  *
  */
 
@@ -800,4 +802,72 @@ void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight ){
 			return;
 		}
 		SDL_FreeSurface(surface);
+}
+
+
+/**
+ *
+ * This function responsible for handling the events and translates them to an operations
+ * in the Load Window section.
+ *
+ * @param lw - LoadWindow data structure
+ * @param board - BoardGame data Structure
+ * @param backGameBool - true means when clicking back we will go the the Game Window
+ * @param backMainBool - true means when clicking back we will go the the Main Window
+ * @return
+ * int between 1-4:
+ * 		1: quit the game
+ * 		2: back to Game Window
+ * 		3: back to Main Window
+ * 		4: load the game and go to Game window
+ *		0: should never!! reach to 0!
+ */
+
+
+int loadWindowGuiManager(LoadWindow* lw, boardGame* board, bool backGameBool, bool backMainBool){
+	assert(lw!=NULL);
+	int dirFiles = numOfFilesInDir();
+	int fileRemove =0;
+	drawLoadWindow(lw,dirFiles);
+	bool quitLoad = false;
+	while(!quitLoad){
+		SDL_Event event2;
+		while(SDL_WaitEvent(&event2)!=0){
+			dirFiles = numOfFilesInDir();
+			if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_EVENT_QUIT){
+				destroyLoadWindow(lw);
+				return 1;
+			}
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_PUSH_BACK){
+				destroyLoadWindow(lw);
+				if (backGameBool)return 2;
+				else if(backMainBool)return 3;
+			}
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_PUSH_LOAD){
+				if(dirFiles>0 && fileRemove>0){
+					initBoard(board,true);
+					loadRemoveChangeFile(dirFiles, fileRemove,board,lw);
+					destroyLoadWindow(lw);
+					return 4;
+				}
+				break;
+			}
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME1SLOT
+				||loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME2SLOT
+				||loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME3SLOT
+				||loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME4SLOT
+				||loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME5SLOT){
+			if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME1SLOT) fileRemove = 1;
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME2SLOT) fileRemove = 2;
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME3SLOT) fileRemove = 3;
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME4SLOT) fileRemove = 4;
+			else if (loadWindowHandleEvent(lw, &event2) == LOAD_WINDOW_GAME5SLOT) fileRemove = 5;
+			destroyLoadRenderer(lw);
+			createLR(lw,dirFiles,fileRemove,true);
+			drawLoadWindow(lw,dirFiles);
+			break;
+			}
+		}
+	}
+	return 0;
 }

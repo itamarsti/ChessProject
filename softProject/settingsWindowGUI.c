@@ -11,6 +11,7 @@
  * The Settings Window GUI sections. This functions are responsible for creating
  * the Settings window Data structure, handling the different events in this window etc.
  *
+ *
  * isClickOnGameMode1				- Checking if there was click on Mode1 button
  * isClickOnGameMode2				- Checking if there was click on Mode2 button
  * isClickOnColWhite				- Checking if there was click on White button

@@ -86,4 +86,5 @@ void createBackTexture(LoadWindow* lw);
 void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight);
 void loadWindowHide(LoadWindow* lw);
 void loadWindowShow(LoadWindow* lw);
+int loadWindowGuiManager(LoadWindow* lw, boardGame* board, bool backGameBool, bool backMainBool);
 #endif /* LOADWINDOWGUI_H_ */

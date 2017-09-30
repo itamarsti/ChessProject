@@ -20,7 +20,7 @@ clean:
 	rm -f $(EXEC) $(O_FILES)
 
 $(EXEC): $(O_FILES)
-	$(CC) $(O_FILES) $(SDL_LIB) -o $@
+	$(CC) $(O_FILES)  $(COMP_FLAG) $(SDL_COMP_FLAG $(SDL_LIB) -o $@
 
 
 SPArrayList.o: SPArrayList.c SPArrayList.h

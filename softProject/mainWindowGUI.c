@@ -340,6 +340,21 @@ void mainWindowShow(MainWindow* mw) {
 }
 
 
+/**
+ *
+ * This function responsible for handling the events and translates them to on operetions
+ * in the Main Window section.
+ *
+ * @param mw - MainWindow data structure
+ *
+ * @return
+ * int between 1-3:
+ * 		1: quit the game
+ * 		2: go to Load Window
+ * 		3: go to Settings Window
+ *
+ */
+
 int mainWindowGuiManager(MainWindow* mw){
 	assert(mw !=NULL);
 	drawMainWindow(mw);
