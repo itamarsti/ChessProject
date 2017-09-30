@@ -400,6 +400,21 @@ bool isBlackPlayer(char c){
 }
 
 
+/**
+ *
+ * This function responsible to find and show all the possible moves of a given object on board,
+ * or to print error if something is not right.
+ * This function first do all the possible moves. If the move is valid it calls
+ * another function to finish the job.
+ *
+ * @param board - the Board Game Data structure.
+ * @param position - the symbol's/object's position on board (0-63)
+ * @return
+ * void
+ *
+ */
+
+
 void getMovesFunc(boardGame* board,int position){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -452,6 +467,21 @@ void getMovesFunc(boardGame* board,int position){
 return;
 }
 
+/**
+ *
+ * This function do the continue checks and prints the get_moves in the right format
+ *  after the first move was given.
+ *
+ * @param copy - the Board Game Data structure.
+ * @param rowDest - the symbol's/object's destination row on board (0-7) after the move
+ * @param colDest  - the symbol's/object's destination column on board (0-7) after the move
+ * @param dest - the destination to move to (the second move actually to check if there is a threat.
+ * @return
+ * void
+ *
+ */
+
+
 void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, int dest){
 	assert(copy!=NULL);
 	assert(copy->boardArr!=NULL);
@@ -478,6 +508,17 @@ void getMovesPrintFunc(boardGame* copy, bool valid1, int rowDest, int colDest, i
 }
 
 
+/**
+ *
+ * This function responsible to find and if there was a checkmate only.
+ *
+ * @param board - the Board Game Data structure.
+ * @return
+ * true - if there was a checkmate, false otherwise.
+ *
+ */
+
+
 bool isWinner(boardGame* board){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
@@ -486,6 +527,16 @@ bool isWinner(boardGame* board){
 	if(isKingSafe==false && checkMate==true) return true;
 	return false;
 }
+
+
+/**
+ *
+ * This function responsible to find if there was a tie only.
+ * @param board - the Board Game Data structure.
+ * @return
+ * true - if there was a tie, false otherwise.
+ *
+ */
 
 bool isTie(boardGame* board){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
@@ -496,7 +547,17 @@ bool isTie(boardGame* board){
 	return false;
 }
 
-
+/**
+ *
+ * This function responsible to print the computer's move in the right format.
+ *
+ * @param board - the Board Game Data structure.
+ * @param position - the symbol's/object's position on board (0-63)
+ * @param destination  - the symbol's/object's destination on board (0-63)
+ * @return
+ * void
+ *
+ */
 
 void computerMoveMessage(boardGame* board, int position, int destination){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
@@ -514,6 +575,22 @@ void computerMoveMessage(boardGame* board, int position, int destination){
 }
 
 
+/**
+ *
+ * This function responsible to check if a given pawn's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the pawn's position row on board (0-7)
+ * @param colPos - the pawn's position column on board (0-7)
+ * @param rowDest  - the pawn's destination row on board (0-7)
+ * @param colDest  - the pawn's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -525,20 +602,17 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		if(rowDest==rowPos+1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-			//if(valid) printf( "valid");
 			return valid;
 		}
 		else if((rowDest==rowPos+2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 					&& board->boardArr[rowPos+1][colDest]==UNDERSCORE && colPos==colDest)
 				&& secRow){
 				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-				//if(valid) printf( "valid");
 				return valid;
 			}
 		else if (rowDest==rowPos+1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				isWhitePlayer(board->boardArr[rowDest][colDest])){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-			//if(valid) printf( "valid");
 			return valid;
 			}
 		}
@@ -546,27 +620,39 @@ bool movePawn(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 		if(rowDest==rowPos-1 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-			//if(valid) printf( "valid");
 			return valid;
 		}
 		else if((rowDest==rowPos-2 && board->boardArr[rowDest][colDest]==UNDERSCORE
 				&& colPos==colDest && board->boardArr[rowPos-1][colDest]==UNDERSCORE)
 				 && secRow){
 				valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-				//if(valid) printf( "valid");
 				return valid;
 			}
 		else if (rowDest==rowPos-1 && (colPos==colDest+1 || colPos==colDest-1)&&
 				isBlackPlayer(board->boardArr[rowDest][colDest])){
-			//printf("was in this term\n");
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackPawn,WhitePawn, doPrint);
-			//if(valid) printf( "valid");
 			return valid;
 			}
 		}
 	if(doPrint) printf("Illegal move\n");
 	return false;
 }
+
+/**
+ *
+ * This function responsible to check if a given Rook's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Rook's position row on board (0-7)
+ * @param colPos - the Rook's position column on board (0-7)
+ * @param rowDest  - the Rook's destination row on board (0-7)
+ * @param colDest  - the Rook's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
 
 bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
@@ -590,6 +676,22 @@ bool moveRook(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	return valid;
 }
 
+/**
+ *
+ * This function responsible to check if a given Bishop's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Bishop's position row on board (0-7)
+ * @param colPos - the Bishop's position column on board (0-7)
+ * @param rowDest  - the Bishop's destination row on board (0-7)
+ * @param colDest  - the Bishop's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 bool moveBishop(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
 	assert(board!=NULL); assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -606,6 +708,22 @@ bool moveBishop(boardGame* board, int rowPos, int colPos, int rowDest, int colDe
 	valid = switchAndCheck(board,rowPos,colPos, rowDest, colDest, BlackBishop, WhiteBishop, doPrint);
 	return valid;
 }
+
+/**
+ *
+ * This function responsible to check if a given Knight's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Knight's position row on board (0-7)
+ * @param colPos - the Knight's position column on board (0-7)
+ * @param rowDest  - the Knight's destination row on board (0-7)
+ * @param colDest  - the Knight's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
 
 
 bool moveKnight(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
@@ -626,6 +744,22 @@ bool moveKnight(boardGame* board, int rowPos, int colPos, int rowDest, int colDe
 }
 
 
+/**
+ *
+ * This function responsible to check if a given King's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the King's position row on board (0-7)
+ * @param colPos - the King's position column on board (0-7)
+ * @param rowDest  - the King's destination row on board (0-7)
+ * @param colDest  - the King's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -641,33 +775,57 @@ bool moveKing(boardGame* board, int rowPos, int colPos, int rowDest, int colDest
 	}
 }
 
+/**
+ *
+ * This function responsible to check if a given Queen's move is valid and do the move
+ * in case the validation is true.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Queen's position row on board (0-7)
+ * @param colPos - the Queen's position column on board (0-7)
+ * @param rowDest  - the Queen's destination row on board (0-7)
+ * @param colDest  - the Queen's destination column on board (0-7)
+ * @param doPrint  - if to print the relevant messeages or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 
 bool moveQueen(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, bool doPrint){
-	//printf("move queen was acted\n");
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool valid;
 	if (rowPos==rowDest || colPos==colDest){
-		//printf("straight was acted\n");
 		if(isValidHorAndVar(board, rowPos, colPos,rowDest,colDest)){
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen, doPrint);
 			return valid;
 		}
 	}
 	else if (abs(rowPos-rowDest)==abs(colPos-colDest)){
-		//printf("diagonal was acted\n");
 		if(isValidDiagonal(board, rowPos, colPos,rowDest,colDest)){
-			//printf("isvalidDiagnoal is true\n");
 			valid = switchAndCheck(board,rowPos,colPos,rowDest, colDest,BlackQueen, WhiteQueen, doPrint);
-			//if(valid) printf("switch and check is true\n");
-			//if(!valid) printf("switch and check false\n");
 			return valid;
 		}
 	}
 	if(doPrint) printf("Illegal move\n");
 	return false;
 }
+
+/**
+ *
+ * This function check if a general move is valid in diagonal direction.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Queen's position row on board (0-7)
+ * @param colPos - the Queen's position column on board (0-7)
+ * @param rowDest  - the Queen's destination row on board (0-7)
+ * @param colDest  - the Queen's destination column on board (0-7)
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
 
 
 bool isValidDiagonal(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
@@ -706,6 +864,21 @@ bool isValidDiagonal(boardGame* board, int rowPos, int colPos, int rowDest, int 
 	}
 	return !valid;
 }
+
+
+/**
+ *
+ * This function check if a general move is valid in horizontal and vertical direction.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the Queen's position row on board (0-7)
+ * @param colPos - the Queen's position column on board (0-7)
+ * @param rowDest  - the Queen's destination row on board (0-7)
+ * @param colDest  - the Queen's destination column on board (0-7)
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
 
 
 bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int colDest){
@@ -748,9 +921,28 @@ bool isValidHorAndVar(boardGame* board, int rowPos, int colPos, int rowDest, int
 	return !valid;
 }
 
+/**
+ *
+ * This function responsible to the actual switching places on boardGame
+ * by activating the switchObj function and also to do some checks before such as if
+ * the move is causing to the king any damger.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the object's position row on board (0-7)
+ * @param colPos - the object's position column on board (0-7)
+ * @param rowDest  - the object's destination row on board (0-7)
+ * @param colDest  - the object's destination column on board (0-7)
+ * @param obj1  - black Player objects
+ * @param obj2  - white player objects
+ * @param print  - if to do the prints.
+ *
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 
 bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int colDest,char obj1, char obj2, bool print){
-	//printf("switch and check was acted from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
@@ -759,10 +951,8 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 	assert(copy!=NULL); assert(copy->boardArr!=NULL);
 	if((board->curPlayer==0) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isWhitePlayer(board->boardArr[rowDest][colDest]))){
-			//printf("is my king safe 0 was acted");
 			switchObj(copy, rowPos, colPos, rowDest, colDest,obj1,false);
 			valid = isMyKingSafe(copy);
-			//if(!valid) printf("king is not safe for move from %d,%d to %d,%d", rowPos, colPos, rowDest, colDest);
 			if(valid){
 				destroyBoard(copy);
 				switchObj(board, rowPos, colPos, rowDest, colDest,obj1,true);
@@ -771,10 +961,8 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 		}
 	else if((board->curPlayer==1) && (board->boardArr[rowDest][colDest]==UNDERSCORE ||
 		isBlackPlayer(board->boardArr[rowDest][colDest]))){
-		//printf("is my king safe 1 was acted");
 		switchObj(copy, rowPos, colPos, rowDest, colDest,obj2,false);
 		valid = isMyKingSafe(copy);
-		//if(!valid) printf("the king is not safe");
 		if(valid){
 			destroyBoard(copy);
 			switchObj(board, rowPos, colPos, rowDest, colDest,obj2,true);
@@ -787,6 +975,24 @@ bool switchAndCheck(boardGame* board, int rowPos, int colPos, int rowDest, int c
 }
 
 
+/**
+ *
+ * This function responsible for doing the actual move on boardGAme.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - the object's position row on board (0-7)
+ * @param colPos - the object's position column on board (0-7)
+ * @param rowDest  - the object's destination row on board (0-7)
+ * @param colDest  - the object's destination column on board (0-7)
+ * @param obj1  - black Player objects
+ * @param obj2  - white player objects
+ * @param chaPla  - boolean: if also to change turns in the game.
+ *
+ * @return
+ * void
+ *
+ */
+
 void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDest, char obj,bool chaPla){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
@@ -797,12 +1003,26 @@ void switchObj(boardGame* board, int rowPos, int colPos, int rowDest, int colDes
 	if(chaPla) changePlayer(board);
 }
 
+/**
+ *
+ * This main function which managing the moving actions on board. The function do some initial
+ * checks to determine if the move is legal and then classifying & activating
+ * the relevant move functions depends on the object's symbol.
+ *
+ * @param board - the Board Game Data structure.
+ * @param position - the symbol's/object's position on board (0-63)
+ * @param destination  - the symbol's/object's destination on board  we want to move to(0-63)
+ * @param doPrint - if to print the comments or not.
+ * @return
+ * true if the move is valid, false otherwise.
+ *
+ */
+
 bool moveObj(boardGame* board,int position, int destination,bool doPrint){
 	assert(board!=NULL);
 	assert(board->boardArr!=NULL);
 	fflush(stdout);
 	bool validMove = false;
-	//printf("the position is:%d, the destinetion is:%d\n",position,destination);
 	int rowPos = NumToRow(position);
 	int colPos = NumToCol(position);
 	int rowDest = NumToRow(destination);
@@ -826,14 +1046,28 @@ bool moveObj(boardGame* board,int position, int destination,bool doPrint){
 		return false;
 	}
 	char obj = board->boardArr[rowPos][colPos];
-		 if (obj=='M' || obj =='m') validMove = movePawn(board,rowPos,colPos,rowDest,colDest, doPrint);
-	else if (obj=='R' || obj =='r') validMove = moveRook(board,rowPos,colPos,rowDest,colDest, doPrint);
-	else if (obj=='B' || obj =='b') validMove = moveBishop(board,rowPos,colPos,rowDest,colDest, doPrint);
-	else if (obj=='N' || obj =='n') validMove = moveKnight(board,rowPos,colPos,rowDest,colDest, doPrint);
-	else if (obj=='K' || obj =='k') validMove = moveKing(board,rowPos,colPos,rowDest,colDest, doPrint);
-	else if (obj=='Q' || obj =='q') validMove = moveQueen(board,rowPos,colPos,rowDest,colDest, doPrint);
+		 if (obj==BlackPawn|| obj ==WhitePawn) validMove = movePawn(board,rowPos,colPos,rowDest,colDest, doPrint);
+	else if (obj==BlackRook || obj ==WhiteRook) validMove = moveRook(board,rowPos,colPos,rowDest,colDest, doPrint);
+	else if (obj==BlackBishop || obj ==WhiteBishop) validMove = moveBishop(board,rowPos,colPos,rowDest,colDest, doPrint);
+	else if (obj==BlackKnight || obj ==WhiteKnight) validMove = moveKnight(board,rowPos,colPos,rowDest,colDest, doPrint);
+	else if (obj==BlackKing || obj ==WhiteKing) validMove = moveKing(board,rowPos,colPos,rowDest,colDest, doPrint);
+	else if (obj==BlackQueen || obj ==WhiteQueen) validMove = moveQueen(board,rowPos,colPos,rowDest,colDest, doPrint);
 	return validMove;	//change player and add move to history are in switchObj func.
 }
+
+
+/**
+ *
+ * This function is managing the king's safety checks by activating other functions which
+ * find the king's position and check that there is no danger from any direction by the
+ * opponent's objects.
+ *
+ * @param board - the Board Game Data structure.
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
 
 
 bool isMyKingSafe(boardGame* board){
@@ -841,31 +1075,39 @@ bool isMyKingSafe(boardGame* board){
 	bool safe = false;
 	int position = -1;
 	if(board->curPlayer==1){
-		//printf("ismyKingSafe1 Function was activated\n");
 		position = trackKingPosition(board, WhiteKing);
 		if(position==-1){
 			printf("ERROR: whiteKing wasn't found\n"); // never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,WhiteKing);
-		//if(safe) printf("it's safe  here 1\n");
-		//if(!safe) printf("it's not safe here1\n");
-
 	}
 	else if (board->curPlayer==0){
-		//printf("ismyKingSafe 0 Function was activated\n");
 		position = trackKingPosition(board, BlackKing);
 		if(position==-1){
 			printf("ERROR: whiteKing wasn't found\n");  //never suppose to act
 			return true;
 		}
 		safe = safeArea(board, position,BlackKing);
-		//if(safe) printf("it's safe here 0\n");
-		//if(!safe) printf("it's not safe here0\n");
 	}
-	//if(safe) printf("the king is safe\n");
 	return safe;
 }
+
+/**
+ *
+ * This function is managing the king's safety checking. The function activating
+ * all kinds of safety functions to check if king is not threatened by any of the
+ * the opponent's tool.
+ *
+ * @param board - the Board Game Data structure.
+ * @param position - integer between 0-63, the position of the king on board Game.
+ * @param symbol - whiteKing or blackKing char symbol
+ *
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
 
 bool safeArea(boardGame* board,int position,char symbol){
 	assert(board!=NULL);
@@ -879,6 +1121,22 @@ bool safeArea(boardGame* board,int position,char symbol){
 	if((safe = isSafeFromPawn(board,row, col, symbol))==false) return false;	//covers pawn
 	return true;
 }
+
+/**
+ *
+ * This function is checking if a given whiteKing/blackKing
+ * is safe from any opponent's object in straight direction.
+ *
+ * @param board - the Board Game Data structure.
+ * @param row - row position of the object before the move
+ * @param col - column position of the object before the move
+ * @param symbol - whiteKing or blackKing char symbol
+ *
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
 
 bool isSafeStraight(boardGame* board,int row, int col,char symbol){
 	assert(board!=NULL);
@@ -938,6 +1196,21 @@ bool isSafeStraight(boardGame* board,int row, int col,char symbol){
 	return true;
 }
 
+/**
+ *
+ * This function is checking if a given whiteKing/blackKing
+ * is safe from any opponent's object in diagonal direction.
+ *
+ * @param board - the Board Game Data structure.
+ * @param row - row position of the object before the move
+ * @param col - column position of the object before the move
+ * @param symbol - whiteKing or blackKing char symbol
+ *
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
 
 bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
 	assert(board!=NULL);assert(board->boardArr!=NULL);
@@ -995,6 +1268,22 @@ bool isSafeDiagnoal(boardGame* board,int row, int col,char symbol){
 	return true;
 }
 
+/**
+ *
+ * This function is checking if a given whiteKing/blackKing
+ * is safe from the opponent's king and knights.
+ *
+ * @param board - the Board Game Data structure.
+ * @param row - row position of the object before the move
+ * @param col - column position of the object before the move
+ * @param symbol - whiteKing or blackKing char symbol
+ *
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
+
 bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol){
 	if(symbol==WhiteKing){
 		for(int i=0;i<ROW;i++){
@@ -1027,6 +1316,21 @@ bool isSafeFromKingAndKnight(boardGame* board,int row, int col,char symbol){
 	return true;
 }
 
+/**
+ *
+ * This function is checking if a given whiteKing/blackKing
+ * is safe from the the opponent's pawns - means no pawn threatening it.
+ *
+ * @param board - the Board Game Data structure.
+ * @param row - row position of the object before the move
+ * @param col - column position of the object before the move
+ * @param symbol - whiteKing or blackKing char symbol
+ *
+ *
+ * @return
+ * true if it's threatened, false otherwise.
+ *
+ */
 
 bool isSafeFromPawn(boardGame* board,int row, int col,char symbol){
 	if(symbol==WhiteKing){
@@ -1084,6 +1388,25 @@ int trackKingPosition(boardGame* board, char symbol){
 	return -1;				// in case the king wasn't found
 }
 
+
+/**
+ *
+ * The purpose of this function is to to save the moves in history structure (SPArrayList)
+ * in order doing undo. The function adds to the arrayList the position, obj in position,
+ * destination, obj in destination (4 details every time).
+ * If the history is full, the function clears from the array the oldest event,
+ * and inserting new one.
+ *
+ * @param board - the Board Game Data structure.
+ * @param rowPos - row position of the object before the move
+ * @param colPos - column position of the object before the move
+ * @param rowDest - row destination of the other object before the move
+ * @param colDest - column destination of other object beforel the move
+ *
+ * @return
+ * void
+ *
+ */
 
 
 void addMoveToHistory(boardGame* board,int rowPos,int colPos,int rowDest,int colDest){

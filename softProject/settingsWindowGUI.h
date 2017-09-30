@@ -19,6 +19,26 @@
 #include <SDL_video.h>
 
 
+/**
+ * The structure which saves the elements in Settings Window GUI:
+ * 		1. window - window element
+ * 		2. renderer - the renderer element
+ * 		3. bg - the backGround photo element
+ * 		4. mode - texture
+ * 		5. gameMode1 - button
+ * 		6. gameMode2 - button
+ * 		7. color - texture
+ * 		8. colWhite - button
+ * 		9. colBlack - button
+ * 		10. difficulty - texture
+ * 		11. noob - button
+ * 		12. easy - button
+ * 		13. moderate - button
+ * 		14. hard - button
+ * 		15. back - button
+ * 		16. start - button
+ */
+
 typedef struct SETTINGSWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -40,9 +60,7 @@ typedef struct SETTINGSWINDOW{
 
 
 typedef enum {
-	//SETTINGS_WINDOW_HOVER_BACK,
 	SETTINGS_WINDOW_PUSH_BACK,
-	//SETTINGS_WINDOW_HOVER_START,
 	SETTINGS_WINDOW_PUSH_START,
 	SETTINGS_WINDOW_GAME_MODE_1,
 	SETTINGS_WINDOW_GAME_MODE_2,
@@ -86,5 +104,7 @@ void createGameHardTexture(SettingsWindow* sw, int numPlayers);
 void createGameDifficultyDecider(SettingsWindow* sw, int diffiOld, int diffiNew);
 void createSetWhiteTexture(SettingsWindow* sw, int numPlayers);
 void createSetBlackTexture(SettingsWindow* sw, int numPlayers);
+void settingsWindowHide(SettingsWindow* sw);
+void settingsWindowShow(SettingsWindow* sw);
 
 #endif /* SETTINGSWINDOWGUI_H_ */

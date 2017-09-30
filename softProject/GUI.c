@@ -5,6 +5,31 @@
  *      Author: Itamar
  */
 
+/**
+ * GUI summary:
+ *
+ * The main GUI section. This part includes the creation of the general Manager data structure,
+ * handling and managing the whole GUI operations, includes switching between windows.
+ *
+ *
+ *
+ * createManager					- Creating the Manager data Structure
+ * destroyManager					- Destroying the Manager data Structure
+ * guiMain							- The handler of the operations and switches
+ * checkMessageWarning				- GUI Message box in case of checkmate/check/tie
+ * saveMessageDialog				- Pop-up message box in case the game was saved
+ * slotDialog						- Pop-up message box in case the weren't left saved games
+ * quitGame							- Terminate the game and free the memory
+ * savePleaseMessageDialog			- GUI Message Box asking if to save the game
+ * livingOnTheEdge					- Checking if there was checkmate/check/tie
+ *
+ *
+ *
+ *
+ *
+ */
+
+
 #include "GUI.h"
 #include "boardFuncs.h"
 #include "gameCommands.h"
@@ -39,27 +64,13 @@ void guiMain(){
 				printf("ERROR: Couldn't create MainWindow struct\n");
 				quitGame(manager);
 			}
-			drawMainWindow(manager->mw);
-			bool quitMain = false; mainBool = false;
-			while(!quitMain){
-				SDL_Event event;
-				while(SDL_PollEvent(&event)!=0){
-					if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
-						destroyMainWindow(manager->mw);
-						quitGame(manager);
-					}
-					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_LOAD_GAME){
-						destroyMainWindow(manager->mw);
-						loadBool = true; backMainBool = true; quitMain = true;
-						break;
-					}
-					else if (mainWindowHandleEvent(manager->mw, &event) == MAIN_WINDOW_NEW_GAME){
-						destroyMainWindow(manager->mw);
-						settingsBool = true; quitMain = true;
-						break;
-					}
-				}
+			mainBool = false;
+			int handle = mainWindowGuiManager(manager->mw);
+			if(handle==1) quitGame(manager);
+			else if(handle==2){
+				loadBool = true; backMainBool = true;
 			}
+			else if(handle==3)settingsBool = true;
 		}
 		//----------------------------End of main Window--------------------------------
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of settings window~~~~~~~~~~~~~~~~~~~~~~
@@ -406,6 +417,16 @@ void guiMain(){
 }
 
 
+/**
+ *
+ * Creating the Manager structure using SDL.
+ * In this part we create the Board and allocating space in memory for the Manager
+ *
+ * @return
+ * Manager pointer of the data Structure
+ *
+ */
+
 Manager* createManager(){
 	Manager* manager = (Manager*) malloc(sizeof(Manager));
 	if(manager==NULL){
@@ -428,6 +449,17 @@ Manager* createManager(){
 }
 
 
+/**
+ *
+ * Destroying the Manager data structure with it's elements and free the memory.
+ *
+ * @param manager -Manager data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void destroyManager(Manager* manager){
 	if(manager==NULL) return;
 	if(manager->board!=NULL) destroyBoard(manager->board);
@@ -436,6 +468,21 @@ void destroyManager(Manager* manager){
 }
 
 
+/**
+ *
+ * Showing Message Warning if there was check/checkmate/tie
+ *
+ * @param curPlayer - the current player
+ * @param check - true/false for check
+ * @param mate	- true/false for checkmate
+ * @param tie	- true/false for tie
+ * @param gameMode - the current gameMode
+ * @param userCol - the User Color
+ *
+ * @return
+ * Manager pointer of the data Structure
+ *
+ */
 
 void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie, int gameMode, int userCol){
 	if(check){
@@ -470,20 +517,63 @@ void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie, int game
 	}
 }
 
+
+/**
+ *
+ * Showing pop-up which announcing the game was saved.
+ *
+ * @return
+ * void
+ *
+ */
+
 void saveMessageDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Save Message",
 		"Game was saved!",NULL);
 }
+
+/**
+ *
+ * Showing pop-up which announcing to make some move before the user's can save the game
+ *
+ * @return
+ * void
+ *
+ */
 
 void savePleaseMessageDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Save Message",
 		"Please make a move before SAVING!",NULL);
 }
 
+
+/**
+ *
+ * Showing pop-up which announcing there weren't left any saveg games to load from
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void slotDialog(){
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"Load Message",
 		"There are no saved Games!",NULL);
 }
+
+
+/**
+ *
+ * Exiting the game in GUI mode by destroying the Manager data structure and print if
+ * to the command line
+ *
+ * @param manager - Manager Data Structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void quitGame(Manager* manager){
 	if(manager!=NULL){
@@ -494,25 +584,24 @@ void quitGame(Manager* manager){
 	}
 }
 
-
-void setBoardDefaultManager(Manager* manager){
-	if(manager==NULL){
-		destroyManager(manager);
-		SDL_Quit();
-		printf("Exiting...");
-		exit(0);
-	}
-	manager->board->curPlayer=1;
-	manager->board->diffLevel=2;
-	manager->board->gameMode=1;
-	manager->board->userCol=1;
-}
-
+/**
+ *
+ * This function checking if there was checkMate, check or tie and activating
+ * the Message function.
+ *
+ * @param board - boardGame Data Structure
+ *
+ * @return
+ * integer between 1-3:
+ * 	1 - for Check
+ * 	2 - for CheckMate
+ * 	3 - for Tie
+ *
+ */
 
 int livingOnTheEdge(boardGame* board){
 	bool kingSafe = isMyKingSafe(board);
 	bool checkMate = isCheckMate(board);
-	if(checkMate) printf("mate");
 	if(kingSafe==false && checkMate==false){
 		checkMessageWarning(board->curPlayer, true, false, false, board->gameMode,board->userCol);
 		return 1;

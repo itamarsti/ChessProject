@@ -45,6 +45,10 @@ int main(int argc, char* argv[]) {
 	if(argc==1 || (argc==2 && strcmp(argv[1],"-c")==0)) consoleBool = true;
 	else if(argc==2 && strcmp(argv[1],"-g")==0) consoleBool = false;
 	if(!consoleBool){
+		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+			printf("ERROR: unable to init SDL: %s\n", SDL_GetError());
+			exit(1);
+		}
 		guiMain();
 	}
 	else if(consoleBool){

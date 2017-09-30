@@ -5,6 +5,44 @@
  *      Author: Itamar
  */
 
+/**
+ * GamwWindow summary:
+ *
+ * The Settings Window GUI sections. This functions are responsible for creating
+ * the Settings window Data structure, handling the different events in this window etc.
+ *
+ *
+ *
+ * destroyGameRenderer				- Destroying only the renderer and textures
+ * destroyGameWindow				- Destroying the GameWindow Structure
+ * createGW							- Creating the GamwWindow structure
+ * createGR							- Creating the Renderer and the textures
+ * isClickOnSaveGame				- Checking if there was click on Save button
+ * isClickOnLoadGameWindow			- Checking if there was click on Load button
+ * isClickOnQuitGameWindow			- Checking if there was click on Quit button
+ * isClickOnRestart					- Checking if there was click on Restart button
+ * isClickOnUndo					- Checking if there was click on Undo button
+ * isClickOnMainMenu				- Checking if there was click on MainMenu button
+ * gameWindowHandleEvent			- Classifying different events in Game window
+ * drawGameWindow					- Drawing the SettingsWindow
+ * createGameLoadTexture			- Creating and Destroying the Load Texture (light/not light)
+ * createGameUndoTexture			- Creating and Destroying the Undo Texture (light/not light)
+ * createGameSaveTexture			- Creating and Destroying the Mode2 Texture (light/not light)
+ * gameWindowHide					- Hiding the Window
+ * gameWindowShow					- Showing the Window
+ * drawGameWindowImproved			- Drawing the SettingsWindow supporting drag and drop
+ * saveGameFromGUI					- Saving the Game into a local File
+ * saveGameMessageBox				- Message box in case the user didn't save the game
+ * fromPixToPos						- Converting from pixel in GUI to position in Board Game
+ * isPixToPos						- Checking if the event has happened in the chess boundaries
+ *
+ *
+ *
+ *
+ *
+ */
+
+
 #include "gameWindowGUI.h"
 #include "gameParser.h"
 #include "boardFuncs.h"
@@ -18,12 +56,27 @@
 #define WIDTH 390
 #define HEIGHT 52
 
+
+/**
+ *
+ * Creating the GameWindow Renderer and textures using SDL.
+ * In this part we create only renderer and buttons.
+ *
+ * @param gw - GameWindow Data structure
+ * @param undoBool - if to light undo
+ * @param loadBool - if to light load
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	assert(gw!=NULL); assert(gw->window!=NULL);
 	SDL_Surface* surface = NULL;
 
 	// creating the game Window renderer
-	//if(gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	gw->renderer = SDL_CreateRenderer(gw->window, -1, SDL_RENDERER_ACCELERATED);
 	if (gw->renderer==NULL) {
 		printf("Could not create a renderer in GameWindow: %s\n", SDL_GetError());
@@ -45,7 +98,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 		return;
 	}
 	SDL_FreeSurface(surface);
-	//printf("creating game bg\n");
 
 	//Creating an undo texture:
 	if(!undoBool) surface = SDL_LoadBMP("./utilities/gameWindow/undo.bmp");
@@ -62,7 +114,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 		return;
 	}
 	SDL_FreeSurface(surface);
-	//printf("creating game undo\n");
 
 	//Creating a restart texture:
 	surface = SDL_LoadBMP("./utilities/gameWindow/restartClicked.bmp");
@@ -79,7 +130,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	}
 	SDL_FreeSurface(surface);
 
-	//printf("creating game restart\n");
 
 	//Creating a saveGame texture:
 
@@ -97,7 +147,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	}
 	SDL_FreeSurface(surface);
 
-	//printf("creating game save\n");
 
 	//Creating a Load Game texture:
 
@@ -116,8 +165,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 	}
 	SDL_FreeSurface(surface);
 
-	//printf("creating game load\n");
-
 	//Creating a mainMenu texture:
 	surface = SDL_LoadBMP("./utilities/gameWindow/mainMenuClicked.bmp");
 	if(surface==NULL){
@@ -132,7 +179,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 		return;
 	}
 	SDL_FreeSurface(surface);
-	//printf("creating game mainmenu\n");
 
 	//Creating a Quit texture:
 
@@ -149,8 +195,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 		return;
 	}
 	SDL_FreeSurface(surface);
-	//printf("creating game renderer\n");
-	//printf("got till end GR\n");
 
 	//Creating a blackKnight texture:
 
@@ -349,6 +393,17 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
 		SDL_FreeSurface(surface);
 }
 
+
+/**
+ *
+ * Creating the GameWindow structure using SDL.
+ * In this part we create a window, renderer and buttons.
+ *
+ * @return
+ * GameWindow pointer of the data Structure
+ *
+ */
+
 GameWindow* createGW(){
 	printf("inside Create GUI Window\n");
 	GameWindow* gw = (GameWindow*) malloc(sizeof(GameWindow));
@@ -370,11 +425,22 @@ GameWindow* createGW(){
 	return gw;
 }
 
+
+/**
+ *
+ * Drawing the window and presents it to the user.
+ *
+ * @param gw - Game Window data structure
+ * @param board - BoardGame Data Structure
+ * @return
+ * void
+ *
+ */
+
+
 void drawGameWindow(GameWindow* gw, boardGame* board){
-	//printf("the gap in old Draw x is:%d, the gap in y is:%d\n",xGap,yGap);
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
 	assert(board->history->elements!=NULL);
-	//printf("inside draw\n");
 
 	if(gw==NULL){
 		printf("Error: GameWindow is NULL\n");
@@ -385,25 +451,18 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 	SDL_SetRenderDrawColor(gw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(gw->renderer);
 	SDL_RenderCopy(gw->renderer, gw->bg, NULL, &rec);
-
 	rec.x = 60; rec.y = 60; rec.w = 200;rec.h = 60;	//undo message
 	SDL_RenderCopy(gw->renderer,gw->undo,NULL,&rec);
-
 	rec.x = 60; rec.y = 150; rec.w = 200;rec.h = 60;	//restart message
 	SDL_RenderCopy(gw->renderer,gw->restart,NULL,&rec);
-
 	rec.x = 60; rec.y = 240; rec.w = 200;rec.h = 60;	//save message
 	SDL_RenderCopy(gw->renderer,gw->saveGame,NULL,&rec);
-
 	rec.x = 60; rec.y = 330; rec.w = 200;rec.h = 60;	//load message
 	SDL_RenderCopy(gw->renderer,gw->loadGame,NULL,&rec);
-
 	rec.x = 60; rec.y = 420; rec.w = 200;rec.h = 60;	//mainMenu message
 	SDL_RenderCopy(gw->renderer,gw->mainMenu,NULL,&rec);
-
 	rec.x = 60; rec.y = 510; rec.w = 200;rec.h = 60;	//quit message
 	SDL_RenderCopy(gw->renderer,gw->quit,NULL,&rec);
-
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			if(board->boardArr[i][j]==BlackPawn){
@@ -460,6 +519,19 @@ void drawGameWindow(GameWindow* gw, boardGame* board){
 }
 
 
+/**
+ *
+ * Destroying the GameWindow data structure with it's elements and free the memory.
+ *
+ * @param gw - Game Window data structure
+ *
+ * @return
+ * void
+ *
+ */
+
+
+
 void destroyGameWindow(GameWindow* gw){
 	if (gw==NULL) return;
 	if (gw->saveGame!=NULL) SDL_DestroyTexture(gw->saveGame);
@@ -484,9 +556,19 @@ void destroyGameWindow(GameWindow* gw){
 	if (gw->renderer!=NULL) SDL_DestroyRenderer(gw->renderer);
 	if (gw->window != NULL) SDL_DestroyWindow(gw->window);
 	free(gw);
-	printf("the end of game window\n");
-
 }
+
+
+/**
+ *
+ * Destroying the GameWindow renderer and textures.
+ *
+ * @param gw - Game Window data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void destroyGameRenderer(GameWindow* gw){
 	if (gw==NULL) return;
@@ -573,36 +655,130 @@ GAME_WINDOW_EVENT gameWindowHandleEvent(GameWindow* gw, SDL_Event* event){
 	return GAME_WINDOW_EVENT_NONE;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Undo Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Undo Button boundaries, false otherwise.
+ *
+ */
+
 
 bool isClickOnUndo(int x, int y){
 	if((x>=60 && x<=260)&& (y>=60&&y<=120)) return true;
 	return false;
 }
 
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Restart Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Restart Button boundaries, false otherwise.
+ *
+ */
+
+
 bool isClickOnRestart(int x, int y){
 	if((x>=60 && x<=260)&& (y>=150&&y<=210)) return true;
 	return false;
 }
+
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the SaveGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the SaveGame Button boundaries, false otherwise.
+ *
+ */
+
 
 bool isClickOnSaveGame(int x, int y){
 	if((x>=60 && x<=260)&& (y>=240&&y<=300)) return true;
 	return false;
 }
 
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the LoadGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the LoadGame Button boundaries, false otherwise.
+ *
+ */
+
+
 bool isClickOnLoadGameWindow(int x, int y){
 	if((x>=60 && x<=260)&& (y>=330&&y<=WIDTH)) return true;
 	return false;
 }
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the MainMenu Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the MainMenu Button boundaries, false otherwise.
+ *
+ */
+
+
 bool isClickOnMainMenu(int x, int y){
 	if((x>=60 && x<=260)&& (y>=420&&y<=480)) return true;
 	return false;
 }
+
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the QuitGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the QuitGame Button boundaries, false otherwise.
+ *
+ */
+
 
 bool isClickOnQuitGameWindow(int x, int y){
 	if((x>=60 && x<=260)&& (y>=510&&y<=570)) return true;
 	return false;
 }
 
+
+/**
+ *
+ * This function is Saving the game to a local directory and manipulating the files
+ * such that there will be at maximum 5 saves sorted by file created time.
+ *
+ * @param gw - GameWindow data structure
+ * @param numOfFiles - number of saves that are already exists
+ * @return
+ * void
+ *
+ */
 
 void saveGameFromGUI(boardGame* game, int numOfFiles){
 	assert(game!=NULL); assert(game->boardArr!=NULL);
@@ -645,14 +821,50 @@ void saveGameFromGUI(boardGame* game, int numOfFiles){
 }
 
 
+/**
+ *
+ * This function hiding the GameWindow
+ *
+ * @param gw - GameWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void gameWindowHide(GameWindow* gw){
 	SDL_HideWindow(gw->window);
 }
+
+
+/**
+ *
+ * This function showing the GameWindow
+ *
+ * @param gw - GameWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void gameWindowShow(GameWindow* gw){
 	SDL_ShowWindow(gw->window);
 }
 
+
+/**
+ *
+ * This function is the message box asking the user if he wants to save the game.
+ *
+ *
+ * @return
+ * integer between 0-2:
+ * 		0: don't save
+ * 		1: save
+ * 		2: cancel the message and do nothing
+ *
+ */
 
 int saveGameMessageBox(){
 	const SDL_MessageBoxButtonData buttons[] = {
@@ -696,6 +908,19 @@ int saveGameMessageBox(){
 	return buttonid;
 }
 
+/**
+ *
+ * This function translating coordinates on gameBoard GUI to a position in the Game Board
+ * Data structure
+ *
+ * @param x - the x axe on the gameBoard
+ * @param y - the y axe on the gameBoard
+ * @return
+ * position on GameBoard (console) - number between 0-63
+ * else: -1
+ *
+ */
+
 int fromPixToPos(int x, int y){
 	if((x>=386 && x<930) && (y>=50 && y<594)){
 		int col = (x-386)/68;
@@ -706,13 +931,37 @@ int fromPixToPos(int x, int y){
 	return -1;
 }
 
+/**
+ *
+ * This function checks coordinates on gameBoard GUI if they are belong to the gameBoard
+ *
+ * @param x - the x axe on the gameBoard
+ * @param y - the y axe on the gameBoard
+ * @return
+ *
+ *true if the coordinate fits to the gameBoard, false otherwise.
+ *
+ */
+
 bool isPixToPos(int x, int y){
 	if((x>=386 && x<930) && (y>=50 && y<594))return true;
 	return false;
 }
 
 
-
+/**
+ *
+ * Drawing the window and presents it to the user - the improved version which supports
+ * drag and drop
+ *
+ * @param gw - Game Window data structure
+ * @param board - BoardGame Data Structure
+ * @param p1 - source position
+ * @param p2 - destination position
+ * @return
+ * void
+ *
+ */
 
 void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL_Point* p2){
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(board->history!=NULL);
@@ -740,12 +989,10 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 	SDL_RenderCopy(gw->renderer,gw->quit,NULL,&rec);
 	int row = NumToRow(fromPixToPos(p1->x,p1->y));
 	int col = NumToCol(fromPixToPos(p1->x,p1->y));
-	//printf("the row is:%d, the col is:%d, the object is:%c\n", row,col,board->boardArr[row][col]);
 	for(int i=0;i<ROW;i++){
 		for(int j=0;j<COL;j++){
 			if(i==row && j==col && board->boardArr[i][j]!=UNDERSCORE
 					&& fromPixToPos(p1->x,p1->y)!=-1 && fromPixToPos(p2->x,p2->y)!=-1){
-				//printf("the first pixel should be: %d, the second is: %d\n",fromPixToPos(p1->x,p1->y), fromPixToPos(p2->x,p2->y));
 				rec.x = (WIDTH + j*SQUARE - p1->x + p2->x); rec.y = (HEIGHT + i*SQUARE - p1->y + p2->y); rec.w = 60 ;rec.h = 60;
 				if(board->boardArr[i][j]==BlackPawn) SDL_RenderCopy(gw->renderer,gw->blackPawn,NULL,&rec);
 				else if(board->boardArr[i][j]==BlackRook) SDL_RenderCopy(gw->renderer,gw->blackRook,NULL,&rec);
@@ -814,7 +1061,18 @@ void drawGameWindowImproved(GameWindow* gw, boardGame* board, SDL_Point* p1, SDL
 	SDL_RenderPresent(gw->renderer);
 }
 
-
+/**
+ *
+ * This function destroy and creates back again the "Load" Button.
+ *
+ * @param gw - LoadWindow data structure
+ * @param loadBool - if to light the load
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 void createGameLoadTexture(GameWindow* gw, bool loadBool){
 	assert(gw!=NULL); assert(gw->window!=NULL); assert(gw->renderer!=NULL);
@@ -837,6 +1095,20 @@ void createGameLoadTexture(GameWindow* gw, bool loadBool){
 
 }
 
+/**
+ *
+ * This function destroy and creates back again the "Undo" Button.
+ *
+ * @param gw - LoadWindow data structure
+ * @param undoBool - if to light the undo
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void createGameUndoTexture(GameWindow* gw, bool undoBool){
 	assert(gw!=NULL); assert(gw->window!=NULL); assert(gw->renderer!=NULL);
 	SDL_Surface* surface = NULL;
@@ -856,6 +1128,19 @@ void createGameUndoTexture(GameWindow* gw, bool undoBool){
 	}
 	SDL_FreeSurface(surface);
 }
+
+/**
+ *
+ * This function destroy and creates back again the "Save" Button.
+ *
+ * @param gw - LoadWindow data structure
+ * @param saveBool - if to light the save
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 
 void createGameSaveTexture(GameWindow* gw, bool saveBool){
@@ -877,3 +1162,4 @@ void createGameSaveTexture(GameWindow* gw, bool saveBool){
 	}
 	SDL_FreeSurface(surface);
 }
+

@@ -11,8 +11,8 @@
 
 #include <stdbool.h>
 
-/*
- * all the possible  Settings commands Messeages.
+/**
+ * The type of the events to handle with in Settings Window.
  */
 
 typedef enum {

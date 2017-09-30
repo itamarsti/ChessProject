@@ -5,11 +5,53 @@
  *      Author: Itamar
  */
 
+/**
+ * LoadWindow summary:
+ *
+ * The Main Window GUI sections. This functions are responsible for creating
+ * the Main window Data structure, handling the different events in this window etc.
+ *
+ *
+ *
+ *
+ * createLW 					- Creating the LoadWindow structure
+ * createLR 					- Creating the Renderer and the textures
+ * destroyLoadWindow 			- Destroying theLoadWindow Structure
+ * destroyLoadRenderer		 	- Destroying only the renderer and textures
+ * numOfFilesInDir 				- Counting the number of files saved locally
+ * loadFilePath					- Loading a file Saved locally to the Game Board
+ * loadRemoveChangeFile 		- Doing actions of manipulating the files in order to load
+ * drawLoadWindow 				- Drawing the LoadWindow
+ * loadWindowHandleEvent 		- Classifying different events in Load window
+ * isClickOnSlot1				- Checking if there was click on Slot1 button
+ * isClickOnSlot2				- Checking if there was click on Slot2 button
+ * isClickOnSlot3				- Checking if there was click on Slot3 button
+ * isClickOnSlot4				- Checking if there was click on Slot4 button
+ * isClickOnSlot5				- Checking if there was click on Slot5 button
+ * isClickOnLWBack				- Checking if there was click on Back button
+ * isClickOnLWLoad				- Checking if there was click on Load button
+ * createBackTexture			- Creating and Destroying the back Texture (light/not light)
+ * createLoadTexture			- Creating and Destroying the load Texture (light/not light)
+ * loadWindowHide				- Hiding the Window
+ * loadWindowShow				- Showing the Window
+ *
+ */
+
 #include "loadWindowGUI.h"
 #include <assert.h>
 #include <string.h>
 
 
+
+/**
+ *
+ * Creating the LoadWindow structure using SDL.
+ * In this part we create a window, renderer and buttons.
+ *
+ * @return
+ * LoadWindow pointer of the data Structure
+ *
+ */
 
 LoadWindow* createLW(){
 	LoadWindow* lw = (LoadWindow*) malloc(sizeof(LoadWindow));
@@ -25,21 +67,32 @@ LoadWindow* createLW(){
 		return NULL;
 	}
 	int numFiles = numOfFilesInDir();
-	//printf("before create LR\n");
 	createLR(lw,numFiles,0,false);
-	//printf("after create LR\n");
 	return lw;
 }
 
+
+/**
+ *
+ * Creating the LoadWindow Renderer and textures using SDL.
+ * In this part we create only renderer and buttons.
+ *
+ * @param lw - LoadWindow Data structure
+ * @param slotsNum - which slot to light (if any of them)
+ * @param slotLight - if to light some slot
+ * @param loadLight - if to light the load
+ *
+ * @return
+ * void
+ *
+ */
 
 void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight){
 	assert(slotsNum>=0); assert(slotsNum<=5); assert(slotLight>=0); assert(slotLight<=5);
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_Surface* surface = NULL;
-	//printf("inside LW func\n");
 	if(lw->renderer==NULL) printf("renderer is null");
 	//SDL_RenderClear(lw->renderer);
-	//printf("after clear LW func\n");
 
 	// creating the load Window renderer
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
@@ -50,7 +103,6 @@ void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight){
 		return ;
 	}
 	//Creating a background texture:
-	//if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
 
 	surface= SDL_LoadBMP("./utilities/loadWindow/anotherBackground.bmp");
 	if (surface==NULL){
@@ -60,18 +112,16 @@ void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight){
 	}
 	lw->bg = SDL_CreateTextureFromSurface(lw->renderer, surface);
 	if (lw->bg==NULL){
-		//printf("Could not create a bg texture in LoadWindow: %s\n", SDL_GetError());
+		printf("Could not create a bg texture in LoadWindow: %s\n", SDL_GetError());
 		destroyLoadWindow(lw);
 		return;
 	}
 	SDL_FreeSurface(surface);
-	//printf("after creating bg load\n");
-
 
 	//Creating a back texture:
 	surface = SDL_LoadBMP("./utilities/loadWindow/backNewClicked.bmp");
 	if(surface==NULL){
-		//printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
+		printf("Could not create a back surface in LoadWindow: %s\n", SDL_GetError());
 		return;
 	}
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format,255,0,255));
@@ -195,9 +245,19 @@ void createLR(LoadWindow* lw, int slotsNum, int slotLight, bool loadLight){
 	}
 }
 
+/**
+ *
+ * Destroying the LoadWindow data structure with it's elements and free the memory.
+ *
+ * @param lw - Load Window data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 
 void destroyLoadWindow(LoadWindow* lw){
-	//printf("in destroy load window\n");
 	int filesNum = numOfFilesInDir();
 	if(lw==NULL) return;
 	if(filesNum>=1){
@@ -216,22 +276,27 @@ void destroyLoadWindow(LoadWindow* lw){
 		if(lw->slot5!=NULL) SDL_DestroyTexture(lw->slot5);
 	}
 	if(lw->back!=NULL) SDL_DestroyTexture(lw->back);
-	//printf("after destroying the back\n");
 	if(lw->load!=NULL) SDL_DestroyTexture(lw->load);
-	//printf("after destroying the load\n");
 	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
-	//printf("after destroying the bg\n");
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
-	//printf("after destroying the renderer\n");
 	if(lw->window!=NULL) SDL_DestroyWindow(lw->window);
-	//printf("after destroying the window\n");
 	free(lw);
-	//printf("ends destroy load window\n");
 	return;
 }
 
+/**
+ *
+ * Destroying the LoadWindow renderer and textures.
+ *
+ * @param lw - Load Window data structure
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void destroyLoadRenderer(LoadWindow* lw){
-	//printf("in destroy load renderer\n");
 	if(lw==NULL) return;
 	if(lw->window!=NULL) return;
 	if(lw->bg!=NULL) SDL_DestroyTexture(lw->bg);
@@ -243,18 +308,28 @@ void destroyLoadRenderer(LoadWindow* lw){
 	if(lw->slot4!=NULL) SDL_DestroyTexture(lw->slot4);
 	if(lw->slot5!=NULL) SDL_DestroyTexture(lw->slot5);
 	if(lw->renderer!=NULL) SDL_DestroyRenderer(lw->renderer);
-
 	return;
 }
+
+
+/**
+ *
+ * Drawing the window and presents it to the user.
+ *
+ * @param lw - Load Window data structure
+ * @param slotsNum - how much slots to show
+ * @return
+ * void
+ *
+ */
+
 void drawLoadWindow(LoadWindow* lw, int slotsNum){
-	//printf("in draw loadWindow\n");
 	if(lw==NULL){
 		printf("ERROR: LoadWindow is null in draw");
 		return;
 	}
 	assert(lw->window!=NULL); //assert(lw->bg!=NULL);
 	assert(lw->back!=NULL); assert(lw->renderer!=NULL); assert(lw->load!=NULL);
-	//printf("passed the asserts of lw draw\n");
 	if(slotsNum>=1) assert(lw->slot1!=NULL);
 	if(slotsNum>=2) assert(lw->slot2!=NULL);
 	if(slotsNum>=3) assert(lw->slot3!=NULL);
@@ -262,11 +337,8 @@ void drawLoadWindow(LoadWindow* lw, int slotsNum){
 	if(slotsNum>=5) assert(lw->slot5!=NULL);
 	SDL_SetRenderDrawColor(lw->renderer, 255, 255, 255, 255);
 	SDL_RenderClear(lw->renderer);
-	//printf("till here again\n");
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
 	SDL_RenderCopy(lw->renderer, lw->bg, NULL, &rec);
-	//printf("till here again2\n");
-
 	if(slotsNum>=1) {
 		rec.x = 400; rec.y = 120;rec.w = 198; rec.h = 56;	//slot1 message
 		SDL_RenderCopy(lw->renderer, lw->slot1, NULL, &rec);
@@ -289,15 +361,21 @@ void drawLoadWindow(LoadWindow* lw, int slotsNum){
 		SDL_RenderCopy(lw->renderer, lw->slot5, NULL, &rec);
 	}
 
-	//printf("ready to set load in lw draw\n");
 	rec.x = 750; rec.y = 100;rec.w = 160; rec.h = 88;	//load message
 	SDL_RenderCopy(lw->renderer, lw->load, NULL, &rec);
-	//printf("ready to set back in lw draw\n");
 	rec.x = 750; rec.y = 250;rec.w = 162; rec.h = 88;	//back message
 	SDL_RenderCopy(lw->renderer, lw->back, NULL, &rec);
-	//printf("the end of lw draw");
 	SDL_RenderPresent(lw->renderer);
 }
+
+/**
+ *
+ * Counting the number of Files saved in the local directory (up till 5 files);
+ *
+ * @return
+ * number of files in directory(integer);
+ *
+ */
 
 int numOfFilesInDir(){
 	DIR *dir;
@@ -322,9 +400,21 @@ int numOfFilesInDir(){
 	free(ent);
 }
 
+
+/**
+ *
+ * Loading a file to the BoardGame.
+ *
+ * @param board - BoardGame data structure
+ * @param path - the relevant path to load from
+ *
+ * @return
+ * void
+ *
+ */
+
 void loadFilePath(boardGame*board, char* path){
 	assert(board!=NULL); assert(board->boardArr!=NULL); assert(path!=NULL);
-	//printf("path is:%s\n",path);
 	FILE* file = (FILE*) fopen(path,"r");
 	assert(file!=NULL);
 	char buffer[1024];
@@ -359,6 +449,23 @@ void loadFilePath(boardGame*board, char* path){
 	fclose(file);
 }
 
+
+/**
+ *
+ * Doing all the actions of manipulating the files in the local directory.
+ * The function supports in saving the Last 5 updated files such that "slot1" is
+ * the LRU.
+ *
+ * @param fileDeleted - which file to delete from saving after loading
+ * @param numOfFiles - number of files in the local directory
+ * @param game - BoardGame data structure
+ * @param lw - LoadWindow Data Structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game, LoadWindow* lw){
 	assert(game!=NULL); assert(game->boardArr!=NULL);
 	assert(lw!=NULL); assert(lw->window!=NULL);
@@ -383,7 +490,6 @@ void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game, LoadW
 		loadFilePath(game, "./utilities/loadedGames/game5.xml");
 		remove("./utilities/loadedGames/game5.xml");
 	}
-
 	if(numOfFiles==5){
 		if (fileDeleted<=1)	rename("./utilities/loadedGames/game2.xml","./utilities/loadedGames/game1.xml");
 		if (fileDeleted<=2)	rename("./utilities/loadedGames/game3.xml","./utilities/loadedGames/game2.xml");
@@ -412,6 +518,18 @@ void loadRemoveChangeFile(int numOfFiles, int fileDeleted,boardGame* game, LoadW
 	return;
 }
 
+
+/**
+ *
+ * This function accepts events and classifying them to an operational commands.
+ *
+ * @param lw - Load Window data structure
+ * @SDL_Event - the interface event
+ *
+ * @return
+ * LOAD_WINDOW_EVENT command event
+ *
+ */
 
 LOAD_WINDOW_EVENT loadWindowHandleEvent(LoadWindow* lw, SDL_Event* event){
 	if((lw==NULL)|| (event==NULL)){
@@ -463,52 +581,170 @@ LOAD_WINDOW_EVENT loadWindowHandleEvent(LoadWindow* lw, SDL_Event* event){
 	}
 
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the slot1 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot1 Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnSlot1(int x, int y){
 	if((x>=400&& x<=598) && (y>=120&& y<=176)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the slot2 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot2 Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnSlot2(int x, int y){
 	if((x>=400&& x<=600) && (y>=191&& y<=249)) return true;
 	return false;
 }
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the slot3 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot3 Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnSlot3(int x, int y){
 	if((x>=400&& x<=600) && (y>=264 && y<=320)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the slot4 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot4 Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnSlot4(int x, int y){
 	if((x>=400&& x<=598) && (y>=335&& y<=391)) return true;
 	return false;
 }
+
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the slot5 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot5 Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnSlot5(int x, int y){
 	if((x>=400&& x<=598) && (y>=406&& y<=460)) return true;
 	return false;
 }
 
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the LoadGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the LoadGame Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnLWLoad(int x, int y){
 	if((x>=750&& x<=910) && (y>=100&& y<=188)) return true;
 	return false;
 }
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Back Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Back Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnLWBack(int x, int y){
 	if((x>=750&& x<=912) && (y>=250&& y<=338)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function hiding the LoadWindow
+ *
+ * @param lw - LoadWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void loadWindowHide(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_HideWindow(lw->window);
 }
+
+/**
+ *
+ * This function showing the LoadWindow
+ *
+ * @param lw - LoadWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void loadWindowShow(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL);
 	SDL_ShowWindow(lw->window);
 }
 
+
+/**
+ *
+ * This function destroy and creates back again the "Back" Button.
+ *
+ * @param lw - LoadWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void createBackTexture(LoadWindow* lw){
 	assert(lw!=NULL); assert(lw->window!=NULL); assert(lw->renderer!=NULL);
@@ -528,6 +764,21 @@ void createBackTexture(LoadWindow* lw){
 	}
 	SDL_FreeSurface(surface);
 }
+
+
+/**
+ *
+ * This function destroy and creates back again the "Load" Button.
+ *
+ * @param lw - LoadWindow data structure
+ * @param slotLight - if slotLoght==0 -->don't Light load
+ * @param loadLight - Lighted button or not
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 
 void createLoadTexture(LoadWindow* lw, int slotLight, bool loadLight ){

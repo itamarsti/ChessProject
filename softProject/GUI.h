@@ -21,6 +21,19 @@
 #include "gameCommands.h"
 
 
+
+/**
+ *
+ * The structure which saves the GUI Manager:
+ * 		1. board - boardGame Data Structure
+ * 		2. mw - MainWindow Data Structure
+ * 		3. sw - SettingsWindow Data Structure
+ * 		4. gw - GameWindow Data Structure
+ * 		5. lw - LoadWindow Data Structure
+ *
+ */
+
+
 typedef struct MANAGER{
 	boardGame* board;
 	MainWindow* mw;
@@ -29,12 +42,12 @@ typedef struct MANAGER{
 	LoadWindow* lw;
 } Manager;
 
+
+
 Manager* createManager();
 void destroyManager(Manager* manager);
 void guiMain();
-bool loadSection(Manager* manager, int numOfFiles, int fileRemove);
 void checkMessageWarning(int curPlayer,bool check, bool mate, bool tie, int gameMode, int userCol);
-void saveGameFromGUI(boardGame* game, int numOfFiles);
 void saveMessageDialog();
 void slotDialog();
 void quitGame(Manager* manager);

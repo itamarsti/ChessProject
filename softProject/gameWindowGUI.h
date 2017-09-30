@@ -21,6 +21,36 @@
 #include "loadWindowGUI.h"
 
 
+/**
+ * The structure which saves the elements in Game Window GUI:
+ * 		1. window - window element
+ * 		2. renderer - the renderer element
+ * 		3. bg - the backGround photo element
+ * 		4. restart - button
+ * 		5. saveGame - button
+ * 		6. loadGame - button
+ * 		7. undo - button
+ * 		8. mainMenu - button
+ * 		9. quit - button
+ * 		10. blackPawn - moving texture
+ * 		11. blackRook - moving texture
+ *		12. blackBishop - moving texture
+ *		13. blackKnight - moving texture
+ *		14. blackQueen - moving texture
+ *		15. blackKing - moving texture
+ *		16. whitePawn - moving texture
+ *		17. whiteRook - moving texture
+ *		18. whiteBishop - moving texture
+ *		19. whiteKnight - moving texture
+ *		20. whiteQueen - moving texture
+ *		21. whiteKing - moving texture
+ *
+ *
+ *
+ */
+
+
+
 typedef struct GAMEWINDOW{
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -46,28 +76,25 @@ typedef struct GAMEWINDOW{
 }GameWindow;
 
 
+/**
+ * The type of the events to handle with in Game Window.
+ */
+
 typedef enum {
 	GAME_WINDOW_DRAG_OBJ,
-	//GAME_WINDOW_DRAG_LIGHT,
 	GAME_WINDOW_PUSH_OBJ,
-	//GAME_WINDOW_PUSH_LIGHT,
 	GAME_WINDOW_PUSH_LOAD_GAME,
 	GAME_WINDOW_PUSH_SAVE_GAME,
 	GAME_WINDOW_PUSH_RESTART_GAME,
 	GAME_WINDOW_PUSH_UNDO,
 	GAME_WINDOW_PUSH_MAIN_MENU,
 	GAME_WINDOW_PUSH_EVENT_QUIT,
-	//GAME_WINDOW_HOVER_LOAD_GAME,
-	//GAME_WINDOW_HOVER_SAVE_GAME,
-	//GAME_WINDOW_HOVER_RESTART_GAME,
-	//GAME_WINDOW_HOVER_UNDO,
-	//GAME_WINDOW_HOVER_MAIN_MENU,
-	//GAME_WINDOW_HOVER_EVENT_QUIT,
 	GAME_WINDOW_HOVER_OBJ,
-	//GAME_WINDOW_HOVER_LIGHT,
 	GAME_WINDOW_EVENT_NONE,
 	GAME_WINDOW_INVALID
 } GAME_WINDOW_EVENT;
+
+
 
 void createGR(GameWindow* gw, bool undoBool, bool loadBool);
 GameWindow* createGW();

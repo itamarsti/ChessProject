@@ -5,10 +5,46 @@
  *      Author: Itamar
  */
 
+/**
+ * MainWindow summary:
+ *
+ * The Main Window GUI sections. This functions are responsible for creating
+ * the Main window Data structure, handling the different events in this window etc.
+ *
+ *
+ * createMW							- Crating the MainWindow structure
+ * destroyMainWindow				- Destroying the mainWindow Structure
+ * drawMainWindow					- Drawing the mainWindow
+ * mainWindowHandleEvent			- Classifying different events in Main window
+ * isClickOnNewGame					- Checking if there was click on New Game button
+ * isClickOnLoadGame				- Checking if there was click on new game button
+ * isClickOnQuit					- Checking if there was click on Quit button
+ * mainWindowHide					- Hiding the Window
+ * mainWindowShow					- Showing the Window
+ * mainWindowGuiManager				- Handling the events
+ *
+ *
+ */
+
 
 #include "mainWindowGUI.h"
 #include <assert.h>
 #include "boardFuncs.h"
+
+
+
+
+
+
+/**
+ *
+ * Creating the MainWindow structure using SDL.
+ * In this part we create a window, renderer and buttons.
+ *
+ * @return
+ * MainWindow pointer of the data Structure
+ *
+ */
 
 
 MainWindow* createMW(){
@@ -114,7 +150,16 @@ MainWindow* createMW(){
 	return mw;
 }
 
-
+/**
+ *
+ * Destroying the MainWindow data structure with it's elements and free the memory.
+ *
+ * @param MainWindow - Main Window data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void destroyMainWindow(MainWindow* mw){
 	if (mw==NULL) return;
@@ -127,6 +172,19 @@ void destroyMainWindow(MainWindow* mw){
 	if (mw->window != NULL) SDL_DestroyWindow(mw->window);
 	free(mw);
 }
+
+
+/**
+ *
+ * Drawing the window and presents it to the user.
+ *
+ * @param MainWindow - Main Window data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 
 void drawMainWindow(MainWindow* mw){
 	if(mw==NULL){
@@ -151,6 +209,17 @@ void drawMainWindow(MainWindow* mw){
 }
 
 
+/**
+ *
+ * This function accepts events and classifying them to an operational commands.
+ *
+ * @param MainWindow - Main Window data structure
+ * @SDL_Event - the interface event
+ *
+ * @return
+ * MAIN_WINDOW_EVENT command event
+ *
+ */
 
 MAIN_WINDOW_EVENT mainWindowHandleEvent(MainWindow* mw, SDL_Event* event) {
 	if (event == NULL || mw == NULL ) {
@@ -181,6 +250,18 @@ MAIN_WINDOW_EVENT mainWindowHandleEvent(MainWindow* mw, SDL_Event* event) {
 
 
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the NewGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the NewGame Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnNewGame(int x, int y) {
 	if ((x >= 160 && x <= 370) && (y >= 65 && y <= 125)) {
 		return true;
@@ -188,12 +269,37 @@ bool isClickOnNewGame(int x, int y) {
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the LoadGame Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the LoadGame Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnLoadGame(int x, int y) {
 	if ((x >= 400 && x <= 640) && (y >= 65 && y <= 125)) {
 		return true;
 	}
 	return false;
 }
+
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Quit Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Quit Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnQuit(int x, int y) {
 	if ((x >= 640 && x <= 850) && (y >= 65 && y <= 125)) {
@@ -203,10 +309,57 @@ bool isClickOnQuit(int x, int y) {
 }
 
 
+/**
+ *
+ * This function Hiding the MainWindow
+ *
+ * @param mw - MainWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void mainWindowHide(MainWindow* mw) {
 	SDL_HideWindow(mw->window);
 }
 
+/**
+ *
+ * This function showing the MainWindow
+ *
+ * @param mw - MainWindow data structure
+ *
+ * @return
+ * void
+ *
+ */
+
 void mainWindowShow(MainWindow* mw) {
 	SDL_ShowWindow(mw->window);
+}
+
+
+int mainWindowGuiManager(MainWindow* mw){
+	assert(mw !=NULL);
+	drawMainWindow(mw);
+	bool quitMain = false;
+	while(!quitMain){
+		SDL_Event event;
+		while(SDL_PollEvent(&event)!=0){
+			if (mainWindowHandleEvent(mw, &event) == MAIN_WINDOW_EVENT_QUIT) {
+				destroyMainWindow(mw);
+				return 1;
+			}
+			else if (mainWindowHandleEvent(mw, &event) == MAIN_WINDOW_LOAD_GAME){
+				destroyMainWindow(mw);
+				return 2;
+			}
+			else if (mainWindowHandleEvent(mw, &event) == MAIN_WINDOW_NEW_GAME){
+				destroyMainWindow(mw);
+				return 3;
+			}
+		}
+	}
+	return 0;
 }

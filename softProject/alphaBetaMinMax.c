@@ -5,6 +5,27 @@
  *      Author: Itamar
  */
 
+
+/**
+ * alphBetaMinMax summary:
+ *
+ * The Handling part of the miniMax and AI section.
+ * Containing functions which their purpose is to stands for the Computer's strategy
+ * and computing.
+ *
+ *
+ *
+ * recursiveFunc			- The recursive function of MiniMax
+ * score					- Scoring the game by it's states
+ * scoreFuncId				- The scores for each object
+ * AlphaBetaMove			- The main Brain of the MiniMax who operates the recursive function
+ * moveAIobj				- Operates the compute's move using MiniMax Alpha-Beta pruning.
+ *
+ *
+ *
+ */
+
+
 #include <limits.h>
 #include <stdbool.h>
 #include <assert.h>
@@ -12,6 +33,27 @@
 #include "alphaBetaMinMax.h"
 #include "boardFuncs.h"
 #include "gameCommands.h"
+
+
+
+
+/**
+ *
+ * This function is the main recursive function which responsible for the MiniMax-Alpha-Beta pruning.
+ * The function using the scoring function to determine which score is the best
+ * for the the Mini-Max tree as taught.
+ *
+ * @param board - the Board Game Data structure.
+ * @param minmax - determine if it's maximum or minimum node.
+ * @param depth - the depth of the recursion.
+ * @param recScore - recursive score for stopping and not calculating the whole tree
+ *
+ *
+ * @return
+ * The best score for maximum or minimum node.
+ *
+ */
+
 
 
 int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore){
@@ -43,20 +85,20 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
         					}
         					else if(minmax==true){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,maxWinner);
-        						if(scoreWinner>maxWinner){
+        						if(scoreWinner>=maxWinner){
 									maxWinner = scoreWinner;
 								}
-        						if(scoreWinner>recScore){
+        						if(scoreWinner>recScore &&  recScore!=INT_MIN ){
 									undo(board,false,true);
 									return scoreWinner;
 								}
         					}
         					else if(minmax==false){
         						scoreWinner = recursiveFunc(board, !minmax, depth-1,minWinner);
-        						if(scoreWinner<minWinner){
+        						if(scoreWinner<=minWinner){
 									minWinner = scoreWinner ;
 								}
-        						if(scoreWinner<recScore){
+        						if(scoreWinner<recScore && recScore!=INT_MAX){
                 					undo(board,false,true);
                 					return scoreWinner;
         						}
@@ -73,6 +115,21 @@ int recursiveFunc(boardGame* board ,bool minmax,unsigned int depth, int recScore
 }
 
 
+
+/**
+ *
+ * The scoring function. Goes over each cell on board Game and checks it's symbol.
+ * Later, using the scoreFuncId to determine if to add or to subtract (opponent's tool)
+ * from the general results.
+ *
+ * @param board - the Board Game Data structure.e
+ *
+ *
+ * @return
+ * The score of the board Game state.
+ *
+ */
+
 int score(boardGame* board){
     assert(board!=NULL); //assert(board->boardArr!=NULL);
     assert(board->history!=NULL); assert(board->history->elements!=NULL);
@@ -82,13 +139,22 @@ int score(boardGame* board){
     	for(int j=0;j<COL;j++){
     		symbol = board->boardArr[i][j];
     		score+=scoreFuncId(symbol);
-
     		}
     	}
-    //printf("the score is:%d\n",score);
     return score;
 }
 
+/**
+ *
+ * This function get symbol and returns it's value on the boardGame to determine the
+ * general score.
+ *
+ * @param symbol - the symbol on boardGame
+ *
+ *
+ * @return
+ * The defined scoring value.
+ */
 
 int scoreFuncId(char symbol){
 	if(symbol == BlackPawn) return 1;
@@ -107,10 +173,25 @@ int scoreFuncId(char symbol){
 }
 
 
+/**
+ *
+ * This function is the operates and managing the MiniMax-Alpha-Beta pruning.
+ * The function using the recursion function to determine which score is the best
+ * for the the Mini-Max tree, and returns the specific place to move to on board.
+ *
+ * @param board - the Board Game Data structure.
+ * @param depth - the depth of the recursion.
+ *
+ *
+ * @return
+ * An Integer Array that includes the positions and destineation for the move function.
+ *
+ */
+
+
 
 int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
-	//printf("inside alphaBetaMove\n");
-	assert(board!=NULL); //assert(board->boardArr!=NULL);
+	assert(board!=NULL); assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
 	bool minmax = true;
 	int maxCompare = INT_MIN;
@@ -125,7 +206,6 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
         boardGame* copy = (boardGame*) copyBoard(board);
         assert(copy!=NULL); assert(copy->boardArr!=NULL);
         assert(copy->history!=NULL); assert(copy->history->elements!=NULL);
-        //gameCopy->simulate = true;
         // bool maxPlayer = false;
         if(copy->curPlayer==1) minmax = false;
         //if(copy->curPlayer==0) maxPlayer=true;
@@ -136,104 +216,78 @@ int* AlphaBetaMove(boardGame* board,unsigned int maxDepth){
 				   copy->boardArr[i][j]==UNDERSCORE) continue;
         		for (int k=ROW;k>=0;k--){
         			for(int l=COL; l>=0;l--){
-        				//printf("i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
         				if(moveObj(copy,RowColToNum(i,j),RowColToNum(k,l),false)){
-        					//printf("valid move: i=%d, j=%d, k=%d, l=%d\n",i,j,k,l);
         					if(isWinner(copy)){
-        						//printf("inside isWinner\n");
         						undo(copy,false,true);
         						destroyBoard(copy);
-        						arrMoves[0] = RowColToNum(i,j);
-        						arrMoves[1] = RowColToNum(k,l);
-        						return arrMoves;
-        					}
+        						arrMoves[0] = RowColToNum(i,j); arrMoves[1] = RowColToNum(k,l);
+        						return arrMoves;}
         					else if(minmax){
-        						//printf("int_max is:%d\n", INT_MAX);
-        						//printf("max_compare is:%d\n", maxCompare);
         						winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, maxCompare);
-        						//printf("the winner score1 is:%d\n",winnerScore);
         						if (winnerScore == INT_MAX){
-									//printf("the winner score is int_max\n");
             						destroyBoard(copy);
-            						arrMoves[0] = RowColToNum(i,j);
-									arrMoves[1] = RowColToNum(k,l);
+            						arrMoves[0] = RowColToNum(i,j); arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
         						}
         						else if(winnerScore>=maxCompare){
-        							//printf("in here 1\n");
         							maxCompare = winnerScore;
-        							arrMoves[0]=RowColToNum(i,j);
-        							arrMoves[1]= RowColToNum(k,l);
-            						//printf("arrMoves[0] is:%d\n",arrMoves[0]);
-            						//printf("arrMoves[1] is:%d\n",arrMoves[1]);
-        						}
-        						//else printf("done with winner score\n");
-        					}
+        							arrMoves[0]=RowColToNum(i,j);arrMoves[1]= RowColToNum(k,l);
+        						}}
         					else if(!minmax){
 								winnerScore = recursiveFunc(copy, !minmax, maxDepth-1, minCompare);
-        						//printf("the winner score2 is:%d\n",winnerScore);
 								if (winnerScore == INT_MIN){
-									//printf("the winner score is int_min\n");
 									destroyBoard(copy);
 									arrMoves[0] = RowColToNum(i,j);
 									arrMoves[1] = RowColToNum(k,l);
 									return arrMoves;
 								}
 								else if(winnerScore<=minCompare){
-									//printf("in here 2\n");
 									minCompare = winnerScore;
         							arrMoves[0]=RowColToNum(i,j);
         							arrMoves[1]= RowColToNum(k,l);
-        							//printf("arrMoves[0] is:%d\n",arrMoves[0]);
-									//printf("arrMoves[1] is:%d\n",arrMoves[1]);
 								}
 							}
-        					//printf("before undo\n");
-        					undo(copy,false,true);
-        					//printf("after undo\n");
-        				}
-        			}
-        		}
-        	}
-        }
-        //printf("before destroy board\n");
-    	destroyBoard(copy);
-    	//printf("after destroy board\n");
-    	//printf("the winner score is: %d\n", winnerScore);
-	}
+        					undo(copy,false,true);}}}}}
+    	destroyBoard(copy);}
 	return arrMoves;
 }
 
 
+/**
+ *
+ * This function is responsible for the computer's move.
+ * the function using the alpha-beta function mentioned above to determine the position
+ * and destination for the computer's move. Also doing the checking of the checkmate/check/tie
+ * states.
+ *
+ * @param board - the Board Game Data structure.
+ * @param checkActive - if to activate the check/checkmate/tie cehcing section.
+ *
+ *
+ * @return
+ * void. doing the move.
+ *
+ */
+
 
 void moveAIobj(boardGame* board, bool checkActive){
-	//printf("at the beggining of move AI OBJEcCT\n");
 	assert(board!=NULL); //assert(board->boardArr!=NULL);
 	assert(board->history!=NULL); assert(board->history->elements!=NULL);
-	//printf("after the asserts og aiobject\n");
 	int* moveArr = (int*) AlphaBetaMove(board, board->diffLevel);
-	//printf("inside moveAiObj\n");
-	//printf("the suggest pos is: %d, the suggest dest is:%d\n",moveArr[0],moveArr[1]);
-	//printf("before valid of moveAiObj\n");
 	bool valid = moveObj(board,moveArr[0],moveArr[1],false);
-	//if(!valid) printf("not valid\n");
-	//if(valid) printf("computer move is not!!! valid\n");
 	if(valid && checkActive){
 		computerMoveMessage(board,moveArr[0],moveArr[1]);
 		if(!isMyKingSafe(board)){		//checking if the opponent king's is threatened
-			//printf("there is a risk on the king");
 			if(isCheckMate(board)){
 				free(moveArr);
 				terminateGame(board,true, false);
 			}
 			printCheckMessage(board->curPlayer,board->userCol, board->gameMode);
-			//printf("we got yill here");
 		}
 		else if (isCheckMate(board)){
 			free(moveArr);
 			terminateGame(board,false, true);
 		}
 	}
-	//printf("at the end of moveaiObj\n");
 	free(moveArr);
 }

@@ -16,6 +16,16 @@
 #include <SDL.h>
 #include <SDL_video.h>
 
+/**
+ * The structure which saves the elements in main window GUI:
+ * 		1. window - window element
+ * 		2. renderer - the renderer element
+ * 		3. bg - the backGround photo element
+ * 		4. welcome - the welcome texture element
+ * 		5. new game - button
+ * 		6. loadGame - button
+ * 		7. quit - button
+ */
 
 typedef struct MAINWINDOW{
 	SDL_Window* window;
@@ -27,6 +37,10 @@ typedef struct MAINWINDOW{
 	SDL_Texture* quit;
 }MainWindow;
 
+
+/**
+ * The type of the events to handle with in Main Window.
+ */
 
 typedef enum {
 	MAIN_WINDOW_LOAD_GAME,
@@ -47,5 +61,7 @@ bool isClickOnLoadGame(int x, int y);
 bool isClickOnQuit(int x, int y);
 void mainWindowHide(MainWindow* mw);
 void mainWindowShow(MainWindow* mw);
+int mainWindowGuiManager(MainWindow* mw);
+
 
 #endif /* MAINWINDOWGUI_H_ */

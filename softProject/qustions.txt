@@ -1,6 +1,5 @@
 
 
 20. to make functions shorter.
-22. to write documentation to the project.
 25. to check the alphabeta pruning
 26. gameParser is too long!!!!

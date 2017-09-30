@@ -5,6 +5,44 @@
  *      Author: Itamar
  */
 
+/**
+ * SettingsWindow summary:
+ *
+ * The Settings Window GUI sections. This functions are responsible for creating
+ * the Settings window Data structure, handling the different events in this window etc.
+ *
+ * isClickOnGameMode1				- Checking if there was click on Mode1 button
+ * isClickOnGameMode2				- Checking if there was click on Mode2 button
+ * isClickOnColWhite				- Checking if there was click on White button
+ * isClickOnColBlack				- Checking if there was click on Black button
+ * isClickOnNoob					- Checking if there was click on Noob button
+ * isClickOnEasy					- Checking if there was click on Easy button
+ * isClickOnModerate				- Checking if there was click on Moderate button
+ * isClickOnHard					- Checking if there was click on Hard button
+ * isClickOnStart					- Checking if there was click on Start button
+ * isClickOnBack					- Checking if there was click on Back button
+ * destroySettingsRenderer			- Destroying only the renderer and textures
+ * destroySettingsWindow			- Destroying the SettingsWindow Structure
+ * createSW							- Creating the SettingsWindow structure
+ * createSR							- Creating the Renderer and the textures
+ * settingsWindowHandleEvent		- Classifying different events in Settings window
+ * drawSettingsWindow				- Drawing the SettingsWindow
+ * createGameMode1Texture			- Creating and Destroying the Mode1 Texture (light/not light)
+ * createGameMode2Texture			- Creating and Destroying the Mode2 Texture (light/not light)
+ * createGameNoobTexture			- Creating and Destroying the Mode2 Texture (light/not light)
+ * createGameEasyTexture			- Creating and Destroying the Easy Texture (light/not light)
+ * createGameModerateTexture		- Creating and Destroying the Moderate Texture (light/not light)
+ * createGameHardTexture			- Creating and Destroying the Hard Texture (light/not light)
+ * createGameDifficultyDecider		- Managing the creation and destroying of difficulty buttons
+ * createSetWhiteTexture			- Creating and Destroying the White Texture (light/not light)
+ * createSetBlackTexture			- Creating and Destroying the Black Texture (light/not light)
+ * settingsWindowHide				- Hiding the Window
+ * settingsWindowShow				- Showing the Window
+ *
+ *
+ */
+
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -13,22 +51,68 @@
 #include "boardFuncs.h"
 
 
-
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Mode1 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the mode1 Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnGameMode1(int x, int y){
 	if((x>=520&& x<=710) && (y>=20&& y<=104)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Mode2 Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the mode2 Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnGameMode2(int x, int y){
 	if((x>=750&& x<=940) && (y>=20&& y<=104)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the White Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the White Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnColWhite(int x, int y){
 	if((x>=520&& x<=710) && (y>=130&& y<=214)) return true;
 	return false;
 }
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Black Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Black Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnColBlack(int x, int y){
 	if((x>=750&& x<=940) && (y>=130&& y<=214)) return true;
@@ -36,78 +120,155 @@ bool isClickOnColBlack(int x, int y){
 }
 
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Noob Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Noob Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnNoob(int x, int y){
 	if((x>=340&& x<=466) && (y>=340&& y<=462)) return true;
 	return false;
 }
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Easy Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Noob Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnEasy(int x, int y){
 	if((x>=495&& x<=623) && (y>=340&& y<=462)) return true;
 	return false;
 }
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Moderate Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the slot2 Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnModerate(int x, int y){
 	if((x>=650&& x<=774) && (y>=340&& y<=462)) return true;
 	return false;
 }
+
+
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Hard Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Hard Button boundaries, false otherwise.
+ *
+ */
+
 
 bool isClickOnHard(int x, int y){
 	if((x>=805&& x<=931) && (y>=340&& y<=462)) return true;
 	return false;
 }
 
-//bool isClickOnExpert(int x, int y){return true;}
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Start Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Start Button boundaries, false otherwise.
+ *
+ */
+
 bool isClickOnStart(int x, int y){
 	if((x>=410&& x<=536) && (y>=505 && y<=627)) return true;
 		return false;
 }
 
 
+/**
+ *
+ * This function checks if there was an event in the boundaries of the Back Button
+ *
+ * @param x - horizontal coordinate (the x axe of a pixel in the window)
+ * @param y - vertical coordinate (the y axe of a pixel in the window)
+ *
+ * @return
+ * true if the coordinates were in the Back Button boundaries, false otherwise.
+ *
+ */
 
 bool isClickOnBack(int x, int y){
 	if((x>=720&& x<=846) && (y>=505 && y<=625)) return true;
 	return false;
 }
 
+/**
+ *
+ * Destroying the SettingsWindow data structure with it's elements and free the memory.
+ *
+ * @param SettingsWindow - Settings Window data structure
+ *
+ * @return
+ * void
+ *
+ */
+
+
 
 void destroySettingsWindow(SettingsWindow* sw){
-	//printf("inside destroy settings\n");
 	if (sw==NULL) return;
 	if (sw->gameMode1!=NULL) SDL_DestroyTexture(sw->gameMode1);
-	//printf("destroying mode1\n");
 	if(sw->gameMode2!=NULL) SDL_DestroyTexture(sw->gameMode2);
-	//printf("destroying mode2\n");
 	if (sw->bg!=NULL) SDL_DestroyTexture(sw->bg);
-	//printf("destroying bg\n");
 	if (sw->color!=NULL) SDL_DestroyTexture(sw->color);
-	//printf("destroying color\n");
 	if (sw->mode!=NULL) SDL_DestroyTexture(sw->mode);
-	//printf("destroying mode\n");
 	if (sw->colWhite!=NULL) SDL_DestroyTexture(sw->colWhite);
-	//printf("destroying white\n");
 	if (sw->colBlack!=NULL) SDL_DestroyTexture(sw->colBlack);
-	//printf("destroying black\n");
 	if (sw->difficulty!=NULL) SDL_DestroyTexture(sw->difficulty);
-	//printf("destroying diffi\n");
 	if (sw->noob!=NULL) SDL_DestroyTexture(sw->noob);
-	//printf("destroying noob\n");
 	if (sw->easy!=NULL) SDL_DestroyTexture(sw->easy);
-	//printf("destroying easy\n");
 	if (sw->moderate!=NULL) SDL_DestroyTexture(sw->moderate);
-	//printf("destroying moderate\n");
 	if (sw->hard!=NULL) SDL_DestroyTexture(sw->hard);
-	//printf("destroying hard\n");
 	if (sw->back!=NULL) SDL_DestroyTexture(sw->back);
-	//printf("destroying back\n");
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
-	//printf("destroying start\n");
 	if (sw->renderer!=NULL) SDL_DestroyRenderer(sw->renderer);
-	//printf("destroying renderer\n");
 	if (sw->window != NULL) SDL_DestroyWindow(sw->window);
-	//printf("destroying window\n");
-	//printf("the end of destroy settings window\n");
 	free(sw);
 }
+
+/**
+ *
+ * Destroying the SettingsWindow renderer and textures.
+ *
+ * @param SetingsWindow - Settings Window data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 
 void destroySettingsRenderer(SettingsWindow* sw){
@@ -129,6 +290,23 @@ void destroySettingsRenderer(SettingsWindow* sw){
 	if (sw->back!=NULL) SDL_DestroyTexture(sw->back);
 	if (sw->start!=NULL) SDL_DestroyTexture(sw->start);
 }
+
+
+/**
+ *
+ * Creating the SettingsWindow Renderer and textures using SDL.
+ * In this part we create only renderer and buttons.
+ *
+ * @sw - SettingsWindow Data Structure
+ * @param numPlayers - game mode 1/2
+ * @param color - User Color 0/1
+ * @param diffi - Difficulty level
+ *
+ * @return
+ * void
+ *
+ */
+
 
 SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diffi){
 	assert(sw!=NULL); assert(sw->window!=NULL);
@@ -411,6 +589,20 @@ SettingsWindow* createSR(SettingsWindow* sw, int numPlayers, int color, int diff
 	return sw;
 }
 
+/**
+ *
+ * Creating the SettingsWindow structure using SDL.
+ * In this part we create a window, renderer and buttons.
+ *
+ * @param numPlayers - game mode 1/2
+ * @param color - User Color 0/1
+ * @param diffi - Difficulty level
+ *
+ * @return
+ * SettingsWindow pointer of the data Structure
+ *
+ */
+
 
 SettingsWindow* createSW(int numPlayers, int color, int diffi){
 	SettingsWindow* sw = (SettingsWindow*) malloc(sizeof(SettingsWindow));
@@ -430,20 +622,52 @@ SettingsWindow* createSW(int numPlayers, int color, int diffi){
 }
 
 
+/**
+ *
+ * This function hiding the SettingsWindow
+ *
+ * @param sw - Settings data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void settingsWindowHide(SettingsWindow* sw) {
 	SDL_HideWindow(sw->window);
 }
+
+/**
+ *
+ * This function showing the SettingsWindow
+ *
+ * @param sw - Settings data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void settingsWindowShow(SettingsWindow* sw) {
 	SDL_ShowWindow(sw->window);
 }
 
 
+
+/**
+ *
+ * This function accepts events and classifying them to an operational commands.
+ *
+ * @param SettingsWindow - Settings Window data structure
+ * @SDL_Event - the interface event
+ *
+ * @return
+ * SETTINGS_WINDOW_EVENT command event
+ *
+ */
+
 SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* event) {
-	if (event == NULL || sw == NULL ) {
-		return SETTINGS_WINDOW_INVALID;
-	}
+	if (event == NULL || sw == NULL ) return SETTINGS_WINDOW_INVALID;
 	switch (event->type) {
 		case SDL_MOUSEBUTTONUP:
 			if(isClickOnGameMode1(event->button.x,event->button.y)){
@@ -472,9 +696,7 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 			}
 			/*
 			else if(isClickOnExpert(event->button.x, event->button.y)){
-				return SETTINGS_WINDOW_COL_DIFFICULTY_5;
-			}
-			*/
+				return SETTINGS_WINDOW_COL_DIFFICULTY_5;}*/
 			else if(isClickOnBack(event->button.x, event->button.y)){
 				return SETTINGS_WINDOW_PUSH_BACK;
 			}
@@ -482,16 +704,6 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 				return SETTINGS_WINDOW_PUSH_START;
 			}
 			break;
-		/*
-		case SDL_MOUSEMOTION:
-			if(isClickOnBack(event->motion.x, event->motion.y)){
-				return SETTINGS_WINDOW_HOVER_BACK;
-			}
-			else if(isClickOnStart(event->button.x, event->button.y)){
-				return SETTINGS_WINDOW_HOVER_START;
-			}
-			break;
-			*/
 		case SDL_WINDOWEVENT:
 			if (event->window.event == SDL_WINDOWEVENT_CLOSE) {
 				return SETTINGS_WINDOW_EVENT_QUIT;
@@ -502,6 +714,17 @@ SETTINGS_WINDOW_EVENT settingsWindowHandleEvent(SettingsWindow* sw, SDL_Event* e
 		}
 	return SETTINGS_WINDOW_EVENT_NONE;
 }
+
+/**
+ *
+ * Drawing the window and presents it to the user.
+ *
+ * @param SettingsWindow - Settings Window data structure
+ *
+ * @return
+ * void
+ *
+ */
 
 void drawSettingsWindow(SettingsWindow* sw){
 	if(sw==NULL){
@@ -514,7 +737,6 @@ void drawSettingsWindow(SettingsWindow* sw){
 	assert(sw->gameMode2!=NULL); assert(sw->gameMode1!=NULL); assert(sw->easy!=NULL);
 	assert(sw->colBlack!=NULL);	assert(sw->colWhite!=NULL); assert(sw->noob!=NULL);
 	assert(sw->hard!=NULL); assert(sw->moderate!=NULL);
-
 	SDL_RenderClear(sw->renderer);
 	SDL_SetRenderDrawColor(sw->renderer, 255, 255, 255, 255);
 	SDL_Rect rec = { .x = 0, .y = 0, .w = 1000, .h = 650 };
@@ -548,6 +770,21 @@ void drawSettingsWindow(SettingsWindow* sw){
 	SDL_RenderPresent(sw->renderer);
 }
 
+
+/**
+ *
+ * This function destroy and creates back again the "Mode1" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void createGameMode1Texture(SettingsWindow* sw, int numPlayers){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
 	SDL_DestroyTexture(sw->gameMode1);
@@ -568,6 +805,20 @@ void createGameMode1Texture(SettingsWindow* sw, int numPlayers){
 	SDL_FreeSurface(surface);
 }
 
+/**
+ *
+ * This function destroy and creates back again the "Mode2" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
+
 void createGameMode2Texture(SettingsWindow* sw, int numPlayers){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
 	SDL_DestroyTexture(sw->gameMode2);
@@ -587,6 +838,20 @@ void createGameMode2Texture(SettingsWindow* sw, int numPlayers){
 	}
 	SDL_FreeSurface(surface);
 }
+
+/**
+ *
+ * This function destroy and creates back again the "Noob" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
 
 void createGameNoobTexture(SettingsWindow* sw, int numPlayers){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
@@ -609,6 +874,19 @@ void createGameNoobTexture(SettingsWindow* sw, int numPlayers){
 }
 
 
+/**
+ *
+ * This function destroy and creates back again the "Easy" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
 void createGameEasyTexture(SettingsWindow* sw, int numPlayers ){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
 	SDL_DestroyTexture(sw->easy);
@@ -630,6 +908,18 @@ void createGameEasyTexture(SettingsWindow* sw, int numPlayers ){
 }
 
 
+/**
+ *
+ * This function destroy and creates back again the "Moderate" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 void createGameModerateTexture(SettingsWindow* sw, int numPlayers ){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
@@ -652,6 +942,18 @@ void createGameModerateTexture(SettingsWindow* sw, int numPlayers ){
 }
 
 
+/**
+ *
+ * This function destroy and creates back again the "Hard" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param numPlayers - gameMode 1 or 2
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 void createGameHardTexture(SettingsWindow* sw, int numPlayers){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
@@ -674,6 +976,21 @@ void createGameHardTexture(SettingsWindow* sw, int numPlayers){
 }
 
 
+/**
+ *
+ * This function managing the destroying and creating of the difficulty buttons
+ *
+ * @param sw - SettingsWindow data structure
+ * @param diffiOld - difficulty before changing
+ * @param diffiNew - difficulty after changing
+ *
+ *
+ *
+ * @return
+ * void
+ *
+ */
+
 void createGameDifficultyDecider(SettingsWindow* sw, int diffiOld, int diffiNew){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
 	if(diffiOld==0){
@@ -695,6 +1012,18 @@ void createGameDifficultyDecider(SettingsWindow* sw, int diffiOld, int diffiNew)
 }
 
 
+/**
+ *
+ * This function destroy and creates back again the "White" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param userCol - User Color 0 or 1
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 void createSetWhiteTexture(SettingsWindow* sw, int userCol){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
@@ -716,6 +1045,18 @@ void createSetWhiteTexture(SettingsWindow* sw, int userCol){
 	SDL_FreeSurface(surface);
 }
 
+/**
+ *
+ * This function destroy and creates back again the "Black" Button.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param userCol - 0 or 1
+ *
+ *
+ * @return
+ * void
+ *
+ */
 
 void createSetBlackTexture(SettingsWindow* sw, int userCol){
 	assert(sw!=NULL); assert(sw->window!=NULL); assert(sw->renderer!=NULL);
