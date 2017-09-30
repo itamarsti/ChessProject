@@ -39,7 +39,10 @@
  * createSetBlackTexture			- Creating and Destroying the Black Texture (light/not light)
  * settingsWindowHide				- Hiding the Window
  * settingsWindowShow				- Showing the Window
- *
+ * settingsWindowGuiManager			- Handling the different cases and translates command to action
+ * difficultyHelper					- Helping to draw the renderer and do board changes
+ * gameModeHelper					- Helping to draw the renderer and do board changes
+ * userColorHelper					- Helping to draw the renderer and do board changes
  *
  */
 
@@ -1080,8 +1083,160 @@ void createSetBlackTexture(SettingsWindow* sw, int userCol){
 }
 
 
+/**
+ *
+ * This function responsible for handling the events and translates them to an operations
+ * in the Settings Window section.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param board - BoardGame data Structure
+ * @return
+ * int between 1-4:
+ * 		1: quit the game
+ * 		2: back to Main Window
+ * 		3: start to Game Window
+ *		0: should never!! reach to 0!
+ */
 
 
+int settingsWindowGuiManager(SettingsWindow* sw, boardGame* board){
+	assert(board!=NULL); assert(sw!=NULL);
+	drawSettingsWindow(sw);
+	bool quitSettings = false;
+	while(!quitSettings){
+		SDL_Event event1;
+		quitSettings = false;
+		while(SDL_PollEvent(&event1)!=0){
+			if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
+				destroySettingsWindow(sw);
+				return 1;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_PUSH_BACK){
+				destroySettingsWindow(sw);
+				return 2;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_PUSH_START){
+				destroySettingsWindow(sw);
+				return 3;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
+				gameModeHelper(sw,board, 1);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
+				gameModeHelper(sw,board, 2);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_WHITE){
+				userColorHelper(sw, board, 1);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_BLACK){
+				userColorHelper(sw, board, 0);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
+				difficultyHelper(sw,board, 1);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
+				difficultyHelper(sw,board, 2);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
+				difficultyHelper(sw,board, 3);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
+				difficultyHelper(sw,board, 4);
+				break;
+			}
+			else if (settingsWindowHandleEvent(sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
+				difficultyHelper(sw,board, 5);
+				break;
+			}
+		}
+	}
+	return 0;
+}
+
+/**
+ *
+ * This function helps to draw the renderer back again with the right difficulty
+ * and also do the difficulty changes in the BoardGame.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param board - BoardGame Data Structure
+ * @paran difficulty - the difficulty level
+ *
+ * @return
+ * void
+ *
+ */
 
 
+void difficultyHelper(SettingsWindow* sw, boardGame* board, int difficulty){
+	assert(board!=NULL); assert(sw!=NULL);
+	if (board->gameMode==2) return;
+	if (board->diffLevel==difficulty) return;
+	createGameDifficultyDecider(sw ,board->diffLevel, difficulty);
+	setDifficult(board,difficulty);
+	drawSettingsWindow(sw);
+}
 
+/**
+ *
+ * This function helps to draw the renderer back again with the right gameMode
+ * and also do the GameMode changes in the BoardGame.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param board - BoardGame Data Structure
+ * @paran gameMode - the gameMode (1 or 2)
+ *
+ * @return
+ * void
+ *
+ */
+
+void gameModeHelper(SettingsWindow* sw, boardGame* board, int gameMode){
+	assert(board!=NULL); assert(sw!=NULL);
+	if(gameMode==1){
+		createGameDifficultyDecider(sw ,board->diffLevel, 2);
+		setNumPlayers(board,1);
+		createSetWhiteTexture(sw, 1);
+	}
+	else if(gameMode==2){
+		setNumPlayers(board,2);
+		createGameDifficultyDecider(sw ,0, board->diffLevel);
+		createSetWhiteTexture(sw, 0);
+	}
+	createGameMode1Texture(sw,  board->gameMode);
+	createGameMode2Texture(sw, board->gameMode);
+	createSetBlackTexture(sw, 1);
+	drawSettingsWindow(sw);
+}
+
+
+/**
+ *
+ * This function helps to draw the renderer back again with the right user color
+ * and also do the user color changes in the BoardGame.
+ *
+ * @param sw - SettingsWindow data structure
+ * @param board - BoardGame Data Structure
+ * @paran userCol - the user color (0 or 1)
+ *
+ * @return
+ * void
+ *
+ */
+
+void userColorHelper(SettingsWindow* sw, boardGame* board, int userCol){
+	assert(board!=NULL); assert(sw!=NULL);
+	if(board->gameMode==2) return;
+	if(board->userCol==userCol) return;
+	setColor(board,userCol);
+	createSetWhiteTexture(sw, userCol);
+	createSetBlackTexture(sw,userCol);
+	drawSettingsWindow(sw);
+}

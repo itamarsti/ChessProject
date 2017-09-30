@@ -34,7 +34,7 @@
  * createLoadTexture			- Creating and Destroying the load Texture (light/not light)
  * loadWindowHide				- Hiding the Window
  * loadWindowShow				- Showing the Window
- *loadWindowGuiManager 			- Handling the different cases and translates command to action
+ * loadWindowGuiManager 		- Handling the different cases and translates command to action
  *
  *
  */

@@ -68,117 +68,22 @@ void guiMain(){
 			}
 			else if(handle==3)settingsBool = true;
 		}
-		//----------------------------End of main Window--------------------------------
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of settings window~~~~~~~~~~~~~~~~~~~~~~
+//-----------------------------------------End of main Window--------------------------------
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of settings window~~~~~~~~~~~~~~~~~~~~~~
 		else if(settingsBool){
 			manager->sw = (SettingsWindow*) createSW(manager->board->gameMode,manager->board->userCol, manager->board->diffLevel);
 			if(manager->sw==NULL) {
 				printf("ERROR: Couldn't create SettingsWindow struct\n");
 				quitGame(manager);
 			}
-			drawSettingsWindow(manager->sw);
-			bool quitSettings = false; settingsBool = false;
-			while(!quitSettings){
-				SDL_Event event1;
-				quitSettings = false;
-				while(SDL_PollEvent(&event1)!=0){
-					if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_EVENT_QUIT){
-						destroySettingsWindow(manager->sw);
-						quitGame(manager);
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_BACK){
-						destroySettingsWindow(manager->sw);
-						mainBool = true; quitSettings = true;
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_PUSH_START){
-						destroySettingsWindow(manager->sw);
-						gameBool = true; quitSettings = true;
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_1){
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 2);
-						setNumPlayers(manager->board,1);
-						createGameMode1Texture(manager->sw,  manager->board->gameMode);
-						createGameMode2Texture(manager->sw, manager->board->gameMode);
-						createSetWhiteTexture(manager->sw, 1);
-						createSetBlackTexture(manager->sw, 1);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_GAME_MODE_2){
-						setNumPlayers(manager->board,2);
-						createGameMode1Texture(manager->sw,  manager->board->gameMode);
-						createGameMode2Texture(manager->sw, manager->board->gameMode);
-						createGameDifficultyDecider(manager->sw ,0, manager->board->diffLevel);
-						createSetWhiteTexture(manager->sw, 0);
-						createSetBlackTexture(manager->sw, 1);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_WHITE){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->userCol==1) continue;
-						setColor(manager->board,1);
-						createSetWhiteTexture(manager->sw, 1);
-						createSetBlackTexture(manager->sw,1);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_BLACK){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->userCol==0) continue;
-						setColor(manager->board,0);
-						createSetWhiteTexture(manager->sw, 0);
-						createSetBlackTexture(manager->sw, 0);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_1){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->diffLevel==1) continue;
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 1);
-						setDifficult(manager->board,1);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_2){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->diffLevel==2) continue;
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 2);
-						setDifficult(manager->board,2);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_3){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->diffLevel==3) continue;
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 3);
-						setDifficult(manager->board,3);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_4){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->diffLevel==4) continue;
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 4);
-						setDifficult(manager->board,4);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-					else if (settingsWindowHandleEvent(manager->sw, &event1) == SETTINGS_WINDOW_COL_DIFFICULTY_5){
-						if(manager->board->gameMode==2) continue;
-						if(manager->board->diffLevel==5) continue;
-						createGameDifficultyDecider(manager->sw ,manager->board->diffLevel, 5);
-						setDifficult(manager->board,5);
-						drawSettingsWindow(manager->sw);
-						break;
-					}
-				}
-			}
+			settingsBool = false;
+			int settingsHandle = settingsWindowGuiManager(manager->sw, manager->board);
+			if(settingsHandle==1) quitGame(manager);
+			else if(settingsHandle==2) mainBool=true;
+			else if(settingsHandle==3)gameBool = true;
 		}
-		//----------------------------End of Settings Window--------------------------------
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of load window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//--------------------------------------End of Settings Window--------------------------------
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of load window~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		else if(loadBool){
 			manager->lw = (LoadWindow*) createLW();
 			if(manager->lw==NULL) {
@@ -197,8 +102,8 @@ void guiMain(){
 				mainBool = true;
 			}
 		}
-		//-----------------------------------End of Load Window--------------------------------
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of game window~~~~~~~~~~~~~~~~~~~~~~~~~~
+//-----------------------------------------End of Load Window--------------------------------
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of game window~~~~~~~~~~~~~~~~~~~~~~~~~~
 		else if(gameBool){
 			manager->gw = (GameWindow*) createGW();
 			if(manager->gw==NULL) {

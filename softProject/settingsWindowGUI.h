@@ -106,5 +106,8 @@ void createSetWhiteTexture(SettingsWindow* sw, int numPlayers);
 void createSetBlackTexture(SettingsWindow* sw, int numPlayers);
 void settingsWindowHide(SettingsWindow* sw);
 void settingsWindowShow(SettingsWindow* sw);
-
+int settingsWindowGuiManager(SettingsWindow* sw, boardGame* board);
+void difficultyHelper(SettingsWindow* sw, boardGame* board, int difficulty);
+void gameModeHelper(SettingsWindow* sw, boardGame* board, int gameMode);
+void userColorHelper(SettingsWindow* sw, boardGame* board, int userCol);
 #endif /* SETTINGSWINDOWGUI_H_ */
