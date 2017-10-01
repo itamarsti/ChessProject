@@ -405,7 +405,6 @@ void createGR(GameWindow* gw, bool undoBool, bool loadBool){
  */
 
 GameWindow* createGW(){
-	printf("inside Create GUI Window\n");
 	GameWindow* gw = (GameWindow*) malloc(sizeof(GameWindow));
 	if(gw==NULL){
 		printf("Couldn't create GameMainWindow struct\n");

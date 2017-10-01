@@ -219,22 +219,17 @@ void guiMain(){
 					}
 					else if(gameWindowHandleEvent(manager->gw, &event3) == GAME_WINDOW_DRAG_OBJ){
 						SDL_Point p1 = {.x = event3.button.x, .y = event3.button.y};
-						//printf("xPos is :%d, yPos is:%d\n",p1.x,p1.y);
 						bool done = false;
 						while(!done){
 							SDL_Event event8;
 							while(SDL_PollEvent(&event8)!=0){
 								SDL_Point p2 = {.x = event8.button.x, .y = event8.button.y};
-								//printf("xDest is :%d, yDest is:%d\n",p2.x,p2.y);
 								if(!(event3.type==SDL_MOUSEBUTTONUP && event3.button.button ==SDL_BUTTON_LEFT)
 										&& !(event3.type==SDL_MOUSEBUTTONDOWN && event3.button.button ==SDL_BUTTON_LEFT)
 										&&!(event3.type=SDL_MOUSEMOTION && (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)))){
 									break;
 								}
 								else if(gameWindowHandleEvent(manager->gw, &event8)==GAME_WINDOW_HOVER_OBJ){
-									//SDL_RenderClear(manager->gw->renderer);
-									//destroyGameRenderer(manager->gw);
-									//createGR(manager->gw,undoBool,loadInsideBool);
 									drawGameWindowImproved(manager->gw, manager->board,&p1,&p2);
 									continue;
 								}
@@ -242,9 +237,7 @@ void guiMain(){
 									SDL_Point p3 = {.x = event8.button.x, .y = event8.button.y};
 									int pos = fromPixToPos(p1.x, p1.y);
 									int dest = fromPixToPos(p3.x, p3.y);
-									//printf("the position is:%d, the destination is: %d\n", pos, dest);
-									if(moveObj(manager->board, pos, dest, false)){
-										//SDL_RenderClear(manager->gw->renderer);
+									if(moveObj(manager->board, pos, dest, true)){
 										if(manager->board->history->actualSize>4 && manager->board->gameMode==1){
 											createGameUndoTexture(manager->gw, true);
 										}
